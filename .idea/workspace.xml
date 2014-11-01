@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7c317f79-31b7-4faf-a787-fe4f36156464" name="Default" comment="" />
+    <list default="true" id="7c317f79-31b7-4faf-a787-fe4f36156464" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/StaticHTMLMockups/Repo.html" afterPath="$PROJECT_DIR$/StaticHTMLMockups/Repo.html" />
+    </list>
     <ignored path="Team119.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -26,8 +28,8 @@
       <file leaf-file-name="Repo.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/StaticHTMLMockups/Repo.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5232975" vertical-offset="456" max-vertical-offset="3757">
-              <caret line="44" column="37" selection-start-line="44" selection-start-column="37" selection-end-line="44" selection-end-column="37" />
+            <state vertical-scroll-proportion="1.3100358" vertical-offset="0" max-vertical-offset="3791">
+              <caret line="43" column="62" selection-start-line="43" selection-start-column="62" selection-end-line="43" selection-end-column="62" />
               <folding />
             </state>
           </provider>
@@ -332,8 +334,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/StaticHTMLMockups/Repo.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5232975" vertical-offset="456" max-vertical-offset="3757">
-          <caret line="44" column="37" selection-start-line="44" selection-start-column="37" selection-end-line="44" selection-end-column="37" />
+        <state vertical-scroll-proportion="1.3100358" vertical-offset="0" max-vertical-offset="3791">
+          <caret line="43" column="62" selection-start-line="43" selection-start-column="62" selection-end-line="43" selection-end-column="62" />
           <folding />
         </state>
       </provider>
