@@ -6,5 +6,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'finalproj.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    url(r'^codebook/', include('codebook.urls')),
+    url(r'^$', 'codebook.views.front'),
     url(r'^admin/', include(admin.site.urls)),
 )

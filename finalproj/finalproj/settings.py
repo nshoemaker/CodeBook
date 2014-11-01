@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates/codebook/'),)
 
 
 # Quick-start development settings - unsuitable for production
@@ -36,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'codebook',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,8 +60,13 @@ WSGI_APPLICATION = 'finalproj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'codebook',                      # Or path to database file if using sqlite3.
+        # The following settings are not used with sqlite3:
+        'USER': 'webapps',
+        'PASSWORD': 'fun',
+        'HOST': 'localhost',    # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
+        'PORT': '',             # Set to empty string for default.
     }
 }
 
@@ -77,7 +84,29 @@ USE_L10N = True
 USE_TZ = True
 
 
+ROOT_URLCONF = 'finalproj.urls'
+
+LOGIN_URL = '/codebook/front'
+
+LOGIN_REDIRECT_URL = '/codebook/'
+
+WSGI_APPLICATION = 'finalproj.wsgi.application'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Configures Django to merely print emails rather than sending them.
+# Comment out this line to enable real email-sending.
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# To enable real email-sending, you should uncomment and 
+# configure the settings below.
+# EMAIL_HOST = 'Your-SMTP-host'               # perhaps 'smtp.andrew.cmu.edu'
+# EMAIL_HOST_USER = 'Your-SMTP-username'      # perhaps your Andrew ID
+# EMAIL_HOST_PASSWORD = 'Your-SMTP-password'
+# EMAIL_USE_TLS = True
+
