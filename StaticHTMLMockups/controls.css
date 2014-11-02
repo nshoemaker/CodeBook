@@ -86,8 +86,27 @@ padding-right: 5px;
 .tag-btn {
 }
 
+.lang-main {
+  background-color: #66CC99;
+
+}
+
+.languages {
+    text-align: center;
+
+}
+
+.languages i {
+  background-color: #55BB88;
+  padding: 15px;
+    background-position: 100% 100%;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+}
+
 .control-btn {
-  border-color: #c0c0c0;
+  background-color: #77DDAA;
 }
 
 .comment-list li { 

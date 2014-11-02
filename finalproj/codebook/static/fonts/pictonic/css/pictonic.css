@@ -35,7 +35,6 @@ a.pictonic, span.pictonic, small.pictonic {
 	-webkit-font-smoothing:  antialiased !important;
 	-moz-font-smoothing:  antialiased !important;
 	font-smoothing:  antialiased !important;
-	line-height:1em;
 }
  
 a[class^="icon-"], a[class*=" icon-"], span[class^="icon-"], span[class*=" icon-"], small[class^="icon-"], small[class*=" icon-"] {
