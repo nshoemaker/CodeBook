@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Codebook: Sign In{% endblock %}
+{% block title %}Codebook: Sign Up{% endblock %}
 
 {% block stylesheets %}
     {% load staticfiles %}
@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-md-offset-2 col-md-8 centered-text">
                     <h1>
-                        <span>Welcome Back!</span>
+                        <span>Welcome to Codebook</span>
                     </h1>
                 </div>
             </div>
@@ -30,15 +30,17 @@
 
     <div class="row">
         <div class="col-md-offset-2 col-md-8 centered-text">
-            <h3>Sign In with your CodeBook account</h3>
+            <h3>Create a CodeBook account</h3>
         </div>
     </div>
     <div class="row">
         <div class="col-md-offset-2 col-md-8 centered-text">
 
             <form class="form-signin" role="form">
+                <input type="username" class="form-control" placeholder="Username" required autofocus>
                 <input type="email" class="form-control" placeholder="Email" required autofocus>
                 <input type="password" class="form-control" placeholder="Password" required>
+                <input type="password" class="form-control" placeholder="Confirm Password" required>
 
                 <div class="col-sm-offset-1 col-sm-10">
                     <label class="checkbox">
@@ -63,17 +65,6 @@
                 <i class="fa fa-github-square"></i>
                 Sign in with GitHub
             </a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-offset-4 col-md-4 centered-text">
-                  <div class="form-signin btn-block centered-text">
-        <div class="btn-group centered-text bottom-button">
-          <button class="btn btn-xs btn-link" type="button">
-            Forgot your password?
-          </button>
-        </div>
-      </div>
         </div>
     </div>
 {% endblock stream %}
