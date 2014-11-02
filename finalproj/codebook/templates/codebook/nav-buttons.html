@@ -16,6 +16,12 @@
 <li><a href="#">Starred</a></li>
 {% endif %}
 
+{% if active == 'following' %}
+<li class="active"><a href="#">Following</a></li>
+{% else %}
+<li><a href="#">Following</a></li>
+{% endif %}
+
 {% if active == 'profile' %}
 <li class="active"><a href="#">Profile</a></li>
 {% else %}

@@ -1,3 +1,16 @@
+.ratings {
+  border-bottom-width: 1px;
+  border-bottom-style:solid;
+  border-bottom-color:#dcdcdc;
+}
+
+.stars
+{
+    padding: 5px;
+    font-size: 24px;
+    color: #77DDAA;
+}
+
 .repository-list {
   padding-left: 0px;
 }
