@@ -44,7 +44,7 @@ class Repository(models.Model):
     kb_size = models.IntegerField()
 
 class Tag(models.Model):
-    message = models.CharField(max_length=20)
+    text = models.CharField(max_length=20)
     profile_user = models.ForeignKey(ProfileUser, related_name="created")
     repository = models.ForeignKey(Repository)
     date_time = models.DateTimeField(auto_now_add=True)
@@ -53,7 +53,7 @@ class Tag(models.Model):
 
 class Comment(models.Model):
     profile_user = models.ForeignKey(ProfileUser)
-    body = models.CharField(max_length=400)  # text of comment
+    text = models.CharField(max_length=400)  # text of comment
     repository = models.ForeignKey(Repository)
     date_time = models.DateTimeField(auto_now_add=True)
     path = models.CharField(max_length=400)  # relative path file comment on
