@@ -1,25 +1,25 @@
 {% if active == 'news' %}
-<li class="active" id="news"><a href="#">News</a></li>
+<li class="active" id="news"><a href="{% url 'news' %}">News</a></li>
 {% else %}
-<li><a href="#">News</a></li>
+<li><a href="{% url 'news' %}">News</a></li>
 {% endif %}
 
 {% if active == 'watching' %}
-<li class="active"><a href="#">Watching</a></li>
+<li class="active"><a href="{% url 'watching' %}">Watching</a></li>
 {% else %}
-<li><a href="#">Watching</a></li>
+<li><a href="{% url 'watching' %}">Watching</a></li>
 {% endif %}
 
 {% if active == 'starred' %}
-<li class="active"><a href="#">Starred</a></li>
+<li class="active"><a href="{% url 'starred' %}">Starred</a></li>
 {% else %}
-<li><a href="#">Starred</a></li>
+<li><a href="{% url 'starred' %}">Starred</a></li>
 {% endif %}
 
 {% if active == 'following' %}
-<li class="active"><a href="#">Following</a></li>
+<li class="active"><a href="{% url 'following' %}">Following</a></li>
 {% else %}
-<li><a href="#">Following</a></li>
+<li><a href="{% url 'following' %}">Following</a></li>
 {% endif %}
 
 {% if active == 'profile' %}

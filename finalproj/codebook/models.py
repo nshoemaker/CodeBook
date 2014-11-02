@@ -6,9 +6,11 @@ from django.db.models import Q
 
 class Stack(models.Model):
     name = models.CharField(max_length=40)
+    icon = models.CharField(max_length=40)
 
 class Language(models.Model):
     name = models.CharField(max_length=20)
+    icon = models.CharField(max_length=40)
     #extensions = models.CharField(max_length=20)
 
 class Rating(models.Model):

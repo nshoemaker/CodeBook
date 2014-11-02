@@ -38,3 +38,29 @@ def front(request):
 
     return render(request, 'codebook/front-page.html', context)
 
+#@login_required
+def news(request):
+    context = {}
+    # TODO: this is just temporary. Replace with actual list of languages the user likes.
+    lang_list = ['java', 'python', 'csharp', 'cpp', 'c']
+    context['lang_list'] = lang_list
+    return render(request, 'codebook/news-page.html', context)
+
+#@login_required
+def watching(request):
+    context = {}
+    return render(request, 'codebook/watching-page.html', context)
+
+#@login_required
+def starred(request):
+    context = {}
+    return render(request, 'codebook/starred-page.html', context)
+
+#@login_required
+def following(request):
+    context = {}
+    # TODO: this is just temporary. Replace with actual list of user ids of people the user is following (max 10)
+    following_list_short = ['1','2','3','4','5','6','7','8','9','10','11','12']
+    context['following_list_short'] = following_list_short
+    return render(request, 'codebook/following-page.html', context)
+

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Codebook: Starred{% endblock %}
+
+{% block stylesheets %}
+    {% load staticfiles %}
+{% endblock stylesheets %}
+
+{% block nav-left %}
+    {% include 'codebook/nav-buttons.html' with active='starred' %}
+{% endblock %}
+
+{% block nav-right %}
+{% endblock nav-right %}
+
+{% block header %}
+    <div class="row jumbotron lang-main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8 centered-text">
+                    <h1>Starred</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock header %}
+    {% block stream %}
+    {% include 'codebook/repository-list.html' %}
+{% endblock stream %}

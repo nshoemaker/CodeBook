@@ -26,7 +26,7 @@
                     <h4>creator</h4>
                 </div>
                 <div class="col-md-1">
-                    <h4><img src="{% static 'img/default_profile.jpg' %}"></h4>
+                    <h4>{% include 'codebook/get-profpic.html' %}</h4>
                 </div>
             </div>
             <!-- end repository header top thingy -->
@@ -97,7 +97,7 @@
                 <li>
                     <div class="row comment">
                         <div class="col-md-1">
-                            <h5><img src="{% static 'img/default_profile.jpg' %}"></h5>
+                            <h5>{% include 'codebook/get-profpic.html' %}</h5>
                         </div>
                         <div class="col-md-2">
                             <h5>username</h5>
@@ -118,7 +118,7 @@
                 <li>
                     <div class="row comment">
                         <div class="col-md-1">
-                            <h5><img src="{% static 'img/default_profile.jpg' %}"></h5>
+                            <h5>{% include 'codebook/get-profpic.html'%}</h5>
                         </div>
                         <div class="col-md-2">
                             <h5>username_2</h5>
@@ -183,11 +183,11 @@
 
                     </div>
                     <div class="col-md-2">
-                        <h4>{{ username.creator.name }}</h4>
+                        <h4>{{ repo.creator.user.username }}</h4>
                     </div>
                     <div class="col-md-1">
                         <!-- TODO: setup profile images -->
-                        <h4><img src="{% static 'img/default_profile.jpg' %}"></h4>
+                        <h4>{% include 'codebook/get-profpic.html' with id=repo.creator.user.id %}</h4>
                     </div>
                 </div>
                 <!-- end repository header top thingy -->
@@ -253,8 +253,7 @@
                         <li id="comment{{ comment.id }}">
                             <div class="row comment">
                                 <div class="col-md-1">
-                                    <!-- TODO: handle profile pictures -->
-                                    <h5><img src="{% static 'img/default_profile.jpg' %}"></h5>
+                                    <h5>{% include 'codebook/get-profpic.html' with id=comment.profile_user.user.id %}</h5>
                                 </div>
                                 <div class="col-md-2">
                                     <h5>{{ comment.profile_user.user.username }}</h5>

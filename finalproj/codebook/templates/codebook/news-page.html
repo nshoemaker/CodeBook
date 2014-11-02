@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Codebook: News{% endblock %}
+
+{% block stylesheets %}
+    {% load staticfiles %}
+{% endblock stylesheets %}
+
+{% block nav-left %}
+    {% include 'codebook/nav-buttons.html' with active='news' %}
+{% endblock %}
+
+{% block nav-right %}
+{% endblock nav-right %}
+
+{% block header %}
+    <div class="row jumbotron lang-main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8 centered-text">
+                    <h1>News</h1>
+                </div>
+            </div>
+            <div class="row languages">
+                <div class="col-md-2">
+                    <h3>Favorites:</h3>
+                </div>
+                {% for lang in lang_list %}
+                    <div class="col-md-1">
+                        <h3>{% include 'codebook/get-lang-icon-from-name.html' with lang=lang %}</h3>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+{% endblock header %}
+
+{% block stream %}
+    {% include 'codebook/repository-list.html' %}
+{% endblock stream %}

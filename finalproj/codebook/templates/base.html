@@ -37,7 +37,10 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                {% block nav-left %}{% endblock %}
+            <!-- TODO: I'm including the navbar buttons for now beccause the backend isn't ready yet-->
+                {% block nav-left %}
+                    {% include 'codebook/nav-buttons.html' %}
+                {% endblock %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% block nav-right %}
@@ -51,7 +54,10 @@
 <!-- main content area -->
 
 <div class="container-fluid">
-    {% block container %}{% endblock %}
+    {% block header %}{% endblock %}
+</div>
+<div class="container-fluid">
+    {% block stream %}{% endblock %}
 </div>
 <!-- end main content area -->
 

@@ -5,14 +5,13 @@
     {% load staticfiles %}
 {% endblock stylesheets %}
 
-{% block nav-left %}
-{% endblock nav-left %}
-
 {% block nav-right %}
         {%include 'codebook/signin-signup-buttons.html' %}
 {% endblock nav-right %}
 
-{% block container %}
+{% block header %}
         {% include 'codebook/search-panel.html' %}
+{% endblock header %}
+{% block stream %}
         {% include 'codebook/repository-list.html' %}
-{% endblock container %}
+{% endblock stream %}
