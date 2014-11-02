@@ -1,0 +1,208 @@
+.repository-list {
+  padding-left: 0px;
+}
+
+.repository-list li {
+list-style-type: none;
+}
+
+.repository {
+  max-width: 75%;
+  border-width:1px; 
+  border-style:solid;
+    border-color:#dcdcdc;
+}
+
+.repository-file-view {
+  border-bottom-width: 1px;
+  border-bottom-style:solid;
+  border-bottom-color:#dcdcdc;
+  min-height: 200px;
+}
+
+.repository-file {
+  min-height: 200px;
+}
+
+.repository-file-explorer {
+  background-color: #c0c0c0;
+  min-height: 200px;
+}
+
+.repository-header {
+    background-color: #dcdcdc;
+}
+
+.repository-footer {
+    background-color: #dcdcdc;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.repository img {
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    width: 25px;
+    height: 25px;
+}
+
+.comment {
+  border-bottom-width: 1px;
+  border-bottom-style:solid;
+  border-bottom-color:#dcdcdc;
+}
+
+.tags {
+  border-bottom-width: 1px;
+  border-bottom-style:solid;
+  border-bottom-color:#dcdcdc; 
+}
+
+.tag-text {
+  padding-right: 5px;
+}
+
+.tag-list {
+-webkit-margin-before: 1em;
+-webkit-margin-after: 1em;
+-webkit-margin-start: 0px;
+-webkit-margin-end: 0px;
+-webkit-padding-start: 0px;
+margin-top: 5px;
+margin-bottom: 5px;
+
+}
+
+.tag-list li
+{
+display: inline;
+list-style-type: none;
+padding-right: 5px;
+}
+
+.tag-btn {
+}
+
+.lang-main {
+  background-color: #66CC99;
+
+}
+
+.languages {
+    text-align: center;
+
+}
+
+.languages i {
+  background-color: #55BB88;
+  padding: 15px;
+    background-position: 100% 100%;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+}
+
+.control-btn {
+  background-color: #77DDAA;
+}
+
+.comment-list li { 
+list-style-type: none;
+}
+
+.centered-text {
+    text-align:center
+}    
+.profile-info {
+  max-width: 600px;
+  padding-top: 20px;
+  margin: 0 auto;
+}
+.profpic{
+  border-radius: 5px;
+}
+
+.vert-padded{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.comment-dislike{
+	padding-top:5px;
+}
+
+.top-padded{
+  padding-top: 20px;
+}
+
+.grumble{
+  position:relative;
+  border:1px solid #ffffff;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #fff;
+}
+
+.bottomright {
+  position:absolute; 
+  padding-bottom: 3px;
+  padding-right: 3px;
+  bottom: 0;  
+  right: 0;
+}
+
+.large-icon {
+  font-size: 40px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+
+.medium-icon {
+  font-size: 20px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.bottom-button{    
+  margin: 0 auto;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

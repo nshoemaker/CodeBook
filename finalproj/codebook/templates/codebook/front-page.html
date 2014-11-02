@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Codebook: Front Page{% endblock %}
+
+{% block stylesheets %}
+    {% load staticfiles %}
+{% endblock stylesheets %}
+
+{% block nav-left %}
+{% endblock nav-left %}
+
+{% block nav-right %}
+        {%include 'codebook/signin-signup-buttons.html' %}
+{% endblock nav-right %}
+
+{% block container %}
+        {% include 'codebook/search-panel.html' %}
+        {% include 'codebook/repository-list.html' %}
+{% endblock container %}

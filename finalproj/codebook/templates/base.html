@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,52 +11,54 @@
     <title>{% block title %}{% endblock %}</title>
 
     {% load staticfiles %}
-    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
-    <link href="{% static "css/controls.css" %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/controls.css' %}" rel="stylesheet">
+    <link href="{% static 'fonts/pictonic/css/pictonic.css' %}" rel="stylesheet">
     {% block stylesheets %}
     {% endblock %}
-  </head>
-  <body>    
+</head>
+<body>
 
-    <!-- Fixed navbar -->
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-      <div class="container">
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/codebook/front">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/codebook/front">
                 <span class="glyphicon glyphicon-book"></span>
                 <span>CodeBook</span>
-          </a>
+            </a>
         </div>
         <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            {% block nav-left %}{% endblock %}
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            {% block nav-right %}
-            {% endblock %}
-          </ul>
+            <ul class="nav navbar-nav">
+                {% block nav-left %}{% endblock %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% block nav-right %}
+                {% endblock %}
+            </ul>
         </div>
-      </div>
     </div>
-    <!-- end Fixed navbar -->
+</div>
+<!-- end Fixed navbar -->
 
-    <!-- main content area -->
-    <div class="top-padded">
-        {% block container %}{% endblock %}
-    </div>
-    <!-- end main content area -->
+<!-- main content area -->
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
-    <script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
-    <script src="{% static "js/add_comment.js" %}"></script>
-  </body>
+<div class="container-fluid">
+    {% block container %}{% endblock %}
+</div>
+<!-- end main content area -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
+<script src="{% static " js/jquery-1.11.1.min.js" %}"></script>
+<script src = "{% static "js / bootstrap.min.js" %}" ></script>
+<script src="{% static " js/add_comment.js" %}"></script>
+</body >

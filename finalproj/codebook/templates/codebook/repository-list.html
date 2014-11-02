@@ -1,0 +1,136 @@
+{% load staticfiles %}
+<!-- start repository list row-->
+<div class="row">
+    <div class="col-md-12">
+        <ol class="repository-list">
+            <li>
+                <div class="container repository">
+                    <div class="row repository-header">
+                        <div class="col-md-3">
+                            <h4>repository</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="glyphicon glyphicon-star"></h4>
+                            <!-- toggled the class should be : class="glyphicon glyphicon-star-empty" -->
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="glyphicon glyphicon-eye-open"></h4>
+                            <!-- toggle, the class should be : class="glyphicon glyphicon-eye-close" -->
+                        </div>
+                        <div class="col-md-4">
+
+                        </div>
+                        <div class="col-md-2">
+                            <h4>creator</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4><img src="{% static 'img/default_profile.jpg' %}"></h4>
+                        </div>
+                    </div>
+                    <!-- end repository header top thingy -->
+
+                    <div class="row repository-file-view">
+                        <div class="col-md-3 repository-file-explorer">
+                            this is where the file explorer will be
+                        </div>
+                        <div class="col-md-9 repository-file">
+                            this is where the code will be
+                        </div>
+                    </div>
+                    <!-- end file view -->
+
+                    <div class="row tags">
+                        <div class="col-md-10">
+                            <div class="btn-group-sm">
+                                <ol class="tag-list">
+                                    <!-- endorsed tags have x's next to them (toggle to unendorse) unendorsed tags have check -->
+                                    <li>
+                                        <button class="btn btn-sm tag-btn">
+                                            <span class="tag-text">Tag 1</span>
+                                            <span class="glyphicon glyphicon-ok"></span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-sm tag-btn">
+                                            <span class="tag-text">Tag 2</span>
+                                            <span class="glyphicon glyphicon-ok"></span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-sm tag-btn">
+                                            <span class="tag-text">Tag 3</span>
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="col-md-2 tag-list">
+                            <button type="submit" class="btn btn-sm control-btn">Add Tag</button>
+                        </div>
+                    </div>
+                    <!-- end tags -->
+
+                    <ol class="comment-list">
+                        <li>
+                            <div class="row comment">
+                                <div class="col-md-1">
+                                    <h5><img src="{% static 'img/default_profile.jpg' %}"></h5>
+                                </div>
+                                <div class="col-md-2">
+                                    <h5>username</h5>
+                                </div>
+                                <div class="col-md-1 col-md-offset-7">
+                                    <h5 class="glyphicon glyphicon-ok"></h5>
+                                </div>
+                                <div class="col-md-10 comment-text">
+                                    <h6>
+                                        this is the text from a comment this is the text from a comment this is the
+                                        text
+                                        from a
+                                        comment this is the text from a comment
+                                    </h6>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row comment">
+                                <div class="col-md-1">
+                                    <h5><img src="{% static 'img/default_profile.jpg' %}"></h5>
+                                </div>
+                                <div class="col-md-2">
+                                    <h5>username_2</h5>
+                                </div>
+                                <div class="col-md-1 col-md-offset-7">
+                                    <h5 class="glyphicon glyphicon-ok"></h5>
+                                </div>
+                                <div class="col-md-10 comment-text ">
+                                    <h6>
+                                        this is the text from a comment this is the text from a comment g s s s s s
+                                        this is
+                                        the
+                                        text from a comment this is the text from a comment
+                                    </h6>
+                                </div>
+                            </div>
+                        </li>
+                    </ol>
+                    <!-- end comment list -->
+
+                    <div class="row repository-footer">
+                        <form role="form">
+                            <div class="col-md-9 col-lg-offset-1">
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="col-md-1">
+                                <input type="submit" class="btn control-btn" value="Comment">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </li>
+        </ol>
+        <!-- end repository list -->
+    </div>
+</div>
+<!-- end repository list row-->
