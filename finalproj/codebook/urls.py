@@ -6,5 +6,7 @@ urlpatterns = patterns('',
     url(r'^watching$', 'codebook.views.watching', name='watching'),
     url(r'^starred$', 'codebook.views.starred', name='starred'),
     url(r'^following$', 'codebook.views.following', name='following'),
+    url(r'^signin$', 'codebook.views.signin', name='signin'),
+    url(r'^signup$', 'codebook.views.signup', name='signup'),
 
 )
