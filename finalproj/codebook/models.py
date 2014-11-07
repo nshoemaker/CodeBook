@@ -19,15 +19,38 @@ class Rating(models.Model):
     credibility = models.IntegerField()  # how well we think they know the language
 
 class ProfileUser(models.Model):
-    user = models.OneToOneField(User)
-    following = models.ManyToManyField("self", related_name="followers", blank=True)
-    # can list followers of user and list users followed by another user
-    rating = models.ManyToManyField(Rating, related_name="rated", blank=True)
-    email = models.CharField(max_length=400)
-    website = models.CharField(max_length=400, blank=True)
-    company = models.CharField(max_length=400, blank=True)
-    bio = models.CharField(max_length=400, blank=True)
+    # note that there will be some id that we can use to get profile info for this user from github
     languages = models.ManyToManyField(Language, related_name="languages_liked")
+
+    def get_username(self):
+        return "username"
+
+    def get_id(self):
+        return 1
+
+    def get_avatar_url(self):
+        return "https://github.com/images/error/octocat_happy.gif"
+
+    def get_git_profile_url(self):
+        return "https://api.github.com/users/octocat"
+    
+    def get_repos(self):
+        pass
+
+    def get_following(self):
+        pass
+
+    def get_email(self):
+        return "user@email.com"
+
+    def get_website(self):
+        return "userwebsite.com"
+
+    def get_compant(self):
+        return "User Company"
+
+    def get_bio(self):
+        return "This is my user bio."
 
 class Comment(models.Model):
     profile_user = models.ForeignKey(ProfileUser)
@@ -37,20 +60,34 @@ class Comment(models.Model):
     likers = models.ManyToManyField(ProfileUser, related_name="liked_by")
 
 class Repository(models.Model):
-    creator = models.ForeignKey(ProfileUser)
-    name = models.CharField(max_length=200)
-    contributors = models.ManyToManyField(ProfileUser, related_name="contributed", blank=True)
-    # sorted by number of commits descending order
-    language = models.ManyToManyField(Language, related_name="language_used_in_repo", blank=True)
-    #number next to each lang is number of bytes of code in that language
-    stack = models.ManyToManyField(Stack, related_name="stack_used_in_repo", blank=True)
-    #commitActivityData = array of array of ints, may want to save this
-    date_created = models.DateTimeField(auto_now_add=False)
-    star_count = models.IntegerField()
-    fork_count = models.IntegerField()
-    kb_size = models.IntegerField()
+    # note that there will need to be an extra field with some github id that we use
     comments = models.ManyToManyField(Comment)
-    watchers = models.ManyToManyField(ProfileUser, related_name="watched_by")
+
+    def get_creator(self):
+        return "repository_creator"
+
+    def get_name(self):
+        return "repository_name"
+
+    def get_language(self):
+        return "repository_language"
+
+    def get_date_created(self):
+        return "1/1/2014"
+
+    def get_star_count(self):
+        return 100
+
+    def get_watch_count(self):
+        return 300
+
+    def get_kb_size(self):
+        return 24
+
+    def get_watchers(self):
+        pass
+
+
 
 class Post (models.Model):
     creator = models.ForeignKey(ProfileUser)
