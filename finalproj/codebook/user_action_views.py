@@ -1,3 +1,15 @@
+############################################################
+############################################################
+##  user_action_views.py:                                 ##
+##                                                        ##
+##  Contains actions which perform user actions  		  ##
+##  Actions:                                              ##
+##      like_comment - Like/dislike a comment             ##
+##      watch_repo   - Watch/Unwatch a Repository         ##
+##      save_post    - Save/Unsave a Post                 ##
+############################################################
+############################################################
+
 from views import *
 
 # Like or Unlike a Comment
