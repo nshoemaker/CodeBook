@@ -3,6 +3,8 @@
 <!-- start repository list row-->
 <div class="row">
 <div class="col-md-12">
+
+
 <!-- TODO: this is temporarily here to show static usage -->
 <ol class="repository-list">
     <li>
@@ -12,12 +14,15 @@
                     <h4>repository</h4>
                 </div>
                 <div class="col-md-1">
-                    <h4 class="glyphicon glyphicon-star"></h4>
+                    <h4 class="glyphicon glyphicon-star"></h4> 
                     <!-- toggled the class should be : class="glyphicon glyphicon-star-empty" -->
+
                 </div>
                 <div class="col-md-1">
                     <h4 class="glyphicon glyphicon-eye-open"></h4>
+
                     <!-- toggle, the class should be : class="glyphicon glyphicon-eye-close" -->
+
                 </div>
                 <div class="col-md-4">
 
@@ -29,6 +34,7 @@
                     <h4>{% include 'codebook/get-profpic.html' %}</h4>
                 </div>
             </div>
+
             <!-- end repository header top thingy -->
 
             <div class="row repository-file-view">
@@ -39,13 +45,16 @@
                     this is where the code will be
                 </div>
             </div>
+
             <!-- end file view -->
 
             <div class="row tags">
                 <div class="col-md-10">
                     <div class="btn-group-sm">
                         <ol class="tag-list">
+
                             <!-- endorsed tags have x's next to them (toggle to unendorse) unendorsed tags have check -->
+
                             <li>
                                 <button class="btn btn-sm tag-btn">
                                     <span class="tag-text">Tag 1</span>
@@ -71,10 +80,12 @@
                     <button type="submit" class="btn btn-sm control-btn">Add Tag</button>
                 </div>
             </div>
+
             <!-- end tags -->
 
             <!-- TODO get ratings working (make average read only)-->
             <!-- begin ratings -->
+
             <div class="row ratings">
                 <div class="col-md-2">
                     <h4>Difficulty</h4>
@@ -137,6 +148,7 @@
                     </div>
                 </li>
             </ol>
+
             <!-- end comment list -->
 
             <div class="row repository-footer">
@@ -152,6 +164,7 @@
         </div>
     </li>
 </ol>
+
 <!-- end repository list -->
 
 <!-- TODO: everything above this comment and below the static usage comment should be deleted eventually -->
@@ -173,11 +186,13 @@
                         {% endif %}
                     </div>
                     <div class="col-md-1">
-                        {% if repo.is_watched == 'true' %}
+                        <a href="{% url watch_repo repo.id %}">
+                        {% if profile_user in repo.watchers.all %}
                             <h4 class="glyphicon glyphicon-eye-open"></h4>
                         {% else %}
                             <h4 class="glyphicon glyphicon-eye-close"></h4>
                         {% endif %}
+                        </a>
                     </div>
                     <div class="col-md-4">
 
@@ -259,11 +274,13 @@
                                     <h5>{{ comment.profile_user.user.username }}</h5>
                                 </div>
                                 <div class="col-md-1 col-md-offset-7">
-                                    {% if comment.is_endorsed == "true" %}
-                                        <h5 class="glyphicon glyphicon-remove"></h5>
-                                    {% else %}
-                                        <h5 class="glyphicon glyphicon-ok"></h5>
-                                    {% endif %}
+                                    <a href="{% url like_comment comment.id %}">
+                                        {% if profile_user in comment.likers.all %}
+                                            <h5 class="glyphicon glyphicon-remove"></h5>
+                                        {% else %}
+                                            <h5 class="glyphicon glyphicon-ok"></h5>
+                                        {% endif %}
+                                    </a>
                                 </div>
                                 <div class="col-md-10 comment-text">
                                     <h6>{{ comment.text }}</h6>

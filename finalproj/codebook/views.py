@@ -25,7 +25,7 @@ from mimetypes import guess_type
 
 from django.db.models import Q
 
-#from codebook.models import *
+from codebook.models import *
 #from codebook.forms import *
 
 from datetime import datetime
@@ -44,16 +44,29 @@ def news(request):
     # TODO: this is just temporary. Replace with actual list of languages the user likes.
     lang_list = ['java', 'python', 'csharp', 'cpp', 'c']
     context['lang_list'] = lang_list
+
+    #profile_user = ProfileUser.objects.get(user=request.user)
+    #user_langs = profile_user.languages.all
+    #context['profile_user'] = profile_user
+    #context['lang_list'] = user_langs
     return render(request, 'codebook/news-page.html', context)
 
 #@login_required
 def watching(request):
     context = {}
+    #profile_user = ProfileUser.objects.get(user=request.user)
+    #user_watches = Watch.objects.get(profile_user=profile_user)
+    #context['repos'] = user_watches.repositories.all 
+    #context['profile_user'] = profile_user
     return render(request, 'codebook/watching-page.html', context)
 
 #@login_required
 def starred(request):
     context = {}
+    #profile_user = ProfileUser.objects.get(user=request.user)
+    #user_saved = Saved.objects.get(profile_user=profile_user)
+    #context['posts'] = user_saved.posts.all 
+    #context['profile_user'] = profile_user
     return render(request, 'codebook/starred-page.html', context)
 
 #@login_required
@@ -62,6 +75,7 @@ def following(request):
     # TODO: this is just temporary. Replace with actual list of user ids of people the user is following (max 10)
     following_list_short = ['1','2','3','4','5','6','7','8','9','10','11','12']
     context['following_list_short'] = following_list_short
+    #context['profile_user'] = ProfileUser.objects.get(user=request.user)
     return render(request, 'codebook/following-page.html', context)
 
 def signin(request):

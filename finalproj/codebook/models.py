@@ -18,7 +18,6 @@ class Rating(models.Model):
     proficiency = models.IntegerField()  # how well they think they know the language
     credibility = models.IntegerField()  # how well we think they know the language
 
-
 class ProfileUser(models.Model):
     user = models.OneToOneField(User)
     following = models.ManyToManyField("self", related_name="followers", blank=True)
@@ -28,22 +27,41 @@ class ProfileUser(models.Model):
     website = models.CharField(max_length=400, blank=True)
     company = models.CharField(max_length=400, blank=True)
     bio = models.CharField(max_length=400, blank=True)
+    languages = models.ManyToManyField(Language, related_name="languages_liked")
 
-
+class Comment(models.Model):
+    profile_user = models.ForeignKey(ProfileUser)
+    text = models.CharField(max_length=400)  # text of comment
+    date_time = models.DateTimeField(auto_now_add=True)
+    path = models.CharField(max_length=400)  # relative path file comment on
+    likers = models.ManyToManyField(ProfileUser, related_name="liked_by")
 
 class Repository(models.Model):
     creator = models.ForeignKey(ProfileUser)
     name = models.CharField(max_length=200)
     contributors = models.ManyToManyField(ProfileUser, related_name="contributed", blank=True)
     # sorted by number of commits descending order
-    language = models.ManyToManyField(Language, related_name="language_used_in", blank=True)
+    language = models.ManyToManyField(Language, related_name="language_used_in_repo", blank=True)
     #number next to each lang is number of bytes of code in that language
-    stack = models.ManyToManyField(Stack, related_name="stack_used_in", blank=True)
+    stack = models.ManyToManyField(Stack, related_name="stack_used_in_repo", blank=True)
     #commitActivityData = array of array of ints, may want to save this
     date_created = models.DateTimeField(auto_now_add=False)
     star_count = models.IntegerField()
     fork_count = models.IntegerField()
     kb_size = models.IntegerField()
+    comments = models.ManyToManyField(Comment)
+    watchers = models.ManyToManyField(ProfileUser, related_name="watched_by")
+
+class Post (models.Model):
+    creator = models.ForeignKey(ProfileUser)
+    name = models.CharField(max_length=200)
+    repository = models.ForeignKey(Repository)
+    language = models.ManyToManyField(Language, related_name="language_used_in_post", blank=True)
+    stack = models.ManyToManyField(Stack, related_name="stack_used_in_post", blank=True)
+    date_created = models.DateTimeField(auto_now_add=False)
+    star_count = models.IntegerField()
+    comments = models.ManyToManyField(Comment)
+    savers = models.ManyToManyField(ProfileUser, related_name="saved_by")
 
 class Tag(models.Model):
     text = models.CharField(max_length=20)
@@ -53,27 +71,16 @@ class Tag(models.Model):
     endorsements = models.ManyToManyField(ProfileUser)
     # tagger field with hash info about tagger - name, email, date
 
-class Comment(models.Model):
-    profile_user = models.ForeignKey(ProfileUser)
-    text = models.CharField(max_length=400)  # text of comment
-    repository = models.ForeignKey(Repository)
-    date_time = models.DateTimeField(auto_now_add=True)
-    path = models.CharField(max_length=400)  # relative path file comment on
-    likes = models.IntegerField()
-
-
-
 class Difficulty(models.Model):
     rating = models.IntegerField()
     repository = models.ForeignKey(Repository)
     profile_user = models.ForeignKey(ProfileUser)
     date_time = models.DateTimeField(auto_now_add=True)
 
-
 class Watch(models.Model):
     # can list watchers and list repositories being watched
     profile_user = models.ForeignKey(ProfileUser)
-    repository = models.ForeignKey(Repository)
+    repositories = models.ManyToManyField(Repository)
     date_time = models.DateTimeField(auto_now_add=True)
 
 class Star(models.Model):
@@ -81,3 +88,8 @@ class Star(models.Model):
     profile_user = models.ForeignKey(ProfileUser)
     repository = models.ForeignKey(Repository)
     date_time = models.DateTimeField(auto_now_add=True)
+
+#class Saved(models.Model):
+#    profile_user = models.ForeignKey(ProfileUser)
+#    posts = models.ManyToManyField(Post)
+#    date_time = models.DateTimeField(auto_now_add=True)
