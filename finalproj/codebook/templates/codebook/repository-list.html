@@ -6,6 +6,7 @@
 
 
 <!-- TODO: this is temporarily here to show static usage -->
+<!--
 <ol class="repository-list">
     <li>
         <div class="container repository">
@@ -15,13 +16,12 @@
                 </div>
                 <div class="col-md-1">
                     <h4 class="glyphicon glyphicon-star"></h4> 
-                    <!-- toggled the class should be : class="glyphicon glyphicon-star-empty" -->
+                    
 
                 </div>
                 <div class="col-md-1">
                     <h4 class="glyphicon glyphicon-eye-open"></h4>
 
-                    <!-- toggle, the class should be : class="glyphicon glyphicon-eye-close" -->
 
                 </div>
                 <div class="col-md-4">
@@ -35,7 +35,6 @@
                 </div>
             </div>
 
-            <!-- end repository header top thingy -->
 
             <div class="row repository-file-view">
                 <div class="col-md-3 repository-file-explorer">
@@ -46,14 +45,12 @@
                 </div>
             </div>
 
-            <!-- end file view -->
 
             <div class="row tags">
                 <div class="col-md-10">
                     <div class="btn-group-sm">
                         <ol class="tag-list">
 
-                            <!-- endorsed tags have x's next to them (toggle to unendorse) unendorsed tags have check -->
 
                             <li>
                                 <button class="btn btn-sm tag-btn">
@@ -80,11 +77,6 @@
                     <button type="submit" class="btn btn-sm control-btn">Add Tag</button>
                 </div>
             </div>
-
-            <!-- end tags -->
-
-            <!-- TODO get ratings working (make average read only)-->
-            <!-- begin ratings -->
 
             <div class="row ratings">
                 <div class="col-md-2">
@@ -149,8 +141,6 @@
                 </li>
             </ol>
 
-            <!-- end comment list -->
-
             <div class="row repository-footer">
                 <form role="form">
                     <div class="col-md-9 col-lg-offset-1">
@@ -165,7 +155,7 @@
     </li>
 </ol>
 
-<!-- end repository list -->
+-->
 
 <!-- TODO: everything above this comment and below the static usage comment should be deleted eventually -->
 
@@ -176,7 +166,7 @@
             <div class="container repository">
                 <div class="row repository-header">
                     <div class="col-md-3">
-                        <h4>{{ repo.name }}</h4>
+                        <h4>{{ repo.get_name }}</h4>
                     </div>
                     <div class="col-md-1">
                         {% if repo.is_starred == 'true' %}
@@ -186,19 +176,19 @@
                         {% endif %}
                     </div>
                     <div class="col-md-1">
-                        <a href="{% url watch_repo repo.id %}">
+                        <!--<a href="{ url watch_repo repo.id }">-->
                         {% if profile_user in repo.watchers.all %}
                             <h4 class="glyphicon glyphicon-eye-open"></h4>
                         {% else %}
                             <h4 class="glyphicon glyphicon-eye-close"></h4>
                         {% endif %}
-                        </a>
+                        <!--</a>-->
                     </div>
                     <div class="col-md-4">
 
                     </div>
                     <div class="col-md-2">
-                        <h4>{{ repo.creator.user.username }}</h4>
+                        <h4>{{ repo.get_creator }}</h4>
                     </div>
                     <div class="col-md-1">
                         <!-- TODO: setup profile images -->
@@ -263,7 +253,7 @@
                 </div>
             </div>
 
-                {% for comment in repo.comments %}
+                {% for comment in repo.comments.all %}
                     <ol class="comment-list" id="comment-list{{ repo.id }}">
                         <li id="comment{{ comment.id }}">
                             <div class="row comment">

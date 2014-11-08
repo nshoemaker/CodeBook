@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 
 from django.db.models import Q
 
+from github import Github 
+g = Github("dmouli", "Spongebob5%")
+
 class Stack(models.Model):
     name = models.CharField(max_length=40)
     icon = models.CharField(max_length=40)
@@ -74,29 +77,31 @@ class Tag(models.Model):
     # tagger field with hash info about tagger - name, email, date
 
 class Repository(models.Model):
-    # note that there will need to be an extra field with some github id that we use
+    repo_id = models.IntegerField(primary_key=True)
     comments = models.ManyToManyField(Comment)
 
     def get_creator(self):
-        return "repository_creator"
+        return g.get_repo(self.repo_id).owner.name
 
     def get_name(self):
-        return "repository_name"
+        print "In models repo id:" + str(self.repo_id)
+        return g.get_repo(self.repo_id).name
+        #return g.get_repo("merb-core").name
 
     def get_language(self):
-        return "repository_language"
+        return g.get_repo(self.repo_id).language
 
     def get_date_created(self):
-        return "1/1/2014"
+        return g.get_repo(self.repo_id).created_at
 
     def get_star_count(self):
-        return 100
+        return g.get_repo(self.repo_id).stargazers_count
 
     def get_watch_count(self):
-        return 300
+        return g.get_repo(self.repo_id).watchers_count
 
     def get_kb_size(self):
-        return 24
+        return g.get_repo(self.repo_id).size
 
     def get_watchers(self):
         pass

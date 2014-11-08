@@ -10,7 +10,7 @@
 ############################################################
 ############################################################
 
-from views import *
+from content_views import *
 
 # Like or Unlike a Comment
 def like_comment(request, comment_id):
@@ -71,3 +71,11 @@ def save_post(request, post_id):
 
 	# Ask others how they sent back to correct page
 	return redirect('/')
+
+def search(request):
+	context = {}
+	context["repos"] = Repository.objects.filter(repo_id=3222)
+	return render(request, "codebook/search-results-page.html", context)
+
+def repo_comment(request, repo_id):
+	return redirect("/")

@@ -18,6 +18,10 @@
             <div class="row">
                 <div class="col-md-offset-2 col-md-8 centered-text">
                     <h1>Search Results</h1>
+                    <p> {% for name in names %}
+                            {{name}} 
+                        {% endfor %}
+                    </p>
                 </div>
             </div>
         </div>
