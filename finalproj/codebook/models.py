@@ -102,15 +102,12 @@ class Repository(models.Model):
         pass
 
 class RepoFile (models.Model):
-    #repository = models.ForeignKey(repo_id from github) 
+    repository = models.ForeignKey(Repository)
     comments = models.ManyToManyField(FileComment)
     savers = models.ManyToManyField(ProfileUser, related_name="saved_by")
     average_difficulty = models.IntegerField()
     average_quality = models.IntegerField()
     tags = models.ManyToManyField(Tag)
-
-    def get_repository(self):
-        return "file_repo"
 
     def get_creator(self):
         return "file_creator"
@@ -127,7 +124,7 @@ class RepoFile (models.Model):
 
 class Difficulty(models.Model):
     rating = models.IntegerField()
-    repository = models.ForeignKey(Repository)
+    repo_file = models.ForeignKey(RepoFile)
     profile_user = models.ForeignKey(ProfileUser)
     date_time = models.DateTimeField(auto_now_add=True)
 
