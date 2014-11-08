@@ -13,7 +13,7 @@ class Language(models.Model):
     icon = models.CharField(max_length=40)
     #extensions = models.CharField(max_length=20)
 
-class Rating(models.Model):
+class UserRating(models.Model):
     language = models.ForeignKey(Language)
     proficiency = models.IntegerField()  # how well they think they know the language
     credibility = models.IntegerField()  # how well we think they know the language
@@ -59,6 +59,20 @@ class Comment(models.Model):
     path = models.CharField(max_length=400)  # relative path file comment on
     likers = models.ManyToManyField(ProfileUser, related_name="liked_by")
 
+class FileComment (models.Model):
+    profile_user = models.ForeignKey(ProfileUser)
+    text = models.CharField(max_length=400)
+    date_time = models.DateTimeField(auto_now_add=True)
+    path = models.CharField(max_length=400)  # relative path file comment on
+    likers = models.ManyToManyField(ProfileUser, related_name="comment_liked_by")
+
+class Tag(models.Model):
+    text = models.CharField(max_length=20)
+    profile_user = models.ForeignKey(ProfileUser, related_name="created")
+    date_time = models.DateTimeField(auto_now_add=True)
+    endorsements = models.ManyToManyField(ProfileUser)
+    # tagger field with hash info about tagger - name, email, date
+
 class Repository(models.Model):
     # note that there will need to be an extra field with some github id that we use
     comments = models.ManyToManyField(Comment)
@@ -87,26 +101,29 @@ class Repository(models.Model):
     def get_watchers(self):
         pass
 
-
-
-class Post (models.Model):
-    creator = models.ForeignKey(ProfileUser)
-    name = models.CharField(max_length=200)
-    repository = models.ForeignKey(Repository)
-    language = models.ManyToManyField(Language, related_name="language_used_in_post", blank=True)
-    stack = models.ManyToManyField(Stack, related_name="stack_used_in_post", blank=True)
-    date_created = models.DateTimeField(auto_now_add=False)
-    star_count = models.IntegerField()
-    comments = models.ManyToManyField(Comment)
+class RepoFile (models.Model):
+    #repository = models.ForeignKey(repo_id from github) 
+    comments = models.ManyToManyField(FileComment)
     savers = models.ManyToManyField(ProfileUser, related_name="saved_by")
+    average_difficulty = models.IntegerField()
+    average_quality = models.IntegerField()
+    tags = models.ManyToManyField(Tag)
 
-class Tag(models.Model):
-    text = models.CharField(max_length=20)
-    profile_user = models.ForeignKey(ProfileUser, related_name="created")
-    repository = models.ForeignKey(Repository)
-    date_time = models.DateTimeField(auto_now_add=True)
-    endorsements = models.ManyToManyField(ProfileUser)
-    # tagger field with hash info about tagger - name, email, date
+    def get_repository(self):
+        return "file_repo"
+
+    def get_creator(self):
+        return "file_creator"
+
+    def get_name(self):
+        return "file_name"
+
+    def get_language(self):
+        return "file_lang"
+
+    def get_date_created(self):
+        return "1/1/2014"
+
 
 class Difficulty(models.Model):
     rating = models.IntegerField()
@@ -114,19 +131,19 @@ class Difficulty(models.Model):
     profile_user = models.ForeignKey(ProfileUser)
     date_time = models.DateTimeField(auto_now_add=True)
 
-class Watch(models.Model):
+#class Watch(models.Model):
     # can list watchers and list repositories being watched
-    profile_user = models.ForeignKey(ProfileUser)
-    repositories = models.ManyToManyField(Repository)
-    date_time = models.DateTimeField(auto_now_add=True)
+    #profile_user = models.ForeignKey(ProfileUser)
+    #repositories = models.ManyToManyField(Repository)
+    #date_time = models.DateTimeField(auto_now_add=True)
 
-class Star(models.Model):
+#class Star(models.Model):
     # can list stargazers and list repositories being starred
-    profile_user = models.ForeignKey(ProfileUser)
-    repository = models.ForeignKey(Repository)
-    date_time = models.DateTimeField(auto_now_add=True)
+    #profile_user = models.ForeignKey(ProfileUser)
+    #repository = models.ForeignKey(Repository)
+    #date_time = models.DateTimeField(auto_now_add=True)
 
-#class Saved(models.Model):
-#    profile_user = models.ForeignKey(ProfileUser)
-#    posts = models.ManyToManyField(Post)
-#    date_time = models.DateTimeField(auto_now_add=True)
+class Saved(models.Model):
+    profile_user = models.ForeignKey(ProfileUser)
+    files = models.ManyToManyField(RepoFile)
+    date_time = models.DateTimeField(auto_now_add=True)

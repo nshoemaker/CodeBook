@@ -91,11 +91,3 @@ def following(request):
     context['following_list_short'] = following_list_short
     #context['profile_user'] = ProfileUser.objects.get(user=request.user)
     return render(request, 'codebook/following-page.html', context)
-
-def signin(request):
-    context = {}
-    return render(request, 'codebook/signin.html', context)
-
-def signup(request):
-    context = {}
-    return render(request, 'codebook/signup.html', context)
