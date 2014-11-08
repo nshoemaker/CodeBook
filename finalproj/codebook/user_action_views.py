@@ -12,6 +12,9 @@
 
 from content_views import *
 
+def signin(request):
+    pass
+
 # Like or Unlike a Comment
 def like_comment(request, comment_id):
 	context = {}
