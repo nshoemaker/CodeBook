@@ -65,8 +65,21 @@
         </div>
         <div class="row">
             <form role="form" action="{% url 'search' %}">
-                <div class="col-md-9 col-md-offset-1">
+                <div class="col-md-7 col-md-offset-1">
                     <input type="text" class="form-control">
+                </div>
+                <div class="col-md-2 dropdown">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default search-type-dropdown"> <!--dropdown-toggle search-type-dropdown" data-toggle="dropdown">-->
+                            <span class="selection">Search Type</span>
+                        </button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Language</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Repository</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Tag</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="col-md-1">
                     <input type="submit" class="btn control-btn" value="Search">

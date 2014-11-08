@@ -15,4 +15,5 @@ urlpatterns = patterns('',
     url(r'^save_post/(?P<post_id>\d+)$', 'codebook.user_action_views.save_post', name='save_post'),
     url(r'^search_results$', 'codebook.user_action_views.search', name='search'),
     url(r'^repo_comment/(?P<repo_id>\d+)$', 'codebook.user_action_views.repo_comment', name='repo_comment'),
+    url(r'^signin', 'codebook.user_action_views.signin', name="signin"),
 )
