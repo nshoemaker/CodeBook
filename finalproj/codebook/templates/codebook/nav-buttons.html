@@ -1,7 +1,7 @@
-{% if active == 'news' %}
-<li class="active" id="news"><a href="{% url 'news' %}">News</a></li>
+{% if active == 'my_languages' %}
+<li class="active" id="my_languages"><a href="{% url 'news' %}">News</a></li>
 {% else %}
-<li><a href="{% url 'news' %}">News</a></li>
+<li><a href="{% url 'news' %}">My Languages</a></li>
 {% endif %}
 
 {% if active == 'watching' %}
