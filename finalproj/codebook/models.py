@@ -46,7 +46,7 @@ class ProfileUser(models.Model):
     def get_website(self):
         return "userwebsite.com"
 
-    def get_compant(self):
+    def get_company(self):
         return "User Company"
 
     def get_bio(self):
