@@ -59,7 +59,7 @@
     </div>
     <div class="row">
         <div class="col-md-offset-4 col-md-4 centered-text">
-            <a class="btn btn-block btn-social btn-lg btn-github">
+            <a class="btn btn-block btn-social btn-lg btn-github" href="{% url 'social:begin' 'github-oauth2' %}?next={{ request.path }}">
                 <i class="fa fa-github-square"></i>
                 Sign in with GitHub
             </a>
