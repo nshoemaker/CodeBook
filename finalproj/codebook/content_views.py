@@ -51,6 +51,11 @@ from django.utils import timezone
 
 import json
 
+def saved(request):
+    context = {}
+
+    return render(request, 'codebook/saved-files.html', context)
+
 def front(request):
     context = {}
 
