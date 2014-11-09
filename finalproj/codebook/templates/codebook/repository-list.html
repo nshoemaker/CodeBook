@@ -256,15 +256,16 @@
                 {% for comment in repo.comments.all %}
                     <ol class="comment-list" id="comment-list{{ repo.id }}">
                         <li id="comment{{ comment.id }}">
+                        <li>
                             <div class="row comment">
                                 <div class="col-md-1">
                                     <h5>{% include 'codebook/get-profpic.html' with id=comment.profile_user.user.id %}</h5>
                                 </div>
                                 <div class="col-md-2">
-                                    <h5>{{ comment.profile_user.user.username }}</h5>
+                                    <h5>{{ comment.profile_user.get_username }}</h5>
                                 </div>
                                 <div class="col-md-1 col-md-offset-7">
-                                    <a href="{% url like_comment comment.id %}">
+                                    <a href="{ url like_comment 0 }">
                                         {% if profile_user in comment.likers.all %}
                                             <h5 class="glyphicon glyphicon-remove"></h5>
                                         {% else %}
@@ -279,16 +280,20 @@
                         </li>
                     </ol>
                 {% endfor %}
+
                 <!-- end comment list -->
 
                 <div class="row repository-footer">
-                    <form role="form">
+                    <form method="POST" role="form" action="{% url 'comment_repo' source repo.repo_id %}">
+                        {% for field in comment_form.visible_fields %}
                         <div class="col-md-9 col-lg-offset-1">
-                            <input type="text" class="form-control">
+                            {{field}}
                         </div>
+                        {% endfor %}
                         <div class="col-md-1">
                             <input type="submit" class="btn control-btn" value="Comment">
                         </div>
+                        {% csrf_token %}
                     </form>
                 </div>
             </div>

@@ -19,7 +19,8 @@ from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 
 from github import Github 
-g = Github("dmouli", "Spongebob5%")
+# g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
+g = Github()
 
 # Needed to manually create HttpResponses or raise an Http404 exception
 from django.http import HttpResponse, Http404, HttpResponseRedirect
@@ -43,7 +44,7 @@ from mimetypes import guess_type
 from django.db.models import Q
 
 from codebook.models import *
-#from codebook.forms import *
+from codebook.forms import *
 
 from datetime import datetime
 from django.utils import timezone

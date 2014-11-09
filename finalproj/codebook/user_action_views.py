@@ -77,8 +77,27 @@ def save_post(request, post_id):
 
 def search(request):
 	context = {}
-	context["repos"] = Repository.objects.filter(repo_id=3222)
+	context["repos"] = Repository.objects.all
+	context["source"] = 'codebook/search_results'
+	context['comment_form'] = CommentForm()
 	return render(request, "codebook/search-results-page.html", context)
 
-def repo_comment(request, repo_id):
-	return redirect("/")
+def comment_repo(request, source, repo_id):
+	context = {}
+
+	if request.method == "GET":
+		context['comment_form'] = CommentForm()
+		return redirect('/' + source)
+
+	new_user = ProfileUser()
+	new_user.save()
+	new_comment = Comment(profile_user=new_user)
+	form = CommentForm(request.POST, instance=new_comment)
+	if not form.is_valid():
+		context['form'] = form
+		return redirect('/' + source)
+	form.save()
+	repo = Repository.objects.get(repo_id=repo_id)
+	repo.comments.add(new_comment)
+	repo.save()
+	return redirect('/' + source)

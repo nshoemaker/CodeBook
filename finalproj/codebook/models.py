@@ -3,7 +3,8 @@ from django.db import models
 from django.db.models import Q
 
 from github import Github 
-g = Github("dmouli", "Spongebob5%")
+# g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
+g = Github()
 
 class Stack(models.Model):
     name = models.CharField(max_length=40)
