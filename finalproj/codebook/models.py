@@ -4,7 +4,7 @@ from django.db.models import Q
 
 from github import Github 
 # g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
-g = Github()
+g = Github('dmouli', 'Spongebob5%')
 
 class Stack(models.Model):
     name = models.CharField(max_length=40)
@@ -25,7 +25,7 @@ class ProfileUser(models.Model):
     languages = models.ManyToManyField(Language, related_name="languages_liked")
 
     def get_username(self):
-        return "username"
+        return "User #" + str(self.id)
 
     def get_id(self):
         return 1
@@ -79,13 +79,14 @@ class Repository(models.Model):
     repo_id = models.IntegerField(primary_key=True)
     comments = models.ManyToManyField(Comment)
 
+    def get_url(self):
+        return g.get_repo(self.repo_id).html_url
+
     def get_creator(self):
         return g.get_repo(self.repo_id).owner.name
 
     def get_name(self):
-        print "In models repo id:" + str(self.repo_id)
         return g.get_repo(self.repo_id).name
-        #return g.get_repo("merb-core").name
 
     def get_language(self):
         return g.get_repo(self.repo_id).language

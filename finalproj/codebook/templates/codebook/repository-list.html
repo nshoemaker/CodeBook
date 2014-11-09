@@ -166,7 +166,7 @@
             <div class="container repository">
                 <div class="row repository-header">
                     <div class="col-md-3">
-                        <h4>{{ repo.get_name }}</h4>
+                        <a href="{{repo.get_url}}"><h4>{{ repo.get_name }}</h4></a>
                     </div>
                     <div class="col-md-1">
                         {% if repo.is_starred == 'true' %}
@@ -262,7 +262,7 @@
                                     <h5>{% include 'codebook/get-profpic.html' with id=comment.profile_user.user.id %}</h5>
                                 </div>
                                 <div class="col-md-2">
-                                    <h5>{{ comment.profile_user.get_username }} , {{comment.profile_user.id}}</h5>
+                                    <h5>{{ comment.profile_user.get_username }}</h5>
                                 </div>
                                 <div class="col-md-1 col-md-offset-7">
                                     <a href="{% url 'like_comment' source comment.id %}">
