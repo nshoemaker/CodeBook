@@ -12,6 +12,7 @@ urlpatterns = patterns('social.apps.django_app.views',
         name='begin'),
     url(r'^complete/(?P<backend>[^/]+)/$', 'complete',
         name='complete'),
+
     # disconnection
     url(r'^disconnect/(?P<backend>[^/]+)/$', 'disconnect',
         name='disconnect'),

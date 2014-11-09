@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
-
 	# Loading Content
     url(r'^$', 'codebook.content_views.front', name='front'),
     url(r'^news$', 'codebook.content_views.news', name='news'),

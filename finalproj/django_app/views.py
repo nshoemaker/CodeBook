@@ -26,7 +26,6 @@ def complete(request, backend, *args, **kwargs):
     return do_complete(request.backend, _do_login, request.user,
                        redirect_name=REDIRECT_FIELD_NAME, *args, **kwargs)
 
-
 @never_cache
 @login_required
 @psa()

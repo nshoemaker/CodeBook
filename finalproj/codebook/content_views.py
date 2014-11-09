@@ -38,6 +38,8 @@ from django.contrib.auth.tokens import default_token_generator
 # Used to send mail from within Django
 from django.core.mail import send_mail
 
+from django.template.context import RequestContext
+
 # Helper function to guess a MIME type from a file name
 from mimetypes import guess_type
 
@@ -58,6 +60,7 @@ def saved(request):
 
 def front(request):
     context = {}
+    context['user'] = request.user
     return render(request, 'codebook/front-page.html', context)
 
 #@login_required
