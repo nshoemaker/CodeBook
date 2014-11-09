@@ -1,7 +1,7 @@
 <div class="navbar-form navbar-right form-group">
     {% if user and not user.is_anonymous %}
        <a>Hello {{ user.get_full_name|default:user.username }}!</a>
-       <a href="{% url 'auth:logout' %}?next={{ request.path }}">Logout</a>
+       <a href="{% url 'auth:logout' %}?next=/">Logout</a>
     {% else %} 
     <a class="btn btn-block btn-social btn-md btn-github" href="{% url 'social:begin' 'github' %}?next={{request.path}}">
         <i class="fa fa-github-square"></i>
