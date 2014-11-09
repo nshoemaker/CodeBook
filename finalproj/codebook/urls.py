@@ -8,10 +8,13 @@ urlpatterns = patterns('',
     url(r'^watching$', 'codebook.content_views.watching', name='watching'),
     url(r'^starred$', 'codebook.content_views.starred', name='starred'),
     url(r'^following$', 'codebook.content_views.following', name='following'),
+    url(r'^saved$', 'codebook.content_views.saved', name='saved'),
 
     # User Actions 
-    url(r'^like_comment/(?P<comment_id>\d+)$', 'codebook.user_action_views.like_comment', name='like_comment'),
+    url(r'^like_comment/(?P<source>\D+)/(?P<comment_id>\d+)$', 'codebook.user_action_views.like_comment', name='like_comment'),
     url(r'^watch_repo/(?P<repo_id>\d+)$', 'codebook.user_action_views.watch_repo', name='watch_repo'),
     url(r'^save_post/(?P<post_id>\d+)$', 'codebook.user_action_views.save_post', name='save_post'),
+    url(r'^search_results$', 'codebook.user_action_views.search', name='search'),
+    url(r'^comment_repo/(?P<source>\D+)/(?P<repo_id>\d+)$', 'codebook.user_action_views.comment_repo', name='comment_repo'),
     url(r'^signin', 'codebook.user_action_views.signin', name="signin"),
 )

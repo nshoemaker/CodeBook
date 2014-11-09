@@ -6,25 +6,21 @@
 
 
 <!-- TODO: this is temporarily here to show static usage -->
-<!--
-<ol class="repository-list">
+
+<ol class="file-list">
     <li>
-        <div class="container repository">
-            <div class="row repository-header">
-                <div class="col-md-3">
-                    <h4>repository</h4>
+        <div class="container file">
+            <div class="row file-header">
+                <div class="col-md-2">
+                    <h4>Filename.txt</h4>
                 </div>
                 <div class="col-md-1">
-                    <h4 class="glyphicon glyphicon-star"></h4> 
-                    
-
+                    <h4 class="glyphicon glyphicon-book"></h4>
                 </div>
                 <div class="col-md-1">
-                    <h4 class="glyphicon glyphicon-eye-open"></h4>
-
-
+                    <h4 class="glyphicon glyphicon-floppy-disk"></h4>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
 
                 </div>
                 <div class="col-md-2">
@@ -36,11 +32,8 @@
             </div>
 
 
-            <div class="row repository-file-view">
-                <div class="col-md-3 repository-file-explorer">
-                    this is where the file explorer will be
-                </div>
-                <div class="col-md-9 repository-file">
+            <div class="row file-file-view">
+                <div class="col-md-12 file-file">
                     this is where the code will be
                 </div>
             </div>
@@ -82,14 +75,13 @@
                 <div class="col-md-2">
                     <h4>Difficulty</h4>
                 </div>
-                <div class="col-md-1">
-                    <h6>Average Rating:</h6>
-                </div>
                 <div class="col-md-3">
-                    <div class="stars starrr" data-rating="3"></div>
+                    <div class="stars starrr" data-rating="0"></div>
                 </div>
                 <div class="col-md-1">
-                    <h6>Your Rating:</h6>
+                </div>
+                <div class="col-md-2">
+                    <h4>Documentation</h4>
                 </div>
                 <div class="col-md-3">
                     <div class="stars starrr" data-rating="0"></div>
@@ -141,7 +133,7 @@
                 </li>
             </ol>
 
-            <div class="row repository-footer">
+            <div class="row file-footer">
                 <form role="form">
                     <div class="col-md-9 col-lg-offset-1">
                         <input type="text" class="form-control">
@@ -155,40 +147,37 @@
     </li>
 </ol>
 
--->
+
 
 <!-- TODO: everything above this comment and below the static usage comment should be deleted eventually -->
 
 
-{% for repo in repos %}
-    <ol class="repository-list" id="repo-list{{ repo.id }}">
-        <li id="repo{{ repo.id }}">
-            <div class="container repository">
-                <div class="row repository-header">
+{% for file in files %}
+    <ol class="file-list" id="file-list{{ file.id }}">
+        <li id="file{{ file.id }}">
+            <div class="container file">
+                <div class="row file-header">
                     <div class="col-md-3">
-                        <h4>{{ repo.get_name }}</h4>
+                        <h4>{{ file.get_name }}</h4>
                     </div>
                     <div class="col-md-1">
-                        {% if repo.is_starred == 'true' %}
-                            <h4 class="glyphicon glyphicon-star"></h4>
-                        {% else %}
-                            <h4 class="glyphicon glyphicon-star-empty"></h4>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-1">
+                        <!-- should have a link to the repository -->
                         <!--<a href="{ url watch_repo repo.id }">-->
-                        {% if profile_user in repo.watchers.all %}
-                            <h4 class="glyphicon glyphicon-eye-open"></h4>
-                        {% else %}
-                            <h4 class="glyphicon glyphicon-eye-close"></h4>
-                        {% endif %}
+                        <h4 class="glyphicon glyphicon-book"></h4>
                         <!--</a>-->
+                    </div>
+                    <div class="col-md-1">
+                        {% if file.is_saved == 'true' %}
+                            <h4 class="glyphicon glyphicon-floppy-saved"></h4>
+                        {% else %}
+                            <h4 class="glyphicon glyphicon-floppy-disk"></h4>
+                        {% endif %}
                     </div>
                     <div class="col-md-4">
 
                     </div>
                     <div class="col-md-2">
-                        <h4>{{ repo.get_creator }}</h4>
+                        <h4>{{ file.get_creator }}</h4>
                     </div>
                     <div class="col-md-1">
                         <!-- TODO: setup profile images -->
@@ -197,12 +186,8 @@
                 </div>
                 <!-- end repository header top thingy -->
 
-                <div class="row repository-file-view">
-                    <!-- TODO: setup file explorer -->
-                    <div class="col-md-3 repository-file-explorer">
-                        this is where the file explorer will be
-                    </div>
-                    <div class="col-md-9 repository-file">
+                <div class="row file-file-view">
+                    <div class="col-md-12 file-file">
                         this is where the code will be
                     </div>
                 </div>
@@ -239,22 +224,21 @@
                 <div class="col-md-2">
                     <h4>Difficulty</h4>
                 </div>
-                <div class="col-md-1">
-                    <h6>Average Rating:</h6>
-                </div>
                 <div class="col-md-3">
-                    <div class="stars starrr" data-rating="{{ repo.difficulty }}"></div>
+                    <div class="stars starrr" data-rating="0"></div>
                 </div>
                 <div class="col-md-1">
-                    <h6>Your Rating:</h6>
+                </div>
+                <div class="col-md-2">
+                    <h4>Documentation</h4>
                 </div>
                 <div class="col-md-3">
                     <div class="stars starrr" data-rating="0"></div>
                 </div>
             </div>
 
-                {% for comment in repo.comments.all %}
-                    <ol class="comment-list" id="comment-list{{ repo.id }}">
+                {% for comment in file.comments.all %}
+                    <ol class="comment-list" id="comment-list{{ file.id }}">
                         <li id="comment{{ comment.id }}">
                         <li>
                             <div class="row comment">
@@ -262,10 +246,10 @@
                                     <h5>{% include 'codebook/get-profpic.html' with id=comment.profile_user.user.id %}</h5>
                                 </div>
                                 <div class="col-md-2">
-                                    <h5>{{ comment.profile_user.get_username }} , {{comment.profile_user.id}}</h5>
+                                    <h5>{{ comment.profile_user.get_username }}</h5>
                                 </div>
                                 <div class="col-md-1 col-md-offset-7">
-                                    <a href="{% url 'like_comment' source comment.id %}">
+                                    <a href="{ url like_comment 0 }">
                                         {% if profile_user in comment.likers.all %}
                                             <h5 class="glyphicon glyphicon-remove"></h5>
                                         {% else %}
@@ -283,8 +267,8 @@
 
                 <!-- end comment list -->
 
-                <div class="row repository-footer">
-                    <form method="POST" role="form" action="{% url 'comment_repo' source repo.repo_id %}">
+                <div class="row file-footer">
+                    <form method="POST" role="form" action="{% url 'comment_file' source file.file_id %}">
                         {% for field in comment_form.visible_fields %}
                         <div class="col-md-9 col-lg-offset-1">
                             {{field}}

@@ -22,6 +22,12 @@
 <li><a href="{% url 'following' %}">Following</a></li>
 {% endif %}
 
+{% if active == 'saved' %}
+<li class="active"><a href="{% url 'saved' %}">Saved Files</a></li>
+{% else %}
+<li><a href="{% url 'saved' %}">Saved Files</a></li>
+{% endif %}
+
 {% if active == 'profile' %}
 <li class="active"><a href="#">Profile</a></li>
 {% else %}

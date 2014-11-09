@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Codebook: Search{% endblock %}
+{% block title %}Codebook: Saved Files{% endblock %}
 
 {% block stylesheets %}
     {% load staticfiles %}
 {% endblock stylesheets %}
 
 {% block nav-left %}
-    {% include 'codebook/nav-buttons.html' %}
+    {% include 'codebook/nav-buttons.html' with active='saved' %}
 {% endblock %}
 
 {% block nav-right %}
@@ -17,17 +17,12 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-offset-2 col-md-8 centered-text">
-                    <h1>Search Results</h1>
-                    <p> {% for name in names %}
-                            {{name}} 
-                        {% endfor %}
-                    </p>
+                    <h1>Saved Files</h1>
                 </div>
             </div>
         </div>
     </div>
 {% endblock header %}
-
 {% block stream %}
-    {% include 'codebook/repository-list.html' %}
+    {% include 'codebook/file-list.html' %}
 {% endblock stream %}
