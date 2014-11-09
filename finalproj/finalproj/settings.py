@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'codebook',
+    'social.apps.django_app.default',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -49,6 +50,26 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+   'django.contrib.auth.context_processors.auth',
+   'django.core.context_processors.debug',
+   'django.core.context_processors.i18n',
+   'django.core.context_processors.media',
+   'django.core.context_processors.static',
+   'django.core.context_processors.tz',
+   'django.contrib.messages.context_processors.messages',
+   'social.apps.django_app.context_processors.backends',
+   'social.apps.django_app.context_processors.login_redirect',
+)
+
+AUTHENTICATION_BACKENDS = (
+   'social.backends.github.GithubOAuth2',
+   'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GITHUB_OAUTH2_KEY = '31fd927b2ac22678d050'
+SOCIAL_AUTH_GITHUB_OAUTH2_SECRET = '431197c65d51dc0ae5e4919fc44a999b95e2fef3'
 
 ROOT_URLCONF = 'finalproj.urls'
 
@@ -65,7 +86,7 @@ DATABASES = {
         # The following settings are not used with sqlite3:
         'USER': 'webapps',
         'PASSWORD': 'fun',
-        'HOST': 'localhost',    # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
+        'HOST': 'test1.com',    # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
         'PORT': '',             # Set to empty string for default.
     }
 }

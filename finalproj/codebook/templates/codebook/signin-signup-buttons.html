@@ -1,6 +1,6 @@
 <div class="navbar-form navbar-right form-group">
-    <a class="btn btn-block btn-social btn-md btn-github" href="{% url 'signin' %}">
+    <a class="btn btn-block btn-social btn-md btn-github" href="{% url 'social:begin' 'github' %}?next={{request.path}}">
         <i class="fa fa-github-square"></i>
-        Sign in with GitHub
+       Sign in with GitHub
     </a>
 </div>
