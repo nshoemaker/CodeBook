@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     url(r'^following$', 'codebook.content_views.following', name='following'),
 
     # User Actions 
-    url(r'^like_comment/(?P<comment_id>\d+)$', 'codebook.user_action_views.like_comment', name='like_comment'),
+    url(r'^like_comment/(?P<source>\D+)/(?P<comment_id>\d+)$', 'codebook.user_action_views.like_comment', name='like_comment'),
     url(r'^watch_repo/(?P<repo_id>\d+)$', 'codebook.user_action_views.watch_repo', name='watch_repo'),
     url(r'^save_post/(?P<post_id>\d+)$', 'codebook.user_action_views.save_post', name='save_post'),
     url(r'^search_results$', 'codebook.user_action_views.search', name='search'),
