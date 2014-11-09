@@ -52,7 +52,6 @@ import json
 
 def front(request):
     context = {}
-
     return render(request, 'codebook/front-page.html', context)
 
 #@login_required
