@@ -86,7 +86,7 @@ DATABASES = {
         # The following settings are not used with sqlite3:
         'USER': 'webapps',
         'PASSWORD': 'fun',
-        'HOST': 'test1.com',    # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
+        'HOST': 'codebook.com',    # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
         'PORT': '',             # Set to empty string for default.
     }
 }
