@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     url(r'^watching$', 'codebook.content_views.watching', name='watching'),
     url(r'^starred$', 'codebook.content_views.starred', name='starred'),
     url(r'^following$', 'codebook.content_views.following', name='following'),
+    url(r'^saved$', 'codebook.content_views.saved', name='saved'),
 
     # User Actions 
     url(r'^like_comment/(?P<source>\D+)/(?P<comment_id>\d+)$', 'codebook.user_action_views.like_comment', name='like_comment'),
