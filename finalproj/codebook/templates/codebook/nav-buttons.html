@@ -11,11 +11,12 @@
 {% endif %}
 
 <!--
-{% if active == 'starred' %}
-<li class="active"><a href="{% url 'starred' %}">Starred</a></li>
-{% else %}
-<li><a href="{% url 'starred' %}">Starred</a></li>
-{% endif %}
+	ADD % BACK TO TAGS IF NEEDED
+{ if active == 'starred' }
+<li class="active"><a href="{ url 'starred' }">Starred</a></li>
+{ else }
+<li><a href="{ url 'starred' }">Starred</a></li>
+{ endif }
 -->
 <!--
 {% if active == 'following' %}

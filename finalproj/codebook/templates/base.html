@@ -55,9 +55,11 @@
 <!-- end Fixed navbar -->
 
 <!-- main content area -->
+{% block search-dropdown %}
 <div class="container-fluid">
     {% include 'codebook/search-dropdown.html' %}
 </div>
+{% endblock search-dropdown %}
 
 <div class="container-fluid" id="header">
     {% block header %}{% endblock %}

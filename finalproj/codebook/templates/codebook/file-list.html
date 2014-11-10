@@ -1,7 +1,7 @@
 {% load staticfiles %}
 <script src="{% static "js/bootstrap-rating-input.min.js" %}" type="text/javascript"></script>
 <!-- start repository list row-->
-<div class="row">
+<div class="row top-padded">
 <div class="col-md-12">
 
 
@@ -167,7 +167,7 @@
                         <!--</a>-->
                     </div>
                     <div class="col-md-1">
-                        <a href="{% url 'save_file' file.id %}">
+                        <a href="{% url 'save_file' source file.id %}">
                         {% if file.is_saved == 'true' %}
                             <h4 class="glyphicon glyphicon-floppy-saved"></h4>
                         {% else %}
