@@ -1,3 +1,7 @@
+#search-dropdown {
+    display: none;
+}
+
 .repository ol {
     padding: 0px;
 }
