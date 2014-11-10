@@ -40,7 +40,9 @@
    text-decoration: none;
 }
 
-
+.repo-body{
+    display: none;
+}
 
 #search-dropdown {
     display: none;
