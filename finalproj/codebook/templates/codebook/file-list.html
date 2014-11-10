@@ -152,8 +152,8 @@
 <!-- TODO: everything above this comment and below the static usage comment should be deleted eventually -->
 
 
+    <ol class="file-list" id="file-list">
 {% for file in files %}
-    <ol class="file-list" id="file-list{{ file.id }}">
         <li id="file{{ file.id }}">
             <div class="container file">
                 <div class="row file-header">
@@ -237,8 +237,8 @@
                 </div>
             </div>
 
+                    <ol class="comment-list" id="comment-list">
                 {% for comment in file.comments.all %}
-                    <ol class="comment-list" id="comment-list{{ file.id }}">
                         <li id="comment{{ comment.id }}">
                         <li>
                             <div class="row comment">
@@ -262,8 +262,8 @@
                                 </div>
                             </div>
                         </li>
-                    </ol>
                 {% endfor %}
+                    </ol>
 
                 <!-- end comment list -->
 
@@ -282,8 +282,8 @@
                 </div>
             </div>
         </li>
-    </ol>
 {% endfor %}
+    </ol>
 <!-- end repository list -->
 </div>
 </div>
