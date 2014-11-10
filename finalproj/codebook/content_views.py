@@ -50,8 +50,6 @@ from datetime import datetime
 from django.utils import timezone
 
 import json
-import urllib2
-import base64
 
 def saved(request):
     context = {}
