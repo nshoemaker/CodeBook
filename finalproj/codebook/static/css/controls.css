@@ -137,6 +137,8 @@ list-style-type: none;
   border-width:1px;
   border-style:solid;
     border-color:#dcdcdc;
+    margin-top:10px;
+    margin-bottom:10px;
 }
 
 .file-file-view {
