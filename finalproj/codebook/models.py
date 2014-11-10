@@ -4,7 +4,7 @@ from django.db.models import Q
 
 from github import Github 
 # g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
-g = Github()
+g = Github('3855772d405888f9622a36d13449312385834a13')
 
 import base64
 

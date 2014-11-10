@@ -76,8 +76,7 @@ def front(request):
         social = request.user.social_auth.get(provider='github')
         token = social.extra_data['access_token']
         g = Github(token)
-        for repo in g.get_user().get_repos():
-            print "divya", g.get_user().has_in_watched(repo)
+        print "token",token
         for field in request.user._meta.get_all_field_names():
             try: 
                 print field, getattr(request.user,field)
