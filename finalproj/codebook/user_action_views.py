@@ -36,7 +36,7 @@ def like_comment(request, source, comment_id):
 
 # Watch or Unwatch a Repository 
 def watch_repo(request, source, repo_id):
-	authenticated_user = 0 #object
+	authenticated_user = request.user #object
 	repo = g.get_repo(repo_id)
 
 	if (authenticated_user.has_in_watched(repo)):
