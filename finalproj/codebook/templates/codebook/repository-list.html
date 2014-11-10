@@ -161,14 +161,14 @@
 
 <ol class="repository-list" id="repo-list">
     {% for repo in repos %}
-        <li id="repo{{ repo.id }}">
+        <li id="repo{{ repo.repo_id }}">
             <div class="container repository">
-                <ol id="repo-parts-{{ repo.id }}">
-                    <li id="repo-header-{{ repo.id }}">
+                <ol id="repo-parts-{{ repo.repo_id }}">
+                    <li id="repo-header-{{ repo.repo_id }}">
                         <div class="row repository-header">
                             <div class="col-md-1">
                                 <!-- should have a link to the repository -->
-                                <h4 class="glyphicon glyphicon-expand repo-toggle-button" id="repo-toggle-button-{{ repo.id }}" data-item-id="{{ repo.id }}"></h4>
+                                <h4 class="glyphicon glyphicon-expand repo-toggle-button" id="repo-toggle-button-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}"></h4>
                             </div>
                             <div class="col-md-2">
                                 <a href="{{ repo.get_url }}"><h4>{{ repo.get_name }}</h4></a>
@@ -176,6 +176,7 @@
                             <div class="col-md-1">
                                 <a href="{% url 'star_repo' source repo.repo_id %}">
                                     <h4 class="glyphicon glyphicon-star"></h4>
+                                </a>
                                     <!--<h4 class="glyphicon glyphicon-star-empty"></h4>-->
                             </div>
                             <div class="col-md-1">
@@ -197,7 +198,7 @@
                         </div>
                         <!-- end repository header top thingy -->
                     </li>
-                    <li class="repo-body" id="repo-body-{{ repo.id }}">
+                    <li class="repo-body" id="repo-body-{{ repo.repo_id }}">
                         <div class="row repository-file-view">
                             <!-- TODO: setup file explorer -->
                             <div class="col-md-3 repository-file-explorer">
@@ -213,7 +214,7 @@
                             <div class="col-md-10">
                                 <div class="btn-group-sm">
                                     {% for tag in repo.tags %}
-                                        <ol class="tag-list" id="tag-list{{ repo.id }}">
+                                        <ol class="tag-list" id="tag-list{{ repo.repo_id }}">
                                             <!-- endorsed tags have x's next to them (toggle to unendorse) unendorsed tags have check -->
                                             <li id="tag{{ tag.id }}">
                                                 <button class="btn btn-sm tag-btn">
