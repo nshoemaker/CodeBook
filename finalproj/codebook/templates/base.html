@@ -46,6 +46,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% block nav-right %}
+                    {% include 'codebook/search-buttons.html' %}
                 {% endblock %}
             </ul>
         </div>
@@ -54,8 +55,11 @@
 <!-- end Fixed navbar -->
 
 <!-- main content area -->
-
 <div class="container-fluid">
+    {% include 'codebook/search-dropdown.html' %}
+</div>
+
+<div class="container-fluid" id="header">
     {% block header %}{% endblock %}
 </div>
 <div class="container-fluid">
@@ -76,6 +80,8 @@
 <script src = "{% static "js/ratings.js" %}"></script>
 <script src = "{% static "js/language_buttons.js" %}"></script>
 <script src = "{% static "js/search.js" %}"></script>
+<script src = "{% static "js/toggle_repository_view.js" %}"></script>
+<script src = "{% static "js/toggle_search.js" %}"></script>
 
 <!-- TODO: bring this back -->
 <!-- <script src="{% static "js/add_comment.js" %}"></script> -->

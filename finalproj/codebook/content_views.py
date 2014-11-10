@@ -51,10 +51,22 @@ from datetime import datetime
 from django.utils import timezone
 
 import json
+import urllib2
+import base64
 
 def saved(request):
     context = {}
-
+    #repo_obj = Repository.objects.get(repo_id=3222)
+    #repo = g.get_repo(3222)
+    #repofile = repo.get_contents("README.md")
+    #path = repofile.path
+    #new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
+    #new_file.save()
+    #context['files'] = RepoFile.objects.filter(id=2)
+    context['files'] = RepoFile.objects.all
+    context["source"] = 'codebook/saved'
+    context['comment_form'] = CommentForm()
+    context['profile_user'] = ProfileUser.objects.get(id=1)
     return render(request, 'codebook/saved-files.html', context)
 
 def front(request):

@@ -6,7 +6,7 @@
 
 
 <!-- TODO: this is temporarily here to show static usage -->
-
+<!--
 <ol class="file-list">
     <li>
         <div class="container file">
@@ -147,13 +147,13 @@
     </li>
 </ol>
 
-
+-->
 
 <!-- TODO: everything above this comment and below the static usage comment should be deleted eventually -->
 
 
+    <ol class="file-list" id="file-list">
 {% for file in files %}
-    <ol class="file-list" id="file-list{{ file.id }}">
         <li id="file{{ file.id }}">
             <div class="container file">
                 <div class="row file-header">
@@ -188,7 +188,7 @@
 
                 <div class="row file-file-view">
                     <div class="col-md-12 file-file">
-                        this is where the code will be
+                        {{file.get_content}}
                     </div>
                 </div>
                 <!-- end file view -->
@@ -237,8 +237,8 @@
                 </div>
             </div>
 
+                    <ol class="comment-list" id="comment-list">
                 {% for comment in file.comments.all %}
-                    <ol class="comment-list" id="comment-list{{ file.id }}">
                         <li id="comment{{ comment.id }}">
                         <li>
                             <div class="row comment">
@@ -249,7 +249,7 @@
                                     <h5>{{ comment.profile_user.get_username }}</h5>
                                 </div>
                                 <div class="col-md-1 col-md-offset-7">
-                                    <a href="{ url like_comment 0 }">
+                                    <a href="{% url 'like_comment' source comment.id %}">
                                         {% if profile_user in comment.likers.all %}
                                             <h5 class="glyphicon glyphicon-remove"></h5>
                                         {% else %}
@@ -262,13 +262,13 @@
                                 </div>
                             </div>
                         </li>
-                    </ol>
                 {% endfor %}
+                    </ol>
 
                 <!-- end comment list -->
 
                 <div class="row file-footer">
-                    <form method="POST" role="form" action="{% url 'comment_file' source file.file_id %}">
+                    <form method="POST" role="form" action="{% url 'comment' 'repofile' source file.id %}">
                         {% for field in comment_form.visible_fields %}
                         <div class="col-md-9 col-lg-offset-1">
                             {{field}}
@@ -282,8 +282,8 @@
                 </div>
             </div>
         </li>
-    </ol>
 {% endfor %}
+    </ol>
 <!-- end repository list -->
 </div>
 </div>

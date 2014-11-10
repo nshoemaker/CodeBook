@@ -6,6 +6,8 @@ from github import Github
 # g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
 g = Github()
 
+import base64
+
 class Stack(models.Model):
     name = models.CharField(max_length=40)
     icon = models.CharField(max_length=40)
@@ -25,7 +27,7 @@ class ProfileUser(models.Model):
     languages = models.ManyToManyField(Language, related_name="languages_liked")
 
     def get_username(self):
-        return "username"
+        return "User #" + str(self.id)
 
     def get_id(self):
         return 1
@@ -61,12 +63,12 @@ class Comment(models.Model):
     path = models.CharField(max_length=400)  # relative path file comment on
     likers = models.ManyToManyField(ProfileUser, related_name="liked_by")
 
-class FileComment (models.Model):
-    profile_user = models.ForeignKey(ProfileUser)
-    text = models.CharField(max_length=400)
-    date_time = models.DateTimeField(auto_now_add=True)
-    path = models.CharField(max_length=400)  # relative path file comment on
-    likers = models.ManyToManyField(ProfileUser, related_name="comment_liked_by")
+#class FileComment (models.Model):
+#    profile_user = models.ForeignKey(ProfileUser)
+#    text = models.CharField(max_length=400)
+#    date_time = models.DateTimeField(auto_now_add=True)
+#    path = models.CharField(max_length=400)  # relative path file comment on
+#    likers = models.ManyToManyField(ProfileUser, related_name="comment_liked_by")
 
 class Tag(models.Model):
     text = models.CharField(max_length=20)
@@ -79,13 +81,14 @@ class Repository(models.Model):
     repo_id = models.IntegerField(primary_key=True)
     comments = models.ManyToManyField(Comment)
 
+    def get_url(self):
+        return g.get_repo(self.repo_id).html_url
+
     def get_creator(self):
         return g.get_repo(self.repo_id).owner.name
 
     def get_name(self):
-        print "In models repo id:" + str(self.repo_id)
         return g.get_repo(self.repo_id).name
-        #return g.get_repo("merb-core").name
 
     def get_language(self):
         return g.get_repo(self.repo_id).language
@@ -107,23 +110,34 @@ class Repository(models.Model):
 
 class RepoFile (models.Model):
     repository = models.ForeignKey(Repository)
-    comments = models.ManyToManyField(FileComment)
+    path = models.CharField(max_length=400)
+    comments = models.ManyToManyField(Comment)
     savers = models.ManyToManyField(ProfileUser, related_name="saved_by")
-    average_difficulty = models.IntegerField()
-    average_quality = models.IntegerField()
+    average_difficulty = models.IntegerField(blank=True)
+    average_quality = models.IntegerField(blank=True)
     tags = models.ManyToManyField(Tag)
 
     def get_creator(self):
-        return "file_creator"
+        repo_id = self.repository.repo_id
+        repo = g.get_repo(repo_id)
+        return repo.owner.name
 
     def get_name(self):
-        return "file_name"
+        repo_id = self.repository.repo_id
+        repo = g.get_repo(repo_id)
+        return repo.get_contents(self.path).name
 
     def get_language(self):
         return "file_lang"
 
     def get_date_created(self):
         return "1/1/2014"
+
+    def get_content(self):
+        repo_id = self.repository.repo_id
+        repo = g.get_repo(repo_id)
+        content = repo.get_contents(self.path).content
+        return base64.b64decode(content)
 
 
 class Difficulty(models.Model):

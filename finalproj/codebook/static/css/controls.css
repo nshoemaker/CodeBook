@@ -1,3 +1,16 @@
+#search-dropdown {
+    display: none;
+}
+
+.repository ol {
+    padding: 0px;
+}
+
+.file ol {
+    padding: 0px;
+}
+
+
 .search-type-dropdown{
     width: 130px;
 }

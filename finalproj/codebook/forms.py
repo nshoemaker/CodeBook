@@ -7,5 +7,5 @@ class CommentForm(forms.ModelForm):
         exclude = ('profile_user', 'path', 'likers', 'date_time')
         fields = ['text']
         widgets = {
-            'text': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Comment on this Repository'})
+            'text': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Leave a Comment'})
         }
