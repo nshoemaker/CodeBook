@@ -1,0 +1,90 @@
+<div class="row jumbotron lang-main" id="search-dropdown">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8 centered-text">
+                <h1>Search</h1>
+
+                <h3><span>Choose </span><span id="language-choice">a Language</span><span> to Get Started</span></h3>
+            </div>
+        </div>
+        <div class="row languages">
+            <div class="col-md-offset-1 col-md-1">
+                <h1><i class="lang-btn icon-prog-java"></i></h1>
+            </div>
+            <div class="col-md-offset-1 col-md-1">
+                <h1><i class="lang-btn icon-prog-c"></i></h1>
+            </div>
+            <div class="col-md-offset-1 col-md-1">
+                <h1><i class="lang-btn icon-prog-js02"></i></h1>
+            </div>
+            <div class="col-md-offset-1 col-md-1">
+                <h1><i class="lang-btn icon-prog-ruby"></i></h1>
+            </div>
+            <div class="col-md-offset-1 col-md-1">
+                <h1><i class="lang-btn icon-prog-rails"></i></h1>
+            </div>
+        </div>
+        <div class="row languages">
+            <div class="col-md-offset-2 col-md-1">
+                <h1><i class="lang-btn icon-prog-nodejs02"></i></h1>
+            </div>
+            <div class="col-md-offset-1 col-md-1">
+                <h1><i class="lang-btn icon-prog-python"></i></h1>
+            </div>
+            <div class="col-md-offset-1 col-md-1">
+                <h1><i class="lang-btn icon-prog-django"></i></h1>
+            </div>
+            <div class="col-md-offset-1 col-md-1">
+                <h1><i class="lang-btn icon-prog-php02"></i></h1>
+            </div>
+            <div class="col-md-offset-1 col-md-1">
+                <h1><i class="lang-btn icon-prog-cplusplus"></i></h1>
+            </div>
+        </div>
+        <div class="row languages">
+            <div class="col-md-offset-1 col-md-1 centered-text">
+                <h1><i class="lang-btn icon-prog-csharp"></i></h1>
+            </div>
+            <div class="col-md-offset-1 col-md-1">
+                <h1><i class="lang-btn icon-prog-objc"></i></h1>
+            </div>
+            <div class="col-md-offset-1 col-md-1">
+                <h1><i class="lang-btn icon-prog-matlab"></i></h1>
+            </div>
+            <div class="col-md-offset-1 col-md-1">
+                <h1><i class="lang-btn icon-prog-aspnet"></i></h1>
+            </div>
+            <div class="col-md-offset-1 col-md-1">
+                <h1><i class="lang-btn icon-prog-bash02"></i></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8 centered-text top-padded">
+                <h3>Or Start With Something More Specific</h3>
+            </div>
+        </div>
+        <div class="row">
+            <form role="form" action="{% url 'search' %}">
+                <div class="col-md-7 col-md-offset-1">
+                    <input type="text" class="form-control">
+                </div>
+                <div class="col-md-2 dropdown">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default search-type-dropdown"> <!--dropdown-toggle search-type-dropdown" data-toggle="dropdown">-->
+                            <span class="selection">Search Type</span>
+                        </button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Language</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Repository</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Tag</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <input type="submit" class="btn control-btn" value="Search">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
