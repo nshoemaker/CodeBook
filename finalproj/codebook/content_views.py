@@ -20,7 +20,10 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from github import Github 
 # g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
-g = Github()
+g = Github('dmouli', 'Spongebob5%')
+"""
+g = Github(token)
+"""
 
 # Needed to manually create HttpResponses or raise an Http404 exception
 from django.http import HttpResponse, Http404, HttpResponseRedirect
@@ -53,17 +56,26 @@ import json
 
 def saved(request):
     context = {}
-    #repo_obj = Repository.objects.get(repo_id=3222)
-    #repo = g.get_repo(3222)
-    #repofile = repo.get_contents("README.md")
-    #path = repofile.path
-    #new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
-    #new_file.save()
-    #context['files'] = RepoFile.objects.filter(id=2)
-    context['files'] = RepoFile.objects.all
+    """
+    profile_user = ProfileUser(user=request.user)
+    user_saves = Saved.objects.get(profile_user=profile_user)
+
+    context['files'] = user_saves.files.all 
     context["source"] = 'codebook/saved'
     context['comment_form'] = CommentForm()
-    context['profile_user'] = ProfileUser.objects.get(id=1)
+    context['profile_user'] = profile_user
+    return render(request, 'codebook/saved-files.html', context)
+
+    """
+    
+    # Dummy test = "authenticated user" is ProfUser 1 
+    profile_user = ProfileUser.objects.get(id=1)
+    user_saves = Saved.objects.get(profile_user=profile_user)
+
+    context['files'] = user_saves.files.all
+    context["source"] = 'codebook/saved'
+    context['comment_form'] = CommentForm()
+    context['profile_user'] = profile_user
     return render(request, 'codebook/saved-files.html', context)
 
 def front(request):
@@ -86,21 +98,17 @@ def news(request):
 
 #@login_required
 def watching(request):
+    """
     context = {}
-    #profile_user = ProfileUser.objects.get(user=request.user)
-    #user_watches = Watch.objects.get(profile_user=profile_user)
-    #context['repos'] = user_watches.repositories.all 
-    #context['profile_user'] = profile_user
+    context['repos'] = request.user.get_watched()
+    context["source"] = 'codebook/watching'
+    context['comment_form'] = CommentForm()
+    context['profile_user'] = ProfileUser.objects.get(user = request.user)
+    return render(request, 'codebook/watching-page.html', context)
+    """
+    context = {}
     return render(request, 'codebook/watching-page.html', context)
 
-#@login_required
-def starred(request):
-    context = {}
-    #profile_user = ProfileUser.objects.get(user=request.user)
-    #user_saved = Saved.objects.get(profile_user=profile_user)
-    #context['posts'] = user_saved.posts.all 
-    #context['profile_user'] = profile_user
-    return render(request, 'codebook/starred-page.html', context)
 
 #@login_required
 def following(request):

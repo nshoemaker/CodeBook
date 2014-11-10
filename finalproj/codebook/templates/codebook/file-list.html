@@ -167,7 +167,7 @@
                         <!--</a>-->
                     </div>
                     <div class="col-md-1">
-                        <a href="{% url 'save_file' file.id %}">
+                        <a href="{% url 'save_file' source file.id %}">
                         {% if file.is_saved == 'true' %}
                             <h4 class="glyphicon glyphicon-floppy-saved"></h4>
                         {% else %}

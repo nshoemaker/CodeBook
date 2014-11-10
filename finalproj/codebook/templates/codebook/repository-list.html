@@ -168,28 +168,21 @@
                         <div class="row repository-header">
                             <div class="col-md-1">
                                 <!-- should have a link to the repository -->
-                                <!--<a href="{ url watch_repo repo.id }">-->
                                 <h4 class="glyphicon glyphicon-expand repo-toggle-button" id="repo-toggle-button-{{ repo.id }}" data-item-id="{{ repo.id }}"></h4>
-                                <!--</a>-->
                             </div>
                             <div class="col-md-2">
                                 <a href="{{ repo.get_url }}"><h4>{{ repo.get_name }}</h4></a>
                             </div>
                             <div class="col-md-1">
-                                {% if repo.is_starred == 'true' %}
+                                <a href="{% url 'star_repo' source repo.repo_id %}">
                                     <h4 class="glyphicon glyphicon-star"></h4>
-                                {% else %}
-                                    <h4 class="glyphicon glyphicon-star-empty"></h4>
-                                {% endif %}
+                                    <!--<h4 class="glyphicon glyphicon-star-empty"></h4>-->
                             </div>
                             <div class="col-md-1">
-                                <!--<a href="{ url watch_repo repo.id }">-->
-                                {% if profile_user in repo.watchers.all %}
+                                <a href="{% url 'watch_repo' source repo.repo_id %}">
                                     <h4 class="glyphicon glyphicon-eye-open"></h4>
-                                {% else %}
-                                    <h4 class="glyphicon glyphicon-eye-close"></h4>
-                                {% endif %}
-                                <!--</a>-->
+                                    <!--<h4 class="glyphicon glyphicon-eye-close"></h4>-->
+                                </a>
                             </div>
                             <div class="col-md-4">
 

@@ -4,7 +4,7 @@ from django.db.models import Q
 
 from github import Github 
 # g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
-g = Github()
+g = Github('dmouli', 'Spongebob5%')
 
 import base64
 
@@ -159,6 +159,7 @@ class Difficulty(models.Model):
     #date_time = models.DateTimeField(auto_now_add=True)
 
 class Saved(models.Model):
-    profile_user = models.ForeignKey(ProfileUser, primary_key=True)
+    #profile_user = models.ForeignKey(ProfileUser, primary_key=True)
+    profile_user = models.ForeignKey(ProfileUser)
     files = models.ManyToManyField(RepoFile)
     date_time = models.DateTimeField(auto_now_add=True)
