@@ -284,7 +284,7 @@
                 <!-- end comment list -->
 
                 <div class="row repository-footer">
-                    <form method="POST" role="form" action="{% url 'comment_repo' source repo.repo_id %}">
+                    <form method="POST" role="form" action="{% url 'comment' 'repo' source repo.repo_id %}">
                         {% for field in comment_form.visible_fields %}
                         <div class="col-md-9 col-lg-offset-1">
                             {{field}}
