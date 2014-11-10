@@ -35,43 +35,50 @@ def like_comment(request, source, comment_id):
     return redirect('/' + source)
 
 # Watch or Unwatch a Repository 
-def watch_repo(request, repo_id):
-	profile_user = ProfileUser.objects.get(user=request.user)
-	repo = Repository.objects.get(id=repo_id)
-	user_watches = Watch.objects.get(profile_user=profile_user)
+def watch_repo(request, source, repo_id):
+	authenticated_user = 0 #object
+	repo = g.get_repo(repo_id)
 
-	if not (user_watches.repositories.filter(id=repo.id)):
-		user_watches.repositories.add(repo)
-		user_watches.save()
-		repo.watchers.add(profile_user)
-		repo.save()
-	# User has already watched this repo - click will "un-watch"
+	if (authenticated_user.has_in_watched(repo)):
+		# User has already watched this repo - click will "un-watch"
+		authenticated_user.remove_from_watched(repo)
 	else:
-		user_watches.repositories.remove(repo)
-		user_watches.save()
-		repo.watchers.remove(profile_user)
-		repo.save()
+		authenticated_user.add_to_watched(repo)
 
 	# Ask others how they sent back to correct page
-	return redirect('/')
+	return redirect('/' + source)
+
+# Star or Unstar a Repository 
+def star_repo(request, source, repo_id):
+	authenticated_user = 0 #object
+	repo = g.get_repo(repo_id)
+
+	if (authenticated_user.has_in_starred(repo)):
+		# User has already watched this repo - click will "un-watch"
+		authenticated_user.remove_from_starred(repo)
+	else:
+		authenticated_user.add_to_starred(repo)
+
+	# Ask others how they sent back to correct page
+	return redirect('/' + source)
 
 # Save or Unsave a Post
-def save_post(request, post_id):
+def save_file(request, file_id):
 	profile_user = ProfileUser.objects.get(user=request.user)
-	post = Repository.objects.get(id=post_id)
+	repofile = RepoFile.objects.get(id=file_id)
 	user_saves = Saved.objects.get(profile_user=profile_user)
 
-	if not (user_saves.posts.filter(id=post.id)):
-		user_saves.posts.add(post)
+	if not (user_saves.files.filter(id=file_id)):
+		user_saves.files.add(repofile)
 		user_saves.save()
-		post.savers.add(profile_user)
-		post.save()
+		repofile.savers.add(profile_user)
+		repofile.save()
 	# User has already saved this post - click will "un-save"
 	else:
-		user_saves.posts.remove(post)
+		user_saves.posts.remove(repofile)
 		user_saves.save()
-		post.savers.remove(profile_user)
-		post.save()
+		repofile.savers.remove(profile_user)
+		repofile.save()
 
 	# Ask others how they sent back to correct page
 	return redirect('/')

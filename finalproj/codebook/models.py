@@ -159,6 +159,6 @@ class Difficulty(models.Model):
     #date_time = models.DateTimeField(auto_now_add=True)
 
 class Saved(models.Model):
-    profile_user = models.ForeignKey(ProfileUser)
+    profile_user = models.ForeignKey(ProfileUser, primary_key=True)
     files = models.ManyToManyField(RepoFile)
     date_time = models.DateTimeField(auto_now_add=True)
