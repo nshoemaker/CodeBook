@@ -2,6 +2,8 @@ from django.db import models
 
 from django.db.models import Q
 
+from django.contrib.auth.models import User
+
 from github import Github 
 # g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
 g = Github('dmouli', 'Spongebob5%')
@@ -25,7 +27,7 @@ class UserRating(models.Model):
 class ProfileUser(models.Model):
     # note that there will be some id that we can use to get profile info for this user from github
     languages = models.ManyToManyField(Language, related_name="languages_liked")
-
+    user = models.ForeignKey(User)
     def get_username(self):
         return "User #" + str(self.id)
 

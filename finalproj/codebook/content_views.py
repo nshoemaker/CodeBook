@@ -71,7 +71,7 @@ def saved(request):
     """
     
     # Dummy test = "authenticated user" is ProfUser 1 
-    profile_user = ProfileUser.objects.get(id=1)
+    profile_user = ProfileUser.objects.get(user = request.user)
     user_saves = Saved.objects.get(profile_user=profile_user)
 
     context['files'] = user_saves.files.all
@@ -84,6 +84,13 @@ def front(request):
     context = {}
     context['user'] = request.user
     if request.user and not request.user.is_anonymous():
+        try:
+            ProfileUser.objects.get(user=request.user)
+        except:
+          new_profile_user = ProfileUser(user = request.user)
+          new_profile_user.save()
+          new_saves = Saved(profile_user=new_profile_user)
+          new_saves.save()
         social = request.user.social_auth.get(provider='github')
         token = social.extra_data['access_token']
         g = Github(token)
