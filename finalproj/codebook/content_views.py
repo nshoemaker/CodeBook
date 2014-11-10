@@ -20,7 +20,6 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from github import Github 
 # g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
-g = Github()
 
 # Needed to manually create HttpResponses or raise an Http404 exception
 from django.http import HttpResponse, Http404, HttpResponseRedirect
@@ -61,6 +60,17 @@ def saved(request):
 def front(request):
     context = {}
     context['user'] = request.user
+    if request.user and not request.user.is_anonymous():
+        social = request.user.social_auth.get(provider='github')
+        token = social.extra_data['access_token']
+        g = Github(token)
+        for repo in g.get_user().get_repos():
+            print "divya", g.get_user().has_in_watched(repo)
+        for field in request.user._meta.get_all_field_names():
+            try: 
+                print field, getattr(request.user,field)
+            except:
+                print field, "crashed"
     return render(request, 'codebook/front-page.html', context)
 
 #@login_required
