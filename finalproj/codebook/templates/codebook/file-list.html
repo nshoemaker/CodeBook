@@ -221,28 +221,27 @@
                 </div>
                 <!-- end tags -->
                         <!-- TODO get ratings working (make average read only)-->
-            <!-- begin ratings -->
-            <div class="row ratings">
-                <div class="col-md-2">
-                    <h4>Difficulty</h4>
+                <!-- begin ratings -->
+                <div class="row ratings">
+                    <div class="col-md-2">
+                        <h4>Difficulty</h4>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stars starrr" data-rating="0"></div>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-2">
+                        <h4>Documentation</h4>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stars starrr" data-rating="0"></div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="stars starrr" data-rating="0"></div>
-                </div>
-                <div class="col-md-1">
-                </div>
-                <div class="col-md-2">
-                    <h4>Documentation</h4>
-                </div>
-                <div class="col-md-3">
-                    <div class="stars starrr" data-rating="0"></div>
-                </div>
-            </div>
 
-                    <ol class="comment-list" id="comment-list">
-                {% for comment in file.comments.all %}
+                <ol class="comment-list" id="comment-list">
+                    {% for comment in file.comments.all %}
                         <li id="comment{{ comment.id }}">
-                        <li>
                             <div class="row comment">
                                 <div class="col-md-1">
                                     <h5>{% include 'codebook/get-profpic.html' with id=comment.profile_user.user.id %}</h5>
@@ -264,8 +263,8 @@
                                 </div>
                             </div>
                         </li>
-                {% endfor %}
-                    </ol>
+                    {% endfor %}
+                </ol>
 
                 <!-- end comment list -->
 

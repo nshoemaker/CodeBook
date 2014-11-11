@@ -18,26 +18,10 @@ def signin(request):
 
 # Like or Unlike a Comment
 def like_comment(request, source, comment_id):
-	"""
 	context = {}
 	comment = Comment.objects.get(id=comment_id)
 	profile_user = ProfileUser.objects.get(user = request.user)
 
-	if not (comment.likers.filter(profile_user=profile_user)):
-		comment.likers.add(profile_user)
-		comment.save()
-	# User has already liked comment - click will "un-like"
-	else:
-		comment.likers.remove(profile_user)
-		comment.save()
-
-	return redirect('/' + source)
-	"""
-	context = {}
-	comment = Comment.objects.get(id=comment_id)
-	profile_user = ProfileUser.objects.get(user = request.user)
-
-	# right now, liking and unliking works for a comment by profile_user 1 ONLY
 	if not (comment.likers.filter(liked_by=profile_user)):
 		comment.likers.add(profile_user)
 		comment.save()
@@ -71,11 +55,8 @@ def star_repo(request, source, repo_id):
     social = request.user.social_auth.get(provider='github')
     token = social.extra_data['access_token']
     g = Github(token)
-    print "In star repo : " + g2.get_organization("github").name
     repo = g.get_repo(3222)
-    print "Got this repo: " + repo.name
     user = g.get_user()
-    print "Got this user: " + user.login 
     
     if (user.has_in_starred(repo)):
 		# User has already watched this repo - click will "un-watch"
@@ -88,25 +69,6 @@ def star_repo(request, source, repo_id):
 
 # Save or Unsave a Post
 def save_file(request, source, file_id):
-	"""
-	profile_user = ProfileUser.objects.get(user=request.user)
-	repofile = RepoFile.objects.get(id=file_id)
-	user_saves = Saved.objects.get(profile_user=profile_user)
-
-	if not (user_saves.files.filter(id=file_id)):
-		user_saves.files.add(repofile)
-		user_saves.save()
-		repofile.savers.add(profile_user)
-		repofile.save()
-	# User has already saved this post - click will "un-save"
-	else:
-		user_saves.posts.remove(repofile)
-		user_saves.save()
-		repofile.savers.remove(profile_user)
-		repofile.save()
-
-	"""
-
 	profile_user = ProfileUser.objects.get(user=request.user)
 	repofile = RepoFile.objects.get(id=file_id)
 	user_saves = Saved.objects.get(profile_user=profile_user)
@@ -129,9 +91,10 @@ def search(request):
     social = request.user.social_auth.get(provider='github')
     token = social.extra_data['access_token']
     g = Github(token)
+    profile_user = ProfileUser.objects.get(user=request.user)
     context = {}
+    
     # Temp code to populate the search page #
-    # only need on first run 
     repos = g.get_organization("github").get_repos()
     i = 0
     for repo in repos:
@@ -146,18 +109,8 @@ def search(request):
             i = i + 1
         else:
             break
-
     # End temp code to populate the search page #
-
-    # Don't need to keep this code if signing into GitHub 
-    # creates a ProfileUser object with id 1 
-    # only need on first run 
-    #new_user = ProfileUser()
-    #new_user.save() 
-    profile_user = ProfileUser.objects.get(user=request.user)
-    #new_user_saves = Saved(profile_user=profile_user)
-    #new_user_saves.save()
-
+    
     context["repos"] = Repository.objects.all
     context['files'] = RepoFile.objects.all
     context["source"] = 'codebook/search_results'
@@ -166,31 +119,6 @@ def search(request):
     return render(request, "codebook/search-results-page.html", context)
 
 def comment(request, comment_type, source, id):
-	"""
-	context = {}
-
-	if request.method == "GET":
-		context['comment_form'] = CommentForm()
-		return redirect('/' + source)
-
-	profile_user = ProfileUser(user = request.user)
-	new_comment = Comment(profile_user=profile_user)
-	form = CommentForm(request.POST, instance=new_comment)
-	if not form.is_valid():
-		context['form'] = form
-		return redirect('/' + source)
-	form.save()
-
-	if (comment_type == 'repo'):
-		repo = Repository.objects.get(repo_id=id)
-		repo.comments.add(new_comment)
-		repo.save()
-	else:
-		repoFile = RepoFile.objects.get(id=id)
-		repoFile.comments.add(new_comment)
-		repoFile.save()
-	return redirect('/' + source)
-	"""
 	context = {}
 
 	if request.method == "GET":
@@ -199,8 +127,8 @@ def comment(request, comment_type, source, id):
 
 	# For now, creating a new user for each comment 
 	# Need to change this once user authentication is a thing
-	new_user = ProfileUser.objects.get(user=request.user)
-	new_comment = Comment(profile_user=new_user)
+	profile_user = ProfileUser.objects.get(user=request.user)
+	new_comment = Comment(profile_user=profile_user)
 	form = CommentForm(request.POST, instance=new_comment)
 	if not form.is_valid():
 		context['form'] = form

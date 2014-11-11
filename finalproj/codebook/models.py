@@ -29,7 +29,7 @@ class ProfileUser(models.Model):
     languages = models.ManyToManyField(Language, related_name="languages_liked")
     user = models.ForeignKey(User)
     def get_username(self):
-        return "User #" + str(self.id)
+        return self.user.username
 
     def get_id(self):
         return 1
@@ -64,13 +64,6 @@ class Comment(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
     path = models.CharField(max_length=400)  # relative path file comment on
     likers = models.ManyToManyField(ProfileUser, related_name="liked_by")
-
-#class FileComment (models.Model):
-#    profile_user = models.ForeignKey(ProfileUser)
-#    text = models.CharField(max_length=400)
-#    date_time = models.DateTimeField(auto_now_add=True)
-#    path = models.CharField(max_length=400)  # relative path file comment on
-#    likers = models.ManyToManyField(ProfileUser, related_name="comment_liked_by")
 
 class Tag(models.Model):
     text = models.CharField(max_length=20)
@@ -148,17 +141,6 @@ class Difficulty(models.Model):
     profile_user = models.ForeignKey(ProfileUser)
     date_time = models.DateTimeField(auto_now_add=True)
 
-#class Watch(models.Model):
-    # can list watchers and list repositories being watched
-    #profile_user = models.ForeignKey(ProfileUser)
-    #repositories = models.ManyToManyField(Repository)
-    #date_time = models.DateTimeField(auto_now_add=True)
-
-#class Star(models.Model):
-    # can list stargazers and list repositories being starred
-    #profile_user = models.ForeignKey(ProfileUser)
-    #repository = models.ForeignKey(Repository)
-    #date_time = models.DateTimeField(auto_now_add=True)
 
 class Saved(models.Model):
     #profile_user = models.ForeignKey(ProfileUser, primary_key=True)
