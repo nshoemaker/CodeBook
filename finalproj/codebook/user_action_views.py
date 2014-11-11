@@ -11,6 +11,7 @@
 ############################################################
 
 from content_views import *
+g2 = Github('dmouli', 'Spongebob5%')
 
 def signin(request):
     pass
@@ -34,16 +35,15 @@ def like_comment(request, source, comment_id):
 	"""
 	context = {}
 	comment = Comment.objects.get(id=comment_id)
+	profile_user = ProfileUser.objects.get(user = request.user)
 
 	# right now, liking and unliking works for a comment by profile_user 1 ONLY
-	if not (comment.likers.filter(id=1)):
-		liker = ProfileUser.objects.get(id=1)
-		comment.likers.add(liker)
+	if not (comment.likers.filter(liked_by=profile_user)):
+		comment.likers.add(profile_user)
 		comment.save()
 	# User has already liked comment - click will "un-like"
 	else:
-		liker = ProfileUser.objects.get(id=1)
-		comment.likers.remove(liker)
+		comment.likers.remove(profile_user)
 		comment.save()
 
 	# Ask others how they sent back to correct page
@@ -51,33 +51,40 @@ def like_comment(request, source, comment_id):
 
 # Watch or Unwatch a Repository 
 def watch_repo(request, source, repo_id):
-	"""
-	repo = g.get_repo(repo_id)
-
-	if (request.user.has_in_watched(repo)):
+    social = request.user.social_auth.get(provider='github')
+    token = social.extra_data['access_token']
+    g = Github(token)
+    repo = g.get_repo(3222)
+    user = g.get_user()
+    
+    if (user.has_in_watched(repo)):
 		# User has already watched this repo - click will "un-watch"
-		request.user.remove_from_watched(repo)
-	else:
-		request.user.add_to_watched(repo)
-
-	return redirect('/' + source)
-	"""
-	return redirect('/' + source)
+		user.remove_from_watched(repo)
+    else:
+        pass
+		#user.add_to_watched(repo)
+        
+    return redirect('/' + source)
 
 # Star or Unstar a Repository 
 def star_repo(request, source, repo_id):
-	"""
-	repo = g.get_repo(repo_id)
-
-	if (request.user.has_in_starred(repo)):
+    social = request.user.social_auth.get(provider='github')
+    token = social.extra_data['access_token']
+    g = Github(token)
+    print "In star repo : " + g2.get_organization("github").name
+    repo = g.get_repo(3222)
+    print "Got this repo: " + repo.name
+    user = g.get_user()
+    print "Got this user: " + user.login 
+    
+    if (user.has_in_starred(repo)):
 		# User has already watched this repo - click will "un-watch"
-		request.user.remove_from_starred(repo)
-	else:
-		request.user.add_to_starred(repo)
-
-	return redirect('/' + source)
-	"""
-	return redirect('/' + source)
+		user.remove_from_starred(repo)
+    else:
+        pass
+		#user.add_to_starred(repo)
+        
+    return redirect('/' + source)
 
 # Save or Unsave a Post
 def save_file(request, source, file_id):
@@ -100,7 +107,7 @@ def save_file(request, source, file_id):
 
 	"""
 
-	profile_user = ProfileUser.objects.get(id=1)
+	profile_user = ProfileUser.objects.get(user=request.user)
 	repofile = RepoFile.objects.get(id=file_id)
 	user_saves = Saved.objects.get(profile_user=profile_user)
 
@@ -119,41 +126,44 @@ def save_file(request, source, file_id):
 	return redirect('/' + source)
 
 def search(request):
-	context = {}
+    social = request.user.social_auth.get(provider='github')
+    token = social.extra_data['access_token']
+    g = Github(token)
+    context = {}
+    # Temp code to populate the search page #
+    # only need on first run 
+    repos = g.get_organization("github").get_repos()
+    i = 0
+    for repo in repos:
+        if (i < 5):
+            new_repo = Repository(repo_id = repo.id)
+            new_repo.save()
+            if (i == 0):
+                repofile = repo.get_contents("README.md")
+                path = repofile.path
+                new_file = RepoFile(repository=new_repo, path=path, average_difficulty=0, average_quality=0)
+                new_file.save()
+            i = i + 1
+        else:
+            break
 
-	# Temp code to populate the search page #
-	# only need on first run 
-	repos = g.get_organization("github").get_repos()
-	i = 0
-	for repo in repos:
-		if (i < 5):
-			new_repo = Repository(repo_id = repo.id)
-			new_repo.save()
-			if (i == 0):
-			    repofile = repo.get_contents("README.md")
-			    path = repofile.path
-			    new_file = RepoFile(repository=new_repo, path=path, average_difficulty=0, average_quality=0)
-			    new_file.save()
-			i = i + 1
-		else:
-			break
-	
-	# End temp code to populate the search page #
+    # End temp code to populate the search page #
 
-	# Don't need to keep this code if signing into GitHub 
-	# creates a ProfileUser object with id 1 
-	# only need on first run 
-	new_user = ProfileUser()
-	new_user.save() 
-	new_user_saves = Saved(profile_user=new_user)
-	new_user_saves.save()
+    # Don't need to keep this code if signing into GitHub 
+    # creates a ProfileUser object with id 1 
+    # only need on first run 
+    #new_user = ProfileUser()
+    #new_user.save() 
+    profile_user = ProfileUser.objects.get(user=request.user)
+    #new_user_saves = Saved(profile_user=profile_user)
+    #new_user_saves.save()
 
-	context["repos"] = Repository.objects.all
-	context['files'] = RepoFile.objects.all
- 	context["source"] = 'codebook/search_results'
-	context['comment_form'] = CommentForm()
-	context['profile_user'] = ProfileUser.objects.get(id=1)
-	return render(request, "codebook/search-results-page.html", context)
+    context["repos"] = Repository.objects.all
+    context['files'] = RepoFile.objects.all
+    context["source"] = 'codebook/search_results'
+    context['comment_form'] = CommentForm()
+    context['profile_user'] = profile_user #ProfileUser.objects.get(id=1)
+    return render(request, "codebook/search-results-page.html", context)
 
 def comment(request, comment_type, source, id):
 	"""
@@ -189,8 +199,7 @@ def comment(request, comment_type, source, id):
 
 	# For now, creating a new user for each comment 
 	# Need to change this once user authentication is a thing
-	new_user = ProfileUser()
-	new_user.save()
+	new_user = ProfileUser.objects.get(user=request.user)
 	new_comment = Comment(profile_user=new_user)
 	form = CommentForm(request.POST, instance=new_comment)
 	if not form.is_valid():

@@ -168,6 +168,7 @@
                         <div class="row repository-header">
                             <div class="col-md-1">
                                 <!-- should have a link to the repository -->
+                                <a href="{% url 'watch_repo' source repo.repo_id %}"></a>
                                 <h4 class="glyphicon glyphicon-expand repo-toggle-button" id="repo-toggle-button-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}"></h4>
                             </div>
                             <div class="col-md-2">
