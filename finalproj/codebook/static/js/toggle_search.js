@@ -1,13 +1,13 @@
 $(document).ready(function()
 {
-    $(".repo-body").slideUp();
-});
-
+    //$(".repo-body").slideUp();
 $(".repo-toggle-button").click(function()
 {
     var repo_id = $(this).attr("data-item-id");
     toggle_repository_view(repo_id);
 });
+});
+
 
 function toggle_repository_view(repo_id)
 {
