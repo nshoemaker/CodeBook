@@ -13,6 +13,29 @@
 from content_views import *
 g2 = Github('dmouli', 'Spongebob5%')
 
+def get_correct_context(request, source):
+	context = {}
+	profile_user = ProfileUser.objects.get(user=request.user)
+	if (source == 'search'):
+		context["repos"] = Repository.objects.filter(repo_id=3222)
+    	context['files'] = RepoFile.objects.filter(id=10)
+    	context["source"] = 'search'
+    	context['comment_form'] = CommentForm()
+    	context['profile_user'] = profile_user
+	return context 
+
+def get_template(source):
+	if (source == 'search'):
+		return "codebook/search-results-page.html"
+	else:
+		return "/"
+
+def get_auth_user_git(request):
+	social = request.user.social_auth.get(provider='github')
+	token = social.extra_data['access_token']
+	g = Github(token)
+	return g
+
 def signin(request):
     pass
 
@@ -35,37 +58,33 @@ def like_comment(request, source, comment_id):
 
 # Watch or Unwatch a Repository 
 def watch_repo(request, source, repo_id):
-    social = request.user.social_auth.get(provider='github')
-    token = social.extra_data['access_token']
-    g = Github(token)
-    repo = g.get_repo(3222)
-    user = g.get_user()
-    
-    if (user.has_in_watched(repo)):
+	g = get_auth_user_git(request)
+	repo = g.get_repo(int(repo_id))
+	user = g.get_user()
+
+	if (user.has_in_subscriptions(repo)):
+		print "CAME INTO HAS WATCHED"
 		# User has already watched this repo - click will "un-watch"
-		user.remove_from_watched(repo)
-    else:
-        pass
-		#user.add_to_watched(repo)
-        
-    return redirect('/' + source)
+		user.remove_from_subscriptions(repo)
+	else:
+		print "CAME INTO ADD TO WATCHED"
+		user.add_to_subscriptions(repo)
+
+	return redirect(reverse(source))
 
 # Star or Unstar a Repository 
 def star_repo(request, source, repo_id):
-    social = request.user.social_auth.get(provider='github')
-    token = social.extra_data['access_token']
-    g = Github(token)
-    repo = g.get_repo(3222)
-    user = g.get_user()
-    
-    if (user.has_in_starred(repo)):
+	g = get_auth_user_git(request)
+	repo = g.get_repo(int(repo_id))
+	user = g.get_user()
+
+	if (user.has_in_starred(repo)):
 		# User has already watched this repo - click will "un-watch"
 		user.remove_from_starred(repo)
-    else:
-        pass
-		#user.add_to_starred(repo)
-        
-    return redirect('/' + source)
+	else:
+		user.add_to_starred(repo)
+
+	return redirect(reverse(source))
 
 # Save or Unsave a Post
 def save_file(request, source, file_id):
@@ -95,6 +114,17 @@ def search(request):
     context = {}
     
     # Temp code to populate the search page #
+    """
+    repo_obj = Repository(repo_id = 7986587)
+    repo_obj.save()
+    repo_gilbert = g.get_repo(7986587)
+    file_index = repo_gilbert.get_contents("index.html")
+    path = file_index.path
+    new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
+    new_file.save()
+    """
+    
+    """
     repos = g.get_organization("github").get_repos()
     i = 0
     for repo in repos:
@@ -109,13 +139,14 @@ def search(request):
             i = i + 1
         else:
             break
+    """
     # End temp code to populate the search page #
     
-    context["repos"] = Repository.objects.all
-    context['files'] = RepoFile.objects.all
-    context["source"] = 'codebook/search_results'
+    context["repos"] = Repository.objects.filter(repo_id=3222)
+    context['files'] = RepoFile.objects.filter(id=10)
+    context["source"] = 'search'
     context['comment_form'] = CommentForm()
-    context['profile_user'] = profile_user #ProfileUser.objects.get(id=1)
+    context['profile_user'] = profile_user 
     return render(request, "codebook/search-results-page.html", context)
 
 def comment(request, comment_type, source, id):
@@ -123,16 +154,14 @@ def comment(request, comment_type, source, id):
 
 	if request.method == "GET":
 		context['comment_form'] = CommentForm()
-		return redirect('/' + source)
+		return redirect(reverse(source))
 
-	# For now, creating a new user for each comment 
-	# Need to change this once user authentication is a thing
 	profile_user = ProfileUser.objects.get(user=request.user)
 	new_comment = Comment(profile_user=profile_user)
 	form = CommentForm(request.POST, instance=new_comment)
 	if not form.is_valid():
 		context['form'] = form
-		return redirect('/' + source)
+		return redirect(reverse(source))
 	form.save()
 
 	if (comment_type == 'repo'):
@@ -143,4 +172,4 @@ def comment(request, comment_type, source, id):
 		repoFile = RepoFile.objects.get(id=id)
 		repoFile.comments.add(new_comment)
 		repoFile.save()
-	return redirect('/' + source)
+	return redirect(reverse(source))

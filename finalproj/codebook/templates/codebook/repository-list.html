@@ -176,9 +176,12 @@
                             </div>
                             <div class="col-md-1">
                                 <a href="{% url 'star_repo' source repo.repo_id %}">
-                                    <h4 class="glyphicon glyphicon-star"></h4>
+                                    {% if starred == False %}
+                                        <h4 class="glyphicon glyphicon-star"></h4>
+                                    {% else %}
+                                        <h4 class="glyphicon glyphicon-star-empty"></h4>
+                                    {% endif %}
                                 </a>
-                                    <!--<h4 class="glyphicon glyphicon-star-empty"></h4>-->
                             </div>
                             <div class="col-md-1">
                                 <a href="{% url 'watch_repo' source repo.repo_id %}">

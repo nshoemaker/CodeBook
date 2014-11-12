@@ -56,26 +56,21 @@ from django.utils import timezone
 
 import json
 
+def get_auth_user_git(request):
+    social = request.user.social_auth.get(provider='github')
+    token = social.extra_data['access_token']
+    g = Github(token)
+    return g
+
 def saved(request):
     context = {}
-    """
-    profile_user = ProfileUser(user=request.user)
-    user_saves = Saved.objects.get(profile_user=profile_user)
 
-    context['files'] = user_saves.files.all 
-    context["source"] = 'codebook/saved'
-    context['comment_form'] = CommentForm()
-    context['profile_user'] = profile_user
-    return render(request, 'codebook/saved-files.html', context)
-
-    """
-    
     # Dummy test = "authenticated user" is ProfUser 1 
     profile_user = ProfileUser.objects.get(user = request.user)
     user_saves = Saved.objects.get(profile_user=profile_user)
 
     context['files'] = user_saves.files.all
-    context["source"] = 'codebook/saved'
+    context["source"] = 'saved'
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user
     return render(request, 'codebook/saved-files.html', context)
@@ -117,6 +112,22 @@ def news(request):
 
 #@login_required
 def watching(request):
+    context = {}
+    g = get_auth_user_git(request)
+    user = g.get_user()
+    watched = user.get_subscriptions()
+    recent_watched = []  
+
+    i = 0
+    for repo in watched:
+        if (i < 10):
+            new_repo = Repository(repo_id = repo.id)
+            new_repo.save()
+            recent_watched.append(new_repo)
+            i = i+1
+        else:
+            break
+
     """
     context = {}
     context['repos'] = request.user.get_watched()
@@ -125,7 +136,10 @@ def watching(request):
     context['profile_user'] = ProfileUser.objects.get(user = request.user)
     return render(request, 'codebook/watching-page.html', context)
     """
-    context = {}
+    context["source"] = 'watching'
+    context['repos'] = recent_watched
+    context['comment_form'] = CommentForm()
+    context['profile_user'] = ProfileUser.objects.get(user = request.user)
     return render(request, 'codebook/watching-page.html', context)
 
 
