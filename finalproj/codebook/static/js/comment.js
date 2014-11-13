@@ -7,9 +7,11 @@ $('.post-repo-comment-form').on('submit', function (e) {
     e.preventDefault();
     var repo_id = $(this).attr("data-item-id");
     create_repo_comment_post(repo_id);
+    console.log("made it to repo comment on submit handler");
 });
 
 function create_repo_comment_post(repo_id) {
+    console.log("made it to repo comment function BEGINNING");
     $.ajax({
         type: "POST",
         url: "/codebook/comment_repo/" + repo_id,
@@ -20,10 +22,12 @@ function create_repo_comment_post(repo_id) {
             csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
         },
         success: function (html){
+            console.log("made it to repo comment function SUCCESS");
             $('#repo-comment-list-' + repo_id).append(html);
             $('#repo-post-text-' + repo_id).val('');
         },
         error: function (xhr, textStatus, errorThrown) {
+            console.log("made it to repo comment function FAIL");
             if (!(xhr.status == 0 || xhr.status == '0' || errorThrown == 0 || errorThrown == '0' || xhr.response == 0 || xhr.response == '0')) {
                 alert("Please report this error: " + errorThrown + xhr.status + xhr.responseText);
 

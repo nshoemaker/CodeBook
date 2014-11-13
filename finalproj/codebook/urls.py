@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     url(r'^saved$', 'codebook.content_views.saved', name='saved'),
     url(r'^sandbox$', 'codebook.content_views.sandbox', name='sandbox'),
 
-    # User Actions 
+    # User Actions
     url(r'^like_comment/(?P<source>\D+)/(?P<comment_id>\d+)$', 'codebook.user_action_views.like_comment', name='like_comment'),
     #url(r'^watch_repo/(?P<source>\D+)/(?P<repo_id>\d+)$', 'codebook.user_action_views.watch_repo', name='watch_repo'),
     #url(r'^star_repo/(?P<source>\D+)/(?P<repo_id>\d+)$', 'codebook.user_action_views.star_repo', name='star_repo'),
@@ -18,8 +18,8 @@ urlpatterns = patterns('',
     url(r'^comment/(?P<comment_type>[^/]+)/(?P<source>\D+)/(?P<id>\d+)$', 'codebook.user_action_views.comment', name='comment'),
     url(r'^signin', 'codebook.user_action_views.signin', name="signin"),
 
-    url(r'^comment_repo/(?P<id>\d+)$', 'codebook.ajax_views.post_repo_comment', name='repo_comment'),
-    url(r'^comment_file/(?P<id>\d+)$', 'codebook.ajax_views.post_file_comment', name='file_comment'),
+    url(r'^comment_repo/(?P<id>\d+)$', 'codebook.ajax_views.post_repo_comment', name='comment_repo'),
+    url(r'^comment_file/(?P<id>\d+)$', 'codebook.ajax_views.post_file_comment', name='comment_file'),
     url(r'^star_repo/(?P<id>\d+)$', 'codebook.ajax_views.star_repo', name='star_repo'),
     url(r'^unstar_repo/(?P<id>\d+)$', 'codebook.ajax_views.unstar_repo', name='unstar_repo'),
     url(r'^watch_repo/(?P<id>\d+)$', 'codebook.ajax_views.watch_repo', name='watch_repo'),

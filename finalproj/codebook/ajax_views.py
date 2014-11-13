@@ -41,6 +41,7 @@ def post_repo_comment(request, id):
         try:
             comment_form = CommentForm(request.POST)
         except:
+            print 'ERROR 1'
             return HttpResponse('Error')
         repo = get_object_or_404(Repository, repo_id=id)
         profile_user = request.user
@@ -48,6 +49,7 @@ def post_repo_comment(request, id):
         if not comment_form.is_valid():
             context = {}
             context['form' + str(repo.repo_id)] = comment_form
+            print 'ERROR 2'
             return HttpResponse('Error')
 
         com_new = comment_form.save(commit=False)
