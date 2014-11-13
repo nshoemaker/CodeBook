@@ -1,6 +1,6 @@
 <div class="navbar-form navbar-right form-group">
     {% if user and not user.is_anonymous %}
-       <a>Hello {{ user.get_full_name|default:user.username }}!</a>
+       <a>Hello {{ user.get_full_name | default:user.get_username }}!</a>
        <a href="{% url 'auth:logout' %}?next=/">Logout</a>
     {% else %} 
     <a class="btn btn-block btn-social btn-md btn-github" href="{% url 'social:begin' 'github' %}?next={{request.path}}">

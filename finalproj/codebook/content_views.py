@@ -77,24 +77,18 @@ def saved(request):
 
 def front(request):
     context = {}
-    context['user'] = request.user
-    if request.user and not request.user.is_anonymous():
+    if request.user and not request.user.is_anonymous:
         try:
             ProfileUser.objects.get(user=request.user)
         except:
-          new_profile_user = ProfileUser(user = request.user)
+          new_profile_user = request.user
           new_profile_user.save()
           new_saves = Saved(profile_user=new_profile_user)
           new_saves.save()
+        context['user'] = new_profile_user
         social = request.user.social_auth.get(provider='github')
         token = social.extra_data['access_token']
-        g = Github(token)
-        print "token",token
-        for field in request.user._meta.get_all_field_names():
-            try: 
-                print field, getattr(request.user,field)
-            except:
-                print field, "crashed"
+        #g = Github(token)
     return render(request, 'codebook/front-page.html', context)
 
 #@login_required

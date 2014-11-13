@@ -2,8 +2,8 @@ from django.db import models
 
 from django.db.models import Q
 
-from django.contrib.auth.models import User
-
+from django.contrib.auth.models import User, UserManager, AbstractBaseUser
+from django.utils import timezone
 from github import Github 
 # g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
 g = Github('dmouli', 'Spongebob5%')
@@ -24,12 +24,29 @@ class UserRating(models.Model):
     proficiency = models.IntegerField()  # how well they think they know the language
     credibility = models.IntegerField()  # how well we think they know the language
 
-class ProfileUser(models.Model):
+class ProfileUser(AbstractBaseUser):
     # note that there will be some id that we can use to get profile info for this user from github
     languages = models.ManyToManyField(Language, related_name="languages_liked")
-    user = models.ForeignKey(User)
+    is_anonymous = models.BooleanField(default = False)
+    username = models.CharField(default = "", max_length=100)
+    firstname = models.CharField(default = "", max_length=100)
+    lastname = models.CharField(default = "", max_length=100)
+    objects = UserManager()
+    date_joined = models.DateTimeField(default=timezone.now())
+    is_active   = models.BooleanField(default=True)
+    is_admin    = models.BooleanField(default=False)
+    is_staff    = models.BooleanField(default=False)
+    is_superuser    = models.BooleanField(default=False)
+    email = models.CharField(default = "", max_length=100)
+    
+    class Meta:
+        db_table = u'profile_user'
+
+    def get_full_name(self):
+        return self.firstname + self.lastname
+    
     def get_username(self):
-        return self.user.username
+        return self.username
 
     def get_id(self):
         return 1
