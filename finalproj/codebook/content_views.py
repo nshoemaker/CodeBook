@@ -66,7 +66,7 @@ def saved(request):
     context = {}
 
     # Dummy test = "authenticated user" is ProfUser 1 
-    profile_user = ProfileUser.objects.get(user = request.user)
+    profile_user = request.user
     user_saves = Saved.objects.get(profile_user=profile_user)
 
     context['files'] = user_saves.files.all
@@ -127,13 +127,13 @@ def watching(request):
     context['repos'] = request.user.get_watched()
     context["source"] = 'codebook/watching'
     context['comment_form'] = CommentForm()
-    context['profile_user'] = ProfileUser.objects.get(user = request.user)
+    context['profile_user'] = request.user
     return render(request, 'codebook/watching-page.html', context)
     """
     context["source"] = 'watching'
     context['repos'] = recent_watched
     context['comment_form'] = CommentForm()
-    context['profile_user'] = ProfileUser.objects.get(user = request.user)
+    context['profile_user'] = request.user
     return render(request, 'codebook/watching-page.html', context)
 
 
