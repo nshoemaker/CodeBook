@@ -16,4 +16,7 @@ urlpatterns = patterns('',
     url(r'^search_results$', 'codebook.user_action_views.search', name='search'),
     url(r'^comment/(?P<comment_type>[^/]+)/(?P<source>\D+)/(?P<id>\d+)$', 'codebook.user_action_views.comment', name='comment'),
     url(r'^signin', 'codebook.user_action_views.signin', name="signin"),
+
+    url(r'^comment/repo/(?P<id>\d+)$', 'codebook.ajax_views.post_repo_comment', name='repo_comment'),
+    url(r'^comment/file/(?P<id>\d+)$', 'codebook.ajax_views.post_file_comment', name='file_comment'),
 )

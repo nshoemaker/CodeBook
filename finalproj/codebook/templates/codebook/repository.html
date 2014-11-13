@@ -99,23 +99,32 @@
                 </div>
             </div>
 
-            <ol class="comment-list" id="comment-list">
+            <ol class="repo-comment-list" id="repo-comment-list-{{ repo.repo_id }}">
                 {% for comment in repo.comments.all %}
                     <li id="comment{{ comment.id }}">
-                    {% include 'codebook/comment.html' %}
+                        {% include 'codebook/comment.html' %}
                     </li>
                 {% endfor %}
             </ol>
 
             <!-- end comment list -->
-
             <div class="row repository-footer">
-                <form method="POST" role="form" action="{% url 'comment' 'repo' source repo.repo_id %}">
-                    {% for field in comment_form.visible_fields %}
-                        <div class="col-md-9 col-lg-offset-1">
-                            {{ field }}
+                <form method="POST" id="post-repo-comment-form-{{ repo.repo_id }}" class="post-repo-comment-form"
+                      data-item-id="{{ repo.repo_id }}" role="form"
+                      action="{% url 'comment' 'repo' source repo.repo_id %}">
+
+                    <div class="col-md-9 col-lg-offset-1">
+                        <div id="the_post{{ repo.repo_id }}">
+                            <tr>
+                                <th><label for="id_text">{{ comment_form.text.label }}</label></th>
+                                <td>
+                                    {{ comment_form.errorlist }}
+                                    <input id="repo-post-text-{{ repo.repo_id }}" maxlength="400" name="text" pla
+                                           ceholder="Say something..." required="True" type="text"/></td>
+                            </tr>
+                            {% csrf_token %}
                         </div>
-                    {% endfor %}
+                    </div>
                     <div class="col-md-1">
                         <input type="submit" class="btn control-btn" value="Comment">
                     </div>

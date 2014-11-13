@@ -93,16 +93,25 @@
     <!-- end comment list -->
 
     <div class="row file-footer">
-        <form method="POST" role="form" action="{% url 'comment' 'repofile' source file.id %}">
-            {% for field in comment_form.visible_fields %}
-                <div class="col-md-9 col-lg-offset-1">
-                    {{ field }}
-                </div>
-            {% endfor %}
-            <div class="col-md-1">
-                <input type="submit" class="btn control-btn" value="Comment">
-            </div>
-            {% csrf_token %}
+        <form method="POST" role="form" id="post-file-comment-form-{{ file.id }}" class="post-file-comment-form"
+                      data-item-id="{{ file.id }}" action="{% url 'comment' 'repofile' source file.id %}">
+
+                    <div class="col-md-9 col-lg-offset-1">
+                        <div id="the_post{{ file.id }}">
+                            <tr>
+                                <th><label for="id_text">{{ comment_form.text.label }}</label></th>
+                                <td>
+                                    {{ comment_form.errorlist }}
+                                    <input id="file-post-text-{{ file.id }}" maxlength="400" name="text" pla
+                                           ceholder="Say something..." required="True" type="text"/></td>
+                            </tr>
+                            {% csrf_token %}
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="submit" class="btn control-btn" value="Comment">
+                    </div>
+                    {% csrf_token %}
         </form>
     </div>
 </div>
