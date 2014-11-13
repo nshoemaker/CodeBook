@@ -1,0 +1,20 @@
+<div class="row comment">
+    <div class="col-md-1">
+        <h5>{% include 'codebook/get-profpic.html' with id=comment.profile_user.user.id %}</h5>
+    </div>
+    <div class="col-md-2">
+        <h5>{{ comment.profile_user.get_username }}</h5>
+    </div>
+    <div class="col-md-1 col-md-offset-7">
+        <a href="{% url 'like_comment' source comment.id %}">
+            {% if profile_user in comment.likers.all %}
+                <h5 class="glyphicon glyphicon-remove"></h5>
+            {% else %}
+                <h5 class="glyphicon glyphicon-ok"></h5>
+            {% endif %}
+        </a>
+    </div>
+    <div class="col-md-10 comment-text">
+        <h6>{{ comment.text }}</h6>
+    </div>
+</div>

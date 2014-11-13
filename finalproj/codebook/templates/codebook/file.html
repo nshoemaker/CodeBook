@@ -1,0 +1,108 @@
+<div class="container file">
+    <div class="row file-header">
+        <div class="col-md-3">
+            <h4>{{ file.get_name }}</h4>
+        </div>
+        <div class="col-md-1">
+            <!-- should have a link to the repository -->
+            <!--<a href="{ url watch_repo repo.id }">-->
+            <h4 class="glyphicon glyphicon-book"></h4>
+            <!--</a>-->
+        </div>
+        <div class="col-md-1">
+            <a href="{% url 'save_file' source file.id %}">
+                {% if file.is_saved == 'true' %}
+                    <h4 class="glyphicon glyphicon-floppy-saved"></h4>
+                {% else %}
+                    <h4 class="glyphicon glyphicon-floppy-disk"></h4>
+                {% endif %}
+            </a>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-2">
+            <h4>{{ file.get_creator }}</h4>
+        </div>
+        <div class="col-md-1">
+            <!-- TODO: setup profile images -->
+            <h4>{% include 'codebook/get-profpic.html' with id=repo.creator.user.id %}</h4>
+        </div>
+    </div>
+    <!-- end repository header top thingy -->
+
+    <div class="row file-file-view">
+        <div class="col-md-12 file-file">
+            {{ file.get_content }}
+        </div>
+    </div>
+    <!-- end file view -->
+
+    <div class="row tags">
+        <div class="col-md-10">
+            <div class="btn-group-sm">
+                {% for tag in repo.tags %}
+                    <ol class="tag-list" id="tag-list{{ repo.id }}">
+                        <!-- endorsed tags have x's next to them (toggle to unendorse) unendorsed tags have check -->
+                        <li id="tag{{ tag.id }}">
+                            <button class="btn btn-sm tag-btn">
+                                <span class="tag-text">{{ tag.text }}</span>
+                                {% if tag.is_endorsed == 'true' %}
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                {% else %}
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                {% endif %}
+                            </button>
+                        </li>
+                    </ol>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-1 tag-list">
+            <button type="submit" class="btn btn-sm control-btn">Add Tag</button>
+        </div>
+    </div>
+    <!-- end tags -->
+    <!-- TODO get ratings working (make average read only)-->
+    <!-- begin ratings -->
+    <div class="row ratings">
+        <div class="col-md-2">
+            <h4>Difficulty</h4>
+        </div>
+        <div class="col-md-3">
+            <div class="stars starrr" data-rating="0"></div>
+        </div>
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-2">
+            <h4>Documentation</h4>
+        </div>
+        <div class="col-md-3">
+            <div class="stars starrr" data-rating="0"></div>
+        </div>
+    </div>
+
+    <ol class="comment-list" id="comment-list">
+        {% for comment in file.comments.all %}
+            <li id="comment{{ comment.id }}">
+            {% include 'codebook/comment.html' %}
+            </li>
+        {% endfor %}
+    </ol>
+
+    <!-- end comment list -->
+
+    <div class="row file-footer">
+        <form method="POST" role="form" action="{% url 'comment' 'repofile' source file.id %}">
+            {% for field in comment_form.visible_fields %}
+                <div class="col-md-9 col-lg-offset-1">
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <div class="col-md-1">
+                <input type="submit" class="btn control-btn" value="Comment">
+            </div>
+            {% csrf_token %}
+        </form>
+    </div>
+</div>
