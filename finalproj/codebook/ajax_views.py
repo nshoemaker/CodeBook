@@ -112,7 +112,7 @@ def star_repo(request, id):
 		user.add_to_starred(repo)
 
         """
-        pass
+        return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
         pass
@@ -129,7 +129,7 @@ def unstar_repo(request, id):
 		user.remove_from_starred(repo)
 
         """
-        pass
+        return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
         pass
@@ -146,7 +146,7 @@ def watch_repo(request, id):
 		user.add_to_subscriptions(repo)
 
         """
-        pass
+        return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
         pass
@@ -163,14 +163,21 @@ def unwatch_repo(request, id):
 		user.remove_to_subscriptions(repo)
 
         """
-        pass
+        return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
         pass
 
 def like_comment(request, id):
     if request.is_ajax():
+        return HttpResponse('True', content_type="text")
+    else:
+        # uhhhhhhhh awk. this should never happen
         pass
+
+def save_file(request, id):
+    if request.is_ajax():
+        return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
         pass

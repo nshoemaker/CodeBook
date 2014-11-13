@@ -30,14 +30,14 @@ function watch_repository(repo_id)
             csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
         },
         success: function() {
-            var star = $("#star-status-" + repo_id);
-            if (star.hasClass("glyphicon-eye-open"))
+            var eye = $("#watch-status-" + repo_id);
+            if (eye.hasClass("glyphicon-eye-open"))
             {
-                star.removeClass("glyphicon-eye-open");
+                eye.removeClass("glyphicon-eye-open");
             }
-            if (!star.hasClass("glyphicon-eye-close"))
+            if (!eye.hasClass("glyphicon-eye-close"))
             {
-                star.addClass("glyphicon-eye-close");
+                eye.addClass("glyphicon-eye-close");
             }
         },
         error: function (xhr, textStatus, errorThrown) {
@@ -61,14 +61,14 @@ function unwatch_repository(repo_id)
             csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
         },
         success: function() {
-            var star = $("#star-status-" + repo_id);
-            if (!star.hasClass("glyphicon-eye-open"))
+            var eye = $("#watch-status-" + repo_id);
+            if (!eye.hasClass("glyphicon-eye-open"))
             {
-                star.addClass("glyphicon-eye-open");
+                eye.addClass("glyphicon-eye-open");
             }
-            if (star.hasClass("glyphicon-eye-close"))
+            if (eye.hasClass("glyphicon-eye-close"))
             {
-                star.removeClass("glyphicon-eye-close");
+                eye.removeClass("glyphicon-eye-close");
             }
         },
         error: function (xhr, textStatus, errorThrown) {
