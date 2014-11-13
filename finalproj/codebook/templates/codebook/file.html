@@ -11,9 +11,9 @@
         </div>
         <div class="col-md-1">
                 {% if file.is_saved == 'true' %}
-                    <h4 class="glyphicon glyphicon-floppy-saved"></h4>
+                    <h4 id="save-status-{{ file.id }}" data-item-id="{{ file.id }}" class="glyphicon glyphicon-floppy-saved save-status"></h4>
                 {% else %}
-                    <h4 class="glyphicon glyphicon-floppy-disk"></h4>
+                    <h4 id="save-status-{{ file.id }}" data-item-id="{{ file.id }}" class="glyphicon glyphicon-floppy-disk save-status"></h4>
                 {% endif %}
         </div>
         <div class="col-md-4">

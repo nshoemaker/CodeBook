@@ -181,3 +181,11 @@ def save_file(request, id):
     else:
         # uhhhhhhhh awk. this should never happen
         pass
+
+
+def unsave_file(request, id):
+    if request.is_ajax():
+        return HttpResponse('True', content_type="text")
+    else:
+        # uhhhhhhhh awk. this should never happen
+        pass
