@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     url(r'^watch_repo/(?P<id>\d+)$', 'codebook.ajax_views.watch_repo', name='watch_repo'),
     url(r'^unwatch_repo/(?P<id>\d+)$', 'codebook.ajax_views.unwatch_repo', name='unwatch_repo'),
     url(r'^like_comment/(?P<id>\d+)$', 'codebook.ajax_views.like_comment', name='like_comment'),
+    url(r'^unlike_comment/(?P<id>\d+)$', 'codebook.ajax_views.unlike_comment', name='unlike_comment'),
     url(r'^save_file/(?P<id>\d+)$', 'codebook.ajax_views.save_file', name='save_file'),
     url(r'^unsave_file/(?P<id>\d+)$', 'codebook.ajax_views.unsave_file', name='unsave_file'),
 )

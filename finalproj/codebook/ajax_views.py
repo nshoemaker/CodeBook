@@ -189,3 +189,19 @@ def unsave_file(request, id):
     else:
         # uhhhhhhhh awk. this should never happen
         pass
+
+
+def like_comment(request, id):
+    if request.is_ajax():
+        return HttpResponse('True', content_type="text")
+    else:
+        # uhhhhhhhh awk. this should never happen
+        pass
+
+
+def unlike_comment(request, id):
+    if request.is_ajax():
+        return HttpResponse('True', content_type="text")
+    else:
+        # uhhhhhhhh awk. this should never happen
+        pass
