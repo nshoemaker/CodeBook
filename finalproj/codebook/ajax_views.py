@@ -167,3 +167,10 @@ def unwatch_repo(request, id):
     else:
         # uhhhhhhhh awk. this should never happen
         pass
+
+def like_comment(request, id):
+    if request.is_ajax():
+        pass
+    else:
+        # uhhhhhhhh awk. this should never happen
+        pass
