@@ -145,3 +145,44 @@ def following(request):
     context['following_list_short'] = following_list_short
     #context['profile_user'] = ProfileUser.objects.get(user=request.user)
     return render(request, 'codebook/following-page.html', context)
+
+
+def sandbox(request):
+    social = request.user.social_auth.get(provider='github')
+    token = social.extra_data['access_token']
+    g = Github(token)
+    context = {}
+    # Temp code to populate the search page #
+    # only need on first run
+    repos = g.get_organization("github").get_repos()
+    i = 0
+    for repo in repos:
+        if (i < 5):
+            new_repo = Repository(repo_id = repo.id)
+            new_repo.save()
+            if (i == 0):
+                repofile = repo.get_contents("README.md")
+                path = repofile.path
+                new_file = RepoFile(repository=new_repo, path=path, average_difficulty=0, average_quality=0)
+                new_file.save()
+            i = i + 1
+        else:
+            break
+
+    # End temp code to populate the search page #
+
+    # Don't need to keep this code if signing into GitHub
+    # creates a ProfileUser object with id 1
+    # only need on first run
+    #new_user = ProfileUser()
+    #new_user.save()
+    profile_user = request.user
+    #new_user_saves = Saved(profile_user=profile_user)
+    #new_user_saves.save()
+
+    context["repos"] = Repository.objects.all
+    context['files'] = RepoFile.objects.all
+    context["source"] = 'codebook/search_results'
+    context['comment_form'] = CommentForm()
+    context['profile_user'] = profile_user #ProfileUser.objects.get(id=1)
+    return render(request, "codebook/sandbox.html", context)
