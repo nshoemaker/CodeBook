@@ -66,7 +66,7 @@ def saved(request):
     context = {}
 
     # Dummy test = "authenticated user" is ProfUser 1 
-    profile_user = ProfileUser.objects.get(user = request.user)
+    profile_user = request.user
     user_saves = Saved.objects.get(profile_user=profile_user)
 
     context['files'] = user_saves.files.all
@@ -77,24 +77,18 @@ def saved(request):
 
 def front(request):
     context = {}
-    context['user'] = request.user
-    if request.user and not request.user.is_anonymous():
+    if request.user and not request.user.is_anonymous:
         try:
             ProfileUser.objects.get(user=request.user)
         except:
-          new_profile_user = ProfileUser(user = request.user)
+          new_profile_user = request.user
           new_profile_user.save()
           new_saves = Saved(profile_user=new_profile_user)
           new_saves.save()
+        context['user'] = new_profile_user
         social = request.user.social_auth.get(provider='github')
         token = social.extra_data['access_token']
-        g = Github(token)
-        print "token",token
-        for field in request.user._meta.get_all_field_names():
-            try: 
-                print field, getattr(request.user,field)
-            except:
-                print field, "crashed"
+        #g = Github(token)
     return render(request, 'codebook/front-page.html', context)
 
 #@login_required
@@ -133,13 +127,13 @@ def watching(request):
     context['repos'] = request.user.get_watched()
     context["source"] = 'codebook/watching'
     context['comment_form'] = CommentForm()
-    context['profile_user'] = ProfileUser.objects.get(user = request.user)
+    context['profile_user'] = request.user
     return render(request, 'codebook/watching-page.html', context)
     """
     context["source"] = 'watching'
     context['repos'] = recent_watched
     context['comment_form'] = CommentForm()
-    context['profile_user'] = ProfileUser.objects.get(user = request.user)
+    context['profile_user'] = request.user
     return render(request, 'codebook/watching-page.html', context)
 
 

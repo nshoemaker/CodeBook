@@ -8,14 +8,14 @@
 ##      watch_repo   - Watch/Unwatch a Repository         ##
 ##      save_post    - Save/Unsave a Post                 ##
 ############################################################
-############################################################
+#####################################################
 
 from content_views import *
 g2 = Github('dmouli', 'Spongebob5%')
 
 def get_correct_context(request, source):
 	context = {}
-	profile_user = ProfileUser.objects.get(user=request.user)
+	profile_user = request.user
 	if (source == 'search'):
 		context["repos"] = Repository.objects.filter(repo_id=3222)
     	context['files'] = RepoFile.objects.filter(id=10)
@@ -88,7 +88,7 @@ def star_repo(request, source, repo_id):
 
 # Save or Unsave a Post
 def save_file(request, source, file_id):
-	profile_user = ProfileUser.objects.get(user=request.user)
+	profile_user = request.user
 	repofile = RepoFile.objects.get(id=file_id)
 	user_saves = Saved.objects.get(profile_user=profile_user)
 
@@ -110,7 +110,7 @@ def search(request):
     social = request.user.social_auth.get(provider='github')
     token = social.extra_data['access_token']
     g = Github(token)
-    profile_user = ProfileUser.objects.get(user=request.user)
+    profile_user = request.user
     context = {}
     
     # Temp code to populate the search page #
@@ -156,7 +156,7 @@ def comment(request, comment_type, source, id):
 		context['comment_form'] = CommentForm()
 		return redirect(reverse(source))
 
-	profile_user = ProfileUser.objects.get(user=request.user)
+	profile_user = request.user
 	new_comment = Comment(profile_user=profile_user)
 	form = CommentForm(request.POST, instance=new_comment)
 	if not form.is_valid():
