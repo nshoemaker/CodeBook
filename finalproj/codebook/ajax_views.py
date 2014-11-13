@@ -133,7 +133,7 @@ def unstar_repo(request, id):
         pass
 
 
-def star_repo(request, id):
+def watch_repo(request, id):
     if request.is_ajax():
         """
         TODO: put in code to star a repo (whatever alternative we come up with. Formerly:)
@@ -150,7 +150,7 @@ def star_repo(request, id):
         pass
 
 
-def unstar_repo(request, id):
+def unwatch_repo(request, id):
     if request.is_ajax():
         """
         TODO: put in code to star a repo (whatever alternative we come up with. Formerly:)
