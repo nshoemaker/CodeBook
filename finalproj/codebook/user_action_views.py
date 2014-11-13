@@ -56,6 +56,7 @@ def like_comment(request, source, comment_id):
 	# Ask others how they sent back to correct page
 	return redirect('/' + source)
 
+"""
 # Watch or Unwatch a Repository 
 def watch_repo(request, source, repo_id):
 	g = get_auth_user_git(request)
@@ -85,7 +86,7 @@ def star_repo(request, source, repo_id):
 		user.add_to_starred(repo)
 
 	return redirect(reverse(source))
-
+"""
 # Save or Unsave a Post
 def save_file(request, source, file_id):
 	profile_user = request.user
@@ -149,6 +150,8 @@ def search(request):
     context['profile_user'] = profile_user 
     return render(request, "codebook/search-results-page.html", context)
 
+"""
+Technically, this should never be called
 def comment(request, comment_type, source, id):
 	context = {}
 
@@ -173,3 +176,4 @@ def comment(request, comment_type, source, id):
 		repoFile.comments.add(new_comment)
 		repoFile.save()
 	return redirect(reverse(source))
+"""

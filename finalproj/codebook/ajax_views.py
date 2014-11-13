@@ -52,10 +52,11 @@ def post_repo_comment(request, id):
 
         com_new = comment_form.save(commit=False)
         com_new.profile_user = profile_user
-        """
-            TODO: ADD ALL OTHER COMMENT FIELDS HERE
-        """
         comment_form.save()
+
+        repo = Repository.objects.get(repo_id=id)
+        repo.comments.add(com_new)
+        repo.save()
 
         context = {}
         context['comment'] = com_new
@@ -83,15 +84,84 @@ def post_file_comment(request, id):
 
         com_new = comment_form.save(commit=False)
         com_new.profile_user = profile_user
-        """
-            TODO: ADD ALL OTHER COMMENT FIELDS HERE
-        """
         comment_form.save()
+
+        repoFile = RepoFile.objects.get(id=id)
+        repoFile.comments.add(com_new)
+        repoFile.save()
 
         context = {}
         context['comment'] = com_new
 
         return render_to_response('codebook/comment.html', context, content_type="html")
+    else:
+        # uhhhhhhhh awk. this should never happen
+        pass
+
+
+def star_repo(request, id):
+    if request.is_ajax():
+        """
+        TODO: put in code to star a repo (something like this:)
+
+	    g = get_auth_user_git(request)
+	    repo = g.get_repo(int(id))
+	    user = g.get_user()
+		user.add_to_starred(repo)
+
+        """
+        pass
+    else:
+        # uhhhhhhhh awk. this should never happen
+        pass
+
+
+def unstar_repo(request, id):
+    if request.is_ajax():
+        """
+        TODO: put in code to star a repo (something like this:)
+
+	    g = get_auth_user_git(request)
+	    repo = g.get_repo(int(id))
+	    user = g.get_user()
+		user.remove_from_starred(repo)
+
+        """
+        pass
+    else:
+        # uhhhhhhhh awk. this should never happen
+        pass
+
+
+def star_repo(request, id):
+    if request.is_ajax():
+        """
+        TODO: put in code to star a repo (whatever alternative we come up with. Formerly:)
+
+	    g = get_auth_user_git(request)
+	    repo = g.get_repo(int(id))
+	    user = g.get_user()
+		user.add_to_subscriptions(repo)
+
+        """
+        pass
+    else:
+        # uhhhhhhhh awk. this should never happen
+        pass
+
+
+def unstar_repo(request, id):
+    if request.is_ajax():
+        """
+        TODO: put in code to star a repo (whatever alternative we come up with. Formerly:)
+
+	    g = get_auth_user_git(request)
+	    repo = g.get_repo(int(id))
+	    user = g.get_user()
+		user.remove_to_subscriptions(repo)
+
+        """
+        pass
     else:
         # uhhhhhhhh awk. this should never happen
         pass
