@@ -152,6 +152,7 @@ def search(request):
 
 """
 Technically, this should never be called
+"""
 def comment(request, comment_type, source, id):
 	context = {}
 
@@ -176,4 +177,3 @@ def comment(request, comment_type, source, id):
 		repoFile.comments.add(new_comment)
 		repoFile.save()
 	return redirect(reverse(source))
-"""

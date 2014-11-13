@@ -42,7 +42,7 @@ def post_repo_comment(request, id):
             comment_form = CommentForm(request.POST)
         except:
             return HttpResponse('Error')
-        repo = get_object_or_404(Repository, id=id)
+        repo = get_object_or_404(Repository, repo_id=id)
         profile_user = request.user
 
         if not comment_form.is_valid():

@@ -12,7 +12,7 @@ $('.post-repo-comment-form').on('submit', function (e) {
 function create_repo_comment_post(repo_id) {
     $.ajax({
         type: "POST",
-        url: "/codebook/comment/repo/" + repo_id,
+        url: "/codebook/comment_repo/" + repo_id,
         datatype: "html",
         data: {
             repo_id: repo_id,
@@ -41,7 +41,7 @@ $('.post-file-comment-form').on('submit', function (e) {
 function create_file_comment_post(file_id) {
     $.ajax({
         type: "POST",
-        url: "/codebook/comment/file/" + file_id,
+        url: "/codebook/comment_file/" + file_id,
         datatype: "html",
         data: {
             repo_id: file_id,
