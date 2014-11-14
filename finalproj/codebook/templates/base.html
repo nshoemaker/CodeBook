@@ -17,6 +17,7 @@
     <link href="{% static 'css/controls.css' %}" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{% static 'fonts/pictonic/css/pictonic.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/default.min.css">
     {% block stylesheets %}
     {% endblock %}
 </head>
@@ -78,6 +79,8 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
 <script src = "{% static "js/jquery-1.11.1.min.js" %}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 <script src = "{% static "js/bootstrap.min.js" %}" ></script>
 <script src = "{% static "js/ratings.js" %}"></script>
 <script src = "{% static "js/language_buttons.js" %}"></script>

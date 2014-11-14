@@ -1,3 +1,18 @@
+.file-file pre
+{
+    padding: 0px;
+    margin: px;
+    min-height: 200px;
+}
+
+.repository-file pre
+{
+    padding: 0px;
+    margin: px;
+    min-height: 200px;
+}
+
+
 #search-dropdown a
 {
    color: #333333;
@@ -100,6 +115,7 @@ list-style-type: none;
 
 .repository-file {
   min-height: 200px;
+  padding: 0px;
 }
 
 .repository-file-explorer {
@@ -150,6 +166,7 @@ list-style-type: none;
 
 .file-file {
   min-height: 200px;
+  padding: 0px;
 }
 
 .file-header {
