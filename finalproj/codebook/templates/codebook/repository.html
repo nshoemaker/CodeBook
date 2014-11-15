@@ -44,14 +44,10 @@
             <div class="row repository-file-view">
                 <!-- TODO: setup file explorer -->
                 <div class="col-md-3 repository-file-explorer">
-                    this is where the file explorer will be
+                    {% include 'codebook/file-explorer.html' %}
                 </div>
                 <div class="col-md-9 repository-file">
-                    <pre>
-                        <code>
-                    this is where the code will be
-                        </code>
-                    </pre>
+                    {% include 'codebook/file-contents.html' %}
                 </div>
             </div>
             <!-- end file view -->
