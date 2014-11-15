@@ -1,3 +1,7 @@
+.top-super-padded{
+    padding-top: 100px;
+}
+
 .file-file pre
 {
     padding: 0px;
@@ -268,12 +272,13 @@ list-style-type: none;
     text-align:center
 }    
 .profile-info {
-  max-width: 600px;
-  padding-top: 20px;
+  max-width: 75%;
   margin: 0 auto;
 }
-.profpic{
-  border-radius: 5px;
+.profpic img{
+    padding: 0 px;
+    border-radius: 50%;
+    width: 100 px;
 }
 
 .vert-padded{

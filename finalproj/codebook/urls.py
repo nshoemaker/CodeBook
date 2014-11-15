@@ -8,6 +8,8 @@ urlpatterns = patterns('',
     url(r'^following$', 'codebook.content_views.following', name='following'),
     url(r'^saved$', 'codebook.content_views.saved', name='saved'),
     url(r'^sandbox$', 'codebook.content_views.sandbox', name='sandbox'),
+    url(r'^profile/(?P<username>\w+)/$', 'codebook.content_views.profile_view', name = 'profile'),
+    url(r'^profile$', 'codebook.content_views.my_profile_view', name = 'view_my_profile'),
 
     # User Actions
     url(r'^comment_repo/(?P<id>\d+)$', 'codebook.ajax_views.post_repo_comment', name='comment_repo'),

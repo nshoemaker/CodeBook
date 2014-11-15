@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Profile: {{ profile_user.username }}{% endblock %}
+
+{% block stylesheets %}
+    {% load staticfiles %}
+{% endblock stylesheets %}
+
+{% block header %}
+{% endblock header %}
+
+{% block main %}
+    <div class="row profile-info">
+    {% include 'codebook/profile-info.html' %}
+    </div>
+{% endblock main %}

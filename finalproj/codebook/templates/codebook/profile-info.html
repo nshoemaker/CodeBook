@@ -1,0 +1,70 @@
+<div class="col-md-3 col-md-offset-1">
+    <div class="row profpic">
+        <div class="col-md-12">
+            {% include 'codebook/get-profpic.html' with id=comment.profile_user.user.id %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>{{ profile_user.username }}</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h5><icon class="fa fa-envelope-o"></icon> {{ profile_user.get_email}}</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h5><icon class="fa fa-github"></icon> {{ profile_user.get_git_profile_url}}</h5>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 col-md-offset-1">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#languages" role="tab" data-toggle="tab">
+                <icon class="fa fa-code"></icon>
+                Languages
+            </a>
+        </li>
+        <li>
+            <a href="#saved" role="tab" data-toggle="tab">
+                <i class="fa fa-save"></i> Saved
+            </a>
+        </li>
+        <li>
+            <a href="#popular" role="tab" data-toggle="tab">
+                <i class="fa fa-line-chart"></i> Popular
+            </a>
+        </li>
+        <li>
+            <a href="#recent" role="tab" data-toggle="tab">
+                <i class="fa fa-clock-o"></i> Recent
+            </a>
+        </li>
+    </ul>
+    <!-- end Nav tabs -->
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane fade active in" id="languages">
+            <h2>Languages Content Goes Here</h2>
+            <img src="http://lorempixel.com/400/400/cats/1" alt="Cats"/>
+        </div>
+        <div class="tab-pane fade" id="saved">
+            <h2>Saved Content Goes Here</h2>
+            <img src="http://lorempixel.com/400/400/cats/2" alt="Cats"/>
+        </div>
+        <div class="tab-pane fade" id="popular">
+            <h2>Popular Content Goes Here</h2>
+            <img src="http://lorempixel.com/400/400/cats/3" alt="Cats"/>
+        </div>
+        <div class="tab-pane fade" id="recent">
+            <h2>Recent Content Goes Here</h2>
+            <img src="http://lorempixel.com/400/400/cats/4" alt="Cats"/>
+        </div>
+    </div>
+    <!-- end Tab panes -->
+</div>

@@ -31,11 +31,7 @@
 
     <div class="row file-file-view">
         <div class="col-md-12 file-file">
-            <pre>
-                <code>
-            {{ file.get_content }}
-                </code>
-            </pre>
+            {% include 'codebook/file-contents.html' %}
         </div>
     </div>
     <!-- end file view -->
