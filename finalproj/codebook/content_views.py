@@ -88,6 +88,7 @@ def front(request):
         context['user'] = new_profile_user
         social = request.user.social_auth.get(provider='github')
         token = social.extra_data['access_token']
+        context['searchform'] = SearchForm()
         #g = Github(token)
     return render(request, 'codebook/front-page.html', context)
 

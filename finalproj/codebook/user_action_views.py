@@ -113,6 +113,37 @@ def search(request):
     g = Github(token)
     profile_user = request.user
     context = {}
+   
+    searchform = SearchForm(request.GET)
+    if not searchform.is_valid():
+        return None 
+        
+    text = searchform.cleaned_data['text'] 
+    choice = searchform.cleaned_data['types']
+    
+    if(choice == 'Lang'):
+        query = "language:"+text+" stars:>=500"
+        repos = g.search_repositories(query,sort='stars',order='desc')
+        for repo in repos:
+            print repo.name
+    
+    if(choice == 'User'):
+        users = g.search_users(text,sort='followers',order='desc')
+        for user in users:
+            print user.name
+            for repo in user.get_repos():
+                print repo.name
+
+    if(choice == 'Repo'):
+        repos = g.search_repositories(text,sort='stars',order='desc')
+        for repo in repos:
+            print repo.name
+    
+    if(choice == 'Code'):
+        query = text+" user:github size:>10000"
+        files = g.search_code(query)
+        for f in files:
+            print f.name+": "+f.html_url
     
     # Temp code to populate the search page #
     """

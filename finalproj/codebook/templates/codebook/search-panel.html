@@ -63,14 +63,46 @@
                 <h3>Or Start With Something More Specific</h3>
             </div>
         </div>
-        <div class="row">
+        
+       <div class="row">
+            <form role="form" action="{% url 'search' %}" method="get">
+                <div class="col-md-7 col-md-offset-1">
+                    {{searchform.text}}
+                </div>
+                <div class="col-md-2 dropdown">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default search-type-dropdown"> 
+                            <!--dropdown-toggle search-type-dropdown" data-toggle="dropdown">-->
+                            <span class="selection">Search Type</span>
+                        </button>
+                        <select id="id_types" name="types">
+                            <option value="Lang">Languages</option>
+                            <option value="Repo">Repository</option>
+                            <option value="User">User</option>
+                            <option value="Code">Code</option>
+                        </select> 
+                        <!--button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></bu
+                        <ul class="dropdown-menu" role="menu">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Language</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Repository</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Tag</a></li>
+                        </ul-->
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <input type="submit" class="btn control-btn" value="Search">
+                </div>
+            </form>
+        </div>
+ 
+        
+        <!--div class="row">
             <form role="form" action="{% url 'search' %}">
                 <div class="col-md-7 col-md-offset-1">
                     <input type="text" class="form-control">
                 </div>
                 <div class="col-md-2 dropdown">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-default search-type-dropdown"> <!--dropdown-toggle search-type-dropdown" data-toggle="dropdown">-->
                             <span class="selection">Search Type</span>
                         </button>
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
@@ -85,6 +117,6 @@
                     <input type="submit" class="btn control-btn" value="Search">
                 </div>
             </form>
-        </div>
+        </div-->
     </div>
 </div>
