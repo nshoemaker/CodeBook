@@ -163,41 +163,21 @@ def sandbox(request):
     token = social.extra_data['access_token']
     g = Github(token)
     context = {}
-    # Temp code to populate the search page #
-    # only need on first run
-    repos = g.get_organization("github").get_repos()
-    # Temp code to populate the search page #
     repo_obj = Repository(repo_id = 7986587)
     repo_obj.save()
+    print repo_obj.get_url()
     repo_gilbert = g.get_repo(7986587)
     file_index = repo_gilbert.get_contents("index.html")
     path = file_index.path
     new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
     new_file.save()
-    i = 0
-    for repo in repos:
-        if (i < 5):
-            new_repo = Repository(repo_id = repo.id)
-            new_repo.save()
-            if (i == 0):
-                repofile = repo.get_contents("README.md")
-                path = repofile.path
-                new_file = RepoFile(repository=new_repo, path=path, average_difficulty=0, average_quality=0)
-                new_file.save()
-            i = i + 1
-        else:
-            break
-
-    # End temp code to populate the search page #
-
-    # Don't need to keep this code if signing into GitHub
-    # creates a ProfileUser object with id 1
-    # only need on first run
-    #new_user = ProfileUser()
-    #new_user.save()
     profile_user = request.user
-    #new_user_saves = Saved(profile_user=profile_user)
-    #new_user_saves.save()
+
+    for repo in Repository.objects.all():
+        print "_____________________________"
+        print str(repo.repo_id)
+        print str(repo.get_url)
+        print str(repo.get_name)
 
     context["repos"] = Repository.objects.all
     context['files'] = RepoFile.objects.all
