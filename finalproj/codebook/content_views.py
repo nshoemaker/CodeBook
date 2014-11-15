@@ -56,6 +56,17 @@ from django.utils import timezone
 
 import json
 
+def my_profile_view(request):
+    context = {}
+    context["profile_user"] = request.user
+    return render(request, 'codebook/view_my_profile.html', context)
+
+def profile_view(request, username):
+    context = {}
+    # TODO change this to the username of the user
+    context["profile_user"] = request.user
+    return render(request, 'codebook/profile.html', context)
+
 def get_auth_user_git(request):
     social = request.user.social_auth.get(provider='github')
     token = social.extra_data['access_token']

@@ -33,9 +33,9 @@
 {% endif %}
 
 {% if active == 'profile' %}
-<li class="active"><a href="#">Profile</a></li>
+<li class="active"><a href="{% url 'view_my_profile' %}">Profile</a></li>
 {% else %}
-<li><a href="#">Profile</a></li>
+<li><a href="{% url 'view_my_profile' %}">Profile</a></li>
 {% endif %}
 
 {% if active == 'settings' %}
