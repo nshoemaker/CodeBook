@@ -166,6 +166,14 @@ def sandbox(request):
     # Temp code to populate the search page #
     # only need on first run
     repos = g.get_organization("github").get_repos()
+    # Temp code to populate the search page #
+    repo_obj = Repository(repo_id = 7986587)
+    repo_obj.save()
+    repo_gilbert = g.get_repo(7986587)
+    file_index = repo_gilbert.get_contents("index.html")
+    path = file_index.path
+    new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
+    new_file.save()
     i = 0
     for repo in repos:
         if (i < 5):
