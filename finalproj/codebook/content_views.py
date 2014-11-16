@@ -80,12 +80,10 @@ def get_auth_user_git(request):
 
 def saved(request):
     context = {}
-
-    # Dummy test = "authenticated user" is ProfUser 1 
     profile_user = request.user
-    user_saves = Saved.objects.get(profile_user=profile_user)
+    user_saves = Saved.objects.filter(profile_user=profile_user)
 
-    context['files'] = user_saves.files.all
+    context['files'] = user_saves.all
     context["source"] = 'saved'
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user
@@ -100,8 +98,6 @@ def front(request):
         except:
           new_profile_user = request.user
           new_profile_user.save()
-          new_saves = Saved(profile_user=new_profile_user)
-          new_saves.save()
         context['user'] = new_profile_user
         social = request.user.social_auth.get(provider='github')
         token = social.extra_data['access_token']
@@ -157,6 +153,7 @@ def watching(request):
     context['repos'] = recent_watched
     context['comment_form'] = CommentForm()
     context['profile_user'] = request.user
+    context['gh_user'] = user
     return render(request, 'codebook/watching-page.html', context)
 
 

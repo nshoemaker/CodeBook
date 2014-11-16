@@ -130,13 +130,18 @@ class Repository(models.Model):
         sg_ids = []
         sgs = g.get_repo(self.repo_id).get_stargazers()
 
-        def run(sg):
+        for sg in sgs:
             sg_ids.append(sg.id)
 
-        num_cores = multiprocessing.cpu_count()
-        print "CORES =" + str(num_cores)
-        results = Parallel(n_jobs=num_cores)(delayed(makeIdList)(sg) for sg in sgs)
-        return results
+        return sg_ids
+
+        #def makeList(sg):
+        #    sg_ids.append(sg.id)
+
+        #num_cores = multiprocessing.cpu_count()
+        #print "CORES =" + str(num_cores)
+        #results = Parallel(n_jobs=num_cores)(delayed(makeList)(sg) for sg in sgs)
+        #return results
 
 class RepoFile (models.Model):
     repository = models.ForeignKey(Repository)
@@ -178,7 +183,6 @@ class Difficulty(models.Model):
 
 
 class Saved(models.Model):
-    #profile_user = models.ForeignKey(ProfileUser, primary_key=True)
     profile_user = models.ForeignKey(ProfileUser)
-    files = models.ManyToManyField(RepoFile)
+    repo_file = models.ForeignKey(RepoFile)
     date_time = models.DateTimeField(auto_now_add=True)

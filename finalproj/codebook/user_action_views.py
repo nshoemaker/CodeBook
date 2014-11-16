@@ -102,22 +102,18 @@ def star_repo(request, source, repo_id):
 """
 # Save or Unsave a Post
 def save_file(request, source, file_id):
-	profile_user = request.user
-	repofile = RepoFile.objects.get(id=file_id)
-	user_saves = Saved.objects.get(profile_user=profile_user)
 
-	if not (user_saves.files.filter(id=file_id)):
-		user_saves.files.add(repofile)
-		user_saves.save()
-		repofile.savers.add(profile_user)
-		repofile.save()
-	# User has already saved this post - click will "un-save"
-	else:
-		user_saves.files.remove(repofile)
-		user_saves.save()
-		repofile.savers.remove(profile_user)
-		repofile.save()
-	# Ask others how they sent back to correct page
+    profile_user = request.user
+    repofile = RepoFile.objects.get(id=file_id)
+    try:
+        saved_file = Saved.objects.get(profile_user=profile_user, repo_file=repofile)
+        # User has already saved this post - click will "un-save"
+        saved_file.delete() 
+    except:
+        saved_file = Saved(profile_user=profile_user, repo_file=repofile)
+        saved_file.save() 
+        repofile.savers.add(profile_user)
+        repofile.save() 
 	return redirect('/' + source)
 
 def search(request):
