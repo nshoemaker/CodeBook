@@ -108,8 +108,8 @@ def front(request):
         g = Github(token)
         
         #user statistics
-        numFollowers = g.get_user().followers
-        numRepos = g.get_user().total_private_repos + g.get_user().public_repos
+#        numFollowers = g.get_user().followers
+ #       numRepos = g.get_user().total_private_repos + g.get_user().public_repos
 
 
     return render(request, 'codebook/front-page.html', context)
