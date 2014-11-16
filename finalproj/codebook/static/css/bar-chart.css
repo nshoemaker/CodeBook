@@ -5,14 +5,18 @@ progress, progress[role] {
   appearance: none;
   border: none;
   background-size: auto;
-  height: 25px;
+  height: 20px;
   width: 50%;
 }
 
 .skill-list {
   list-style: none;
   margin: 0;
-  padding: 1em;
+  padding: 5px;
+}
+
+.skill i{
+    color: #55BB88;
 }
 
 .skill {

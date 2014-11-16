@@ -5,4 +5,7 @@ $(document).ready(function(){
     $('.file-content').slimScroll({
         height: '250px'
     });
+    $('.tab-content').slimScroll({
+        height: '400px'
+    });
 });
