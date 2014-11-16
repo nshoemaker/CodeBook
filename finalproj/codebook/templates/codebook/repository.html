@@ -10,8 +10,8 @@
                     <h4 class="glyphicon glyphicon-expand repo-toggle-button" id="repo-toggle-button-{{ repo.repo_id }}"
                         data-item-id="{{ repo.repo_id }}"></h4>
                 </div>
-                <div class="col-md-2">
-                    <a href="{{ repo.get_url }}"><h4>{{ repo.get_name }}</h4></a>
+                <div class="col-md-2 text-left">
+                    <a href="{{ repo.get_url }}"><h4 class="text-left">{{ repo.get_name }}</h4></a>
                 </div>
                 <div class="col-md-1">
                         {% if starred == False %}
@@ -31,7 +31,7 @@
 
                 </div>
                 <div class="col-md-2">
-                    <h4>{{ repo.get_creator }}</h4>
+                    <h4 class="text-right">{{ repo.get_creator }}</h4>
                 </div>
                 <div class="col-md-1">
                     <!-- TODO: setup profile images -->
@@ -81,16 +81,15 @@
             <!-- begin ratings -->
             <div class="row ratings">
                 <div class="col-md-2">
-                    <h4>Difficulty</h4>
                 </div>
                 <div class="col-md-1">
-                    <h6>Average Rating:</h6>
+                    <h4 class="text-right">Difficulty:</h4>
                 </div>
                 <div class="col-md-3">
                     <div class="stars starrr" data-rating="{{ repo.difficulty }}"></div>
                 </div>
-                <div class="col-md-1">
-                    <h6>Your Rating:</h6>
+                <div class="col-md-2">
+                    <h4 class="text-right">Documentation:</h4>
                 </div>
                 <div class="col-md-3">
                     <div class="stars starrr" data-rating="0"></div>
