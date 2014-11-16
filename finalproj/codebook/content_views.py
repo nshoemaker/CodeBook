@@ -59,12 +59,17 @@ import json
 def my_profile_view(request):
     context = {}
     context["profile_user"] = request.user
+    context["view_my_profile"] = 'true'
     return render(request, 'codebook/view_my_profile.html', context)
 
 def profile_view(request, username):
     context = {}
     # TODO change this to the username of the user
-    context["profile_user"] = request.user
+    profile_user = get_object_or_404(ProfileUser, username=username)
+    context["profile_user"] = profile_user
+
+    if (profile_user == request.user):
+        context["view_my_profile"] = 'true'
     return render(request, 'codebook/profile.html', context)
 
 def get_auth_user_git(request):
