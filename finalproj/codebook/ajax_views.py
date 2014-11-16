@@ -102,7 +102,6 @@ def post_file_comment(request, id):
 
 
 def star_repo(request, id):
-    print "COMING INTO THE STAR FUNCTION"
     if request.is_ajax():
         g = get_auth_user_git(request)
         repo = g.get_repo(int(id))
@@ -119,7 +118,6 @@ def star_repo(request, id):
 
 
 def unstar_repo(request, id):
-    print "COMING INTO THE UNSTAR FUNCTION"
     if request.is_ajax():
         g = get_auth_user_git(request)
         repo = g.get_repo(int(id))
@@ -137,15 +135,15 @@ def unstar_repo(request, id):
 
 def watch_repo(request, id):
     if request.is_ajax():
-        """
-        TODO: put in code to star a repo (whatever alternative we come up with. Formerly:)
+        g = get_auth_user_git(request)
+        repo = g.get_repo(int(id))
+        user = g.get_user()
 
-	    g = get_auth_user_git(request)
-	    repo = g.get_repo(int(id))
-	    user = g.get_user()
-		user.add_to_subscriptions(repo)
-
-        """
+        if (user.has_in_subscriptions(repo)):
+            # User has already watched this repo - click will "un-watch"
+            pass
+        else:
+            user.add_to_subscriptions(repo)
         return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
@@ -154,15 +152,15 @@ def watch_repo(request, id):
 
 def unwatch_repo(request, id):
     if request.is_ajax():
-        """
-        TODO: put in code to star a repo (whatever alternative we come up with. Formerly:)
+        g = get_auth_user_git(request)
+        repo = g.get_repo(int(id))
+        user = g.get_user()
 
-	    g = get_auth_user_git(request)
-	    repo = g.get_repo(int(id))
-	    user = g.get_user()
-		user.remove_to_subscriptions(repo)
-
-        """
+        if (user.has_in_subscriptions(repo)):
+            user.remove_from_subscriptions(repo)
+        else:
+            # User has not watched this repo
+            pass
         return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
