@@ -162,8 +162,9 @@ def following(request):
 def sandbox(request):
     social = request.user.social_auth.get(provider='github')
     token = social.extra_data['access_token']
-    g = Github(token)
     context = {}
+    """
+    g = Github(token)
     repo_obj = Repository(repo_id = 7986587)
     repo_obj.save()
     print repo_obj.get_url()
@@ -172,6 +173,7 @@ def sandbox(request):
     path = file_index.path
     new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
     new_file.save()
+    """
     profile_user = request.user
 
     for repo in Repository.objects.all():
@@ -180,8 +182,14 @@ def sandbox(request):
         print str(repo.get_url)
         print str(repo.get_name)
 
+    for file in RepoFile.objects.all():
+        print "++++++++++++++++++++++++++++++++++++++"
+        print file.get_name
+        print file.get_content
+
     context["repos"] = Repository.objects.all
     context['files'] = RepoFile.objects.all
+    context['file'] = RepoFile.objects.all()[0]
     context["source"] = 'codebook/search_results'
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user #ProfileUser.objects.get(id=1)
