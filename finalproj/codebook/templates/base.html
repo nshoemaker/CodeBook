@@ -57,12 +57,11 @@
 <!-- end Fixed navbar -->
 
 <!-- main content area -->
-{% block search-panel %}
+{% block search-dropdown %}
 <div class="container-fluid">
-<!-- DO NOT ADD ANYTHING HERE PLEASE -->
-<!-- DO NOT ADD ANYTHING HERE PLEASE -->
+{% include 'codebook/search-dropdown.html' %}
 </div>
-{% endblock search-panel %}
+{% endblock search-dropdown %}
 
 <div class="container-fluid" id="header">
     {% block header %}{% endblock %}
