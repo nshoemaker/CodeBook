@@ -11,10 +11,26 @@
 #####################################################
 
 from content_views import *
-g2 = Github('dmouli', 'Spongebob5%')
+g = Github('dmouli', 'Spongebob5%')
 
 def quick_search(request, language):
-    pass
+    context={}
+    if request.user:
+        profile_user = request.user
+        social = request.user.social_auth.get(provider='github')
+        token = social.extra_data['access_token']
+        g = Github(token)
+    query = "language:"+language+" stars:>=500"
+    repos = g.search_repositories(query,sort='stars',order='desc')
+    for i in xrange(min(len(list(repos)),10)):
+        new_repo = Repository(repo_id = repos[i].id)
+        new_repo.save()
+    context["repos"] = Repository.objects.all()
+    context['files'] = RepoFile.objects.filter(id=10)
+    context["source"] = 'search'
+    context['comment_form'] = CommentForm()
+    context['profile_user'] = profile_user 
+    return render(request, "codebook/search-results-page.html", context)
 
 def get_correct_context(request, source):
 	context = {}
@@ -119,35 +135,36 @@ def search(request):
    
     searchform = SearchForm(request.GET)
     if not searchform.is_valid():
+        print searchform.errors
         return None 
         
     text = searchform.cleaned_data['text'] 
     choice = searchform.cleaned_data['types']
     
-    if(choice == 'Lang'):
-        query = "language:"+text+" stars:>=500"
-        repos = g.search_repositories(query,sort='stars',order='desc')
-        for repo in repos:
-            print repo.name
-    
     if(choice == 'User'):
+        repos = []
         users = g.search_users(text,sort='followers',order='desc')
         for user in users:
-            print user.name
-            for repo in user.get_repos():
-                print repo.name
-
-    if(choice == 'Repo'):
-        repos = g.search_repositories(text,sort='stars',order='desc')
-        for repo in repos:
-            print repo.name
+            repos.append(user.get_repos())
     
-    if(choice == 'Code'):
+    elif(choice == 'Repo'):
+        repos = g.search_repositories(text,sort='stars',order='desc')
+    
+    elif(choice == 'Code'):
         query = text+" user:github size:>10000"
         files = g.search_code(query)
         for f in files:
             print f.name+": "+f.html_url
     
+    else:
+        #check that language?
+        query = "language:"+text+" stars:>=500"
+        repos = g.search_repositories(query,sort='stars',order='desc')
+
+    for i in xrange(min(len(list(repos)),10)):
+        new_repo = Repository(repo_id = repos[i].id)
+        new_repo.save()
+
     # Temp code to populate the search page #
     """
     repo_obj = Repository(repo_id = 7986587)
@@ -177,7 +194,7 @@ def search(request):
     """
     # End temp code to populate the search page #
     
-    context["repos"] = Repository.objects.filter(repo_id=3222)
+    context["repos"] = Repository.objects.all()
     context['files'] = RepoFile.objects.filter(id=10)
     context["source"] = 'search'
     context['comment_form'] = CommentForm()
