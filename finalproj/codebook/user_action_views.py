@@ -30,12 +30,6 @@ def get_template(source):
 	else:
 		return "/"
 
-def get_auth_user_git(request):
-	social = request.user.social_auth.get(provider='github')
-	token = social.extra_data['access_token']
-	g = Github(token)
-	return g
-
 def signin(request):
     pass
 
@@ -141,12 +135,31 @@ def search(request):
             break
     """
     # End temp code to populate the search page #
+
+    sg_ids = []
+    sgs = g.get_repo(3222).get_stargazers()
+    for sg in sgs :
+        sg_ids.append(sg.id)
+    if (g.get_user().id in sg_ids):
+    	print "YES"
+    else:
+    	print "NO"
+
+    #print "NAMED ID = " + str(g.get_user().id) + "\n"
+    #print "AUTH ID = " + str(Github().get_user('dmouli').has_in_starred(g.get_repo(3222)))
+    #sgs = g.get_repo(3222).get_stargazers()
+    #if (g.get_user() in g.get_repo(3222).get_stargazers()):
+    #	print "YESSSSSSSSSSS" 
+    #else:
+    #	print "NOOOOOOOOOOO"
+    #	print (g.get_user().has_in_starred(g.get_repo(3222)))
     
     context["repos"] = Repository.objects.filter(repo_id=3222)
     context['files'] = RepoFile.objects.filter(id=10)
     context["source"] = 'search'
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user 
+    context['gh_user'] = g.get_user()
     return render(request, "codebook/search-results-page.html", context)
 
 def comment(request, comment_type, source, id):

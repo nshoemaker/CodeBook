@@ -176,10 +176,10 @@
                             </div>
                             <div class="col-md-1">
                                 <a href="{% url 'star_repo' source repo.repo_id %}">
-                                    {% if starred == False %}
-                                        <h4 class="glyphicon glyphicon-star"></h4>
+                                    {% if gh_user.id in repo.get_stargazers %}
+                                        <h4 class="glyphicon glyphicon-star-empty" alt="Un-Star this Repository"></h4>
                                     {% else %}
-                                        <h4 class="glyphicon glyphicon-star-empty"></h4>
+                                        <h4 class="glyphicon glyphicon-star" alt="Un-Star this Repository"></h4>
                                     {% endif %}
                                 </a>
                             </div>

@@ -9,6 +9,8 @@ from github import Github
 g = Github('dmouli', 'Spongebob5%')
 
 import base64
+import multiprocessing 
+from joblib import Parallel, delayed  
 
 class Stack(models.Model):
     name = models.CharField(max_length=40)
@@ -101,7 +103,23 @@ class Repository(models.Model):
         return g.get_repo(self.repo_id).size
 
     def get_watchers(self):
-        pass
+        sg_ids = []
+        sgs = g.get_repo(self.repo_id).get_stargazers()
+        for sg in sgs :
+            sg_ids.append(sg.id)
+        return sg_ids
+
+    def get_stargazers(self):
+        sg_ids = []
+        sgs = g.get_repo(self.repo_id).get_stargazers()
+
+        def run(sg):
+            sg_ids.append(sg.id)
+
+        num_cores = multiprocessing.cpu_count()
+        print "CORES =" + str(num_cores)
+        results = Parallel(n_jobs=num_cores)(delayed(makeIdList)(sg) for sg in sgs)
+        return results
 
 class RepoFile (models.Model):
     repository = models.ForeignKey(Repository)
