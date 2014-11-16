@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Codebook: News{% endblock %}
+
+{% block stylesheets %}
+    {% load staticfiles %}
+{% endblock stylesheets %}
+
+{% block nav-left %}
+    {% include 'codebook/nav-buttons.html' with active='news' %}
+{% endblock %}
+
+{% block header %}
+    <div class="row jumbotron lang-main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8 centered-text">
+                    <h1>Sandbox</h1>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-offset-2 col-md-8 centered-text">
+                    <h3>Nora's UI Playground</h3>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock header %}
+
+{% block stream %}
+    {% include 'codebook/repository-list.html' %}
+{% endblock stream %}

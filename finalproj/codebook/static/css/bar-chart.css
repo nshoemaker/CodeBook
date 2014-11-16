@@ -1,0 +1,47 @@
+
+progress, progress[role] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  background-size: auto;
+  height: 20px;
+  width: 50%;
+}
+
+.skill-list {
+  list-style: none;
+  margin: 0;
+  padding: 5px;
+}
+
+.skill i{
+    color: #55BB88;
+}
+
+.skill {
+  margin-bottom: 1em;
+  position: relative;
+}
+.skill ::-webkit-progress-value {
+  -webkit-animation: bar-fill 2s;
+  width: 0px;
+}
+.skill::-webkit-progress-value {
+  background: #77DDAA;
+}
+
+.skill::-moz-progress-bar {
+  background: #77DDAA;
+}
+
+@-webkit-keyframes bar-fill {
+  0% {
+    width: 0;
+  }
+}
+@keyframes bar-fill {
+  0% {
+    width: 0;
+  }
+}

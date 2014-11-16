@@ -9,3 +9,7 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'text': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Leave a Comment'})
         }
+
+class SearchForm(forms.Form):
+    text = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Search'}))
+    types = forms.ChoiceField(choices=(('Lang', 'Languages'),('Repo','Repository'),('User','User'),('Code','Code')))

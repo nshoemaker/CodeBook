@@ -56,6 +56,22 @@ from django.utils import timezone
 
 import json
 
+def my_profile_view(request):
+    context = {}
+    context["profile_user"] = request.user
+    context["view_my_profile"] = 'true'
+    return render(request, 'codebook/view_my_profile.html', context)
+
+def profile_view(request, username):
+    context = {}
+    # TODO change this to the username of the user
+    profile_user = get_object_or_404(ProfileUser, username=username)
+    context["profile_user"] = profile_user
+
+    if (profile_user == request.user):
+        context["view_my_profile"] = 'true'
+    return render(request, 'codebook/profile.html', context)
+
 def get_auth_user_git(request):
     social = request.user.social_auth.get(provider='github')
     token = social.extra_data['access_token']
@@ -66,7 +82,7 @@ def saved(request):
     context = {}
 
     # Dummy test = "authenticated user" is ProfUser 1 
-    profile_user = ProfileUser.objects.get(user = request.user)
+    profile_user = request.user
     user_saves = Saved.objects.get(profile_user=profile_user)
 
     context['files'] = user_saves.files.all
@@ -77,24 +93,19 @@ def saved(request):
 
 def front(request):
     context = {}
-    context['user'] = request.user
-    if request.user and not request.user.is_anonymous():
+    if request.user and not request.user.is_anonymous:
         try:
             ProfileUser.objects.get(user=request.user)
         except:
-          new_profile_user = ProfileUser(user = request.user)
+          new_profile_user = request.user
           new_profile_user.save()
           new_saves = Saved(profile_user=new_profile_user)
           new_saves.save()
+        context['user'] = new_profile_user
         social = request.user.social_auth.get(provider='github')
         token = social.extra_data['access_token']
-        g = Github(token)
-        print "token",token
-        for field in request.user._meta.get_all_field_names():
-            try: 
-                print field, getattr(request.user,field)
-            except:
-                print field, "crashed"
+        context['searchform'] = SearchForm()
+        #g = Github(token)
     return render(request, 'codebook/front-page.html', context)
 
 #@login_required
@@ -133,13 +144,13 @@ def watching(request):
     context['repos'] = request.user.get_watched()
     context["source"] = 'codebook/watching'
     context['comment_form'] = CommentForm()
-    context['profile_user'] = ProfileUser.objects.get(user = request.user)
+    context['profile_user'] = request.user
     return render(request, 'codebook/watching-page.html', context)
     """
     context["source"] = 'watching'
     context['repos'] = recent_watched
     context['comment_form'] = CommentForm()
-    context['profile_user'] = ProfileUser.objects.get(user = request.user)
+    context['profile_user'] = request.user
     return render(request, 'codebook/watching-page.html', context)
 
 
@@ -151,3 +162,40 @@ def following(request):
     context['following_list_short'] = following_list_short
     #context['profile_user'] = ProfileUser.objects.get(user=request.user)
     return render(request, 'codebook/following-page.html', context)
+
+
+def sandbox(request):
+    social = request.user.social_auth.get(provider='github')
+    token = social.extra_data['access_token']
+    context = {}
+    """
+    g = Github(token)
+    repo_obj = Repository(repo_id = 7986587)
+    repo_obj.save()
+    print repo_obj.get_url()
+    repo_gilbert = g.get_repo(7986587)
+    file_index = repo_gilbert.get_contents("index.html")
+    path = file_index.path
+    new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
+    new_file.save()
+    """
+    profile_user = request.user
+
+    for repo in Repository.objects.all():
+        print "_____________________________"
+        print str(repo.repo_id)
+        print str(repo.get_url)
+        print str(repo.get_name)
+
+    for file in RepoFile.objects.all():
+        print "++++++++++++++++++++++++++++++++++++++"
+        print file.get_name
+        print file.get_content
+
+    context["repos"] = Repository.objects.all
+    context['files'] = RepoFile.objects.all
+    context['file'] = RepoFile.objects.all()[0]
+    context["source"] = 'codebook/search_results'
+    context['comment_form'] = CommentForm()
+    context['profile_user'] = profile_user #ProfileUser.objects.get(id=1)
+    return render(request, "codebook/sandbox.html", context)

@@ -1,3 +1,46 @@
+.profile-tabs{
+    padding: 5px;
+}
+
+.profile-left{
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    margin: 5px;
+    padding: 15px;
+}
+
+.top-super-padded{
+    padding-top: 100px;
+}
+
+.file-file pre {
+    padding: 0px;
+    margin: 0px;
+}
+
+.repository-file pre
+{
+    padding: 0px;
+    margin: 0px;
+}
+
+
+.file-file code
+{
+    padding: 0px;
+    margin: 0px;
+    height: 200px;
+}
+
+.repository-file code
+{
+    padding: 0px;
+    margin: 0px;
+    height: 200px;
+}
+
+
 #search-dropdown a
 {
    color: #333333;
@@ -95,11 +138,13 @@ list-style-type: none;
   border-bottom-width: 1px;
   border-bottom-style:solid;
   border-bottom-color:#dcdcdc;
+  background-color: #c0c0c0;
   min-height: 200px;
 }
 
 .repository-file {
   min-height: 200px;
+  padding: 0px;
 }
 
 .repository-file-explorer {
@@ -150,6 +195,7 @@ list-style-type: none;
 
 .file-file {
   min-height: 200px;
+  padding: 0px;
 }
 
 .file-header {
@@ -251,12 +297,13 @@ list-style-type: none;
     text-align:center
 }    
 .profile-info {
-  max-width: 600px;
-  padding-top: 20px;
+  max-width: 75%;
   margin: 0 auto;
 }
-.profpic{
-  border-radius: 5px;
+.profpic img{
+    padding: 0 px;
+    border-radius: 50%;
+    width: 100 px;
 }
 
 .vert-padded{
