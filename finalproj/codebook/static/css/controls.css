@@ -1,3 +1,11 @@
+.profile-left{
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    margin: 5px;
+    padding: 15px;
+}
+
 .top-super-padded{
     padding-top: 100px;
 }
