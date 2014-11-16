@@ -13,6 +13,9 @@
 from content_views import *
 g2 = Github('dmouli', 'Spongebob5%')
 
+def quick_search(request, language):
+    pass
+
 def get_correct_context(request, source):
 	context = {}
 	profile_user = request.user
