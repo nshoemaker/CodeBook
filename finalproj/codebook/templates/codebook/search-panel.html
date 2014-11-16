@@ -7,62 +7,57 @@
                 <h3><span>Choose </span><span id="language-choice">a Language</span><span> to Get Started</span></h3>
             </div>
         </div>
-        <form role="form" action="{% url 'search' %}" method="get">
         <div class="row languages">
             <div class="col-md-offset-1 col-md-1">
-                <!--begin different-->
-                <input class="form-control" name="langinput" type="hidden" value="java"> 
-                <h1><i class="lang-btn icon-prog-java"><button type="submit"></button></i></h1>
-                <!-- end different -->
+                <h1><a href="{% url 'quick_search' 'java' %}"><i class="lang-btn icon-prog-java"></i></a></h1>
             </div>
             <div class="col-md-offset-1 col-md-1">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-js02"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'javascript' %}"><i class="lang-btn icon-prog-js02"></i></a></h1>
             </div>
             <div class="col-md-offset-1 col-md-1">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-js02"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'c' %}"><i class="lang-btn icon-prog-c"></i></a></h1>
             </div>
             <div class="col-md-offset-1 col-md-1">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-ruby"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'ruby' %}"><i class="lang-btn icon-prog-ruby"></i></a></h1>
             </div>
             <div class="col-md-offset-1 col-md-1">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-rails"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'rails' %}"><i class="lang-btn icon-prog-rails"></i></a></h1>
             </div>
         </div>
         <div class="row languages">
             <div class="col-md-offset-2 col-md-1">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-nodejs02"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'node' %}"><i class="lang-btn icon-prog-nodejs02"></i></a></h1>
             </div>
             <div class="col-md-offset-1 col-md-1">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-python"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'python' %}"><i class="lang-btn icon-prog-python"></i></a></h1>
             </div>
             <div class="col-md-offset-1 col-md-1">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-django"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'django' %}"><i class="lang-btn icon-prog-django"></i></a></h1>
             </div>
             <div class="col-md-offset-1 col-md-1">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-php02"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'php' %}"><i class="lang-btn icon-prog-php02"></i></a></h1>
             </div>
             <div class="col-md-offset-1 col-md-1">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-cplusplus"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'cplusplus' %}"><i class="lang-btn icon-prog-cplusplus"></i></a></h1>
             </div>
         </div>
         <div class="row languages">
             <div class="col-md-offset-1 col-md-1 centered-text">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-csharp"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'csharp' %}"><i class="lang-btn icon-prog-csharp"></i></a></h1>
             </div>
             <div class="col-md-offset-1 col-md-1">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-objc"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'objc' %}"><i class="lang-btn icon-prog-objc"></i></a></h1>
             </div>
             <div class="col-md-offset-1 col-md-1">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-matlab"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'matlab' %}"><i class="lang-btn icon-prog-matlab"></i></a></h1>
             </div>
             <div class="col-md-offset-1 col-md-1">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-aspnet"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'aspnet' %}"><i class="lang-btn icon-prog-aspnet"></i></a></h1>
             </div>
             <div class="col-md-offset-1 col-md-1">
-                <h1><a href="{% url 'search' %}"><i class="lang-btn icon-prog-bash02"></i></a></h1>
+                <h1><a href="{% url 'quick_search' 'bash' %}"><i class="lang-btn icon-prog-bash02"></i></a></h1>
             </div>
         </div>
-        </form>
         
         <div class="row">
             <div class="col-md-offset-2 col-md-8 centered-text top-padded">
@@ -77,7 +72,7 @@
                 </div>
                 <div class="col-md-2 dropdown">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-default search-type-dropdown"> 
+                        <button type="button" class="btn btn-default search-type-dropdown">
                             <!--dropdown-toggle search-type-dropdown" data-toggle="dropdown">-->
                             <span class="selection">Search Type</span>
                         </button>

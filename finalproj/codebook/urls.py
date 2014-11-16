@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     #url(r'^star_repo/(?P<source>\D+)/(?P<repo_id>\d+)$', 'codebook.user_action_views.star_repo', name='star_repo'),
     #url(r'^save_file/(?P<source>\D+)/(?P<file_id>\d+)$', 'codebook.user_action_views.save_file', name='save_file'),
     url(r'^search_results$', 'codebook.user_action_views.search', name='search'),
+    url(r'^search/(?P<language>\w+)/$', 'codebook.user_action_views.quick_search', name='quick_search'),
     url(r'^comment/(?P<comment_type>[^/]+)/(?P<source>\D+)/(?P<id>\d+)$', 'codebook.user_action_views.comment', name='comment'),
     url(r'^signin', 'codebook.user_action_views.signin', name="signin"),
 
