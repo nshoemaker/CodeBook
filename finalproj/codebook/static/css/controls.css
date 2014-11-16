@@ -2,18 +2,30 @@
     padding-top: 100px;
 }
 
-.file-file pre
-{
+.file-file pre {
     padding: 0px;
-    margin: px;
-    min-height: 200px;
+    margin: 0px;
 }
 
 .repository-file pre
 {
     padding: 0px;
-    margin: px;
-    min-height: 200px;
+    margin: 0px;
+}
+
+
+.file-file code
+{
+    padding: 0px;
+    margin: 0px;
+    height: 200px;
+}
+
+.repository-file code
+{
+    padding: 0px;
+    margin: 0px;
+    height: 200px;
 }
 
 
@@ -114,6 +126,7 @@ list-style-type: none;
   border-bottom-width: 1px;
   border-bottom-style:solid;
   border-bottom-color:#dcdcdc;
+  background-color: #c0c0c0;
   min-height: 200px;
 }
 
