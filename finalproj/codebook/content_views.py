@@ -183,7 +183,7 @@ def sandbox(request):
     context['searchform'] = SearchForm()
     context["repos"] = Repository.objects.all
     context['files'] = RepoFile.objects.all
-    context['file'] = RepoFile.objects.all()[0]
+    #context['file'] = RepoFile.objects.all()[0]
     context["source"] = 'codebook/search_results'
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user #ProfileUser.objects.get(id=1)

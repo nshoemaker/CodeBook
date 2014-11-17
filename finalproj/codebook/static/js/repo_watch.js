@@ -73,7 +73,8 @@ function unwatch_repository(repo_id)
 
             if ($("#watching").length)
             {
-                $("#repo-list").remove($("#repo" + repo_id));
+                $("repo" + repo_id).remove();
+                //$("#repo-list").remove($("#repo" + repo_id));
             }
         },
         error: function (xhr, textStatus, errorThrown) {
