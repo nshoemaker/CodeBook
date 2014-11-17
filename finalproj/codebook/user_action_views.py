@@ -11,6 +11,7 @@
 #####################################################
 
 from content_views import *
+import sys
 g = Github('dmouli', 'Spongebob5%')
 
 def quick_search(request, language):
@@ -141,6 +142,18 @@ def search(request):
     for i in xrange(min(len(list(repos)),10)):
         new_repo = Repository(repo_id = repos[i].id)
         new_repo.save()
+        """branches = repos[i].get_branches()
+        SHA = branches[0].commit.sha
+        tree = repos[i].get_git_tree(SHA,True).tree
+        for elt in tree:
+            try:
+                size = repos[i].get_contents(elt.path).size
+                name = repos[i].get_contents(elt.path).name
+                if repos[i].get_contents(elt.path).size>0:
+                    new_file = RepoFile(repository=new_repo, path=elt.path, average_difficulty=0, average_quality=0)
+                    new_file.save()
+            except:
+                pass"""
 
     # Temp code to populate the search page #
     #repo_obj = Repository(repo_id = 7986587)
