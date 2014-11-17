@@ -72,6 +72,7 @@ def post_repo_comment(request, id):
 @transaction.atomic
 def post_file_comment(request, id):
     if request.is_ajax():
+        print "Comes into file comment"
         try:
             comment_form = CommentForm(request.POST)
         except:
@@ -169,32 +170,7 @@ def unwatch_repo(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
-def like_comment(request, id):
-    print "COMING INTO AJAX LIKE \n" 
-    if request.is_ajax():
-        context = {}
-        comment = Comment.objects.get(id=id)
-        profile_user = request.user 
-
-        if not (comment.likers.filter(liked_by=profile_user)):
-            print "COMING INTO IF \n" 
-            comment.likers.add(profile_user)
-            comment.save()
-            context['comment'] = com_new
-            context['profile_user'] = profile_user
-            return render_to_response('codebook/comment.html', context, content_type="html")
-        else:
-            # Shouldn't happen 
-            context['comment'] = com_new
-            context['profile_user'] = profile_user
-            return render_to_response('codebook/comment.html', context, content_type="html")
-    else:
-        print "COMING INTO ELSE? \n"
-        # uhhhhhhhh awk. this should never happen
-        pass
-
 def save_file(request, id):
-    print "IN SAVE FUNCTION"
     if request.is_ajax():
         profile_user = request.user
         repofile = RepoFile.objects.get(id=id)
@@ -214,7 +190,6 @@ def save_file(request, id):
 
 
 def unsave_file(request, id):
-    print "IN UNSAVE FUNCTION"
     context = {}
     if request.is_ajax():
         profile_user = request.user
@@ -234,6 +209,17 @@ def unsave_file(request, id):
 
 def like_comment(request, id):
     if request.is_ajax():
+        context = {}
+        comment = Comment.objects.get(id=id)
+        profile_user = request.user 
+
+        if (comment.likers.filter(liked_by=profile_user)):
+            # User has already liked comment
+            pass
+        else:
+            # User has not liked comment 
+            comment.likers.add(profile_user)
+            comment.save()
         return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
@@ -242,6 +228,17 @@ def like_comment(request, id):
 
 def unlike_comment(request, id):
     if request.is_ajax():
+        context = {}
+        comment = Comment.objects.get(id=id)
+        profile_user = request.user
+
+        if (comment.likers.filter(liked_by=profile_user)):
+            # User has already liked comment
+            comment.likers.remove(profile_user)
+            comment.save()
+        else:
+            # User has not liked comment 
+            pass
         return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen

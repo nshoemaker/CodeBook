@@ -48,7 +48,7 @@ function create_file_comment_post(file_id) {
         url: "/codebook/comment_file/" + file_id,
         datatype: "html",
         data: {
-            repo_id: file_id,
+            file_=id: file_id,
             text: $('#file-post-text-' + file_id).val(),
             csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
         },
