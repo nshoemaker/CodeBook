@@ -121,11 +121,11 @@ class Repository(models.Model):
         return g.get_repo(self.repo_id).size
 
     def get_watchers(self):
-        sg_ids = []
-        sgs = g.get_repo(self.repo_id).get_stargazers()
-        for sg in sgs :
-            sg_ids.append(sg.id)
-        return sg_ids
+        w_ids = []
+        ws = g.get_repo(self.repo_id).get_subscribers()
+        for w in ws :
+            w_ids.append(w.id)
+        return w_ids
 
     def get_stargazers(self):
         sg_ids = []

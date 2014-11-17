@@ -85,20 +85,6 @@ def watch_repo(request, source, repo_id):
 		user.add_to_subscriptions(repo)
 
 	return redirect(reverse(source))
-
-# Star or Unstar a Repository 
-def star_repo(request, source, repo_id):
-	g = get_auth_user_git(request)
-	repo = g.get_repo(int(repo_id))
-	user = g.get_user()
-
-	if (user.has_in_starred(repo)):
-		# User has already watched this repo - click will "un-watch"
-		user.remove_from_starred(repo)
-	else:
-		user.add_to_starred(repo)
-
-	return redirect(reverse(source))
 """
 # Save or Unsave a Post
 def save_file(request, source, file_id):
@@ -131,6 +117,7 @@ def search(request):
     text = searchform.cleaned_data['text'] 
     choice = searchform.cleaned_data['types']
     
+    """
     if(choice == 'User'):
         repos = []
         users = g.search_users(text,sort='followers',order='desc')
@@ -154,17 +141,16 @@ def search(request):
     for i in xrange(min(len(list(repos)),10)):
         new_repo = Repository(repo_id = repos[i].id)
         new_repo.save()
+    """
 
     # Temp code to populate the search page #
-    """
-    repo_obj = Repository(repo_id = 7986587)
-    repo_obj.save()
-    repo_gilbert = g.get_repo(7986587)
-    file_index = repo_gilbert.get_contents("index.html")
-    path = file_index.path
-    new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
-    new_file.save()
-    """
+    #repo_obj = Repository(repo_id = 7986587)
+    #repo_obj.save()
+    #repo_gilbert = g.get_repo(7986587)
+    #file_index = repo_gilbert.get_contents("index.html")
+    #path = file_index.path
+    #new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
+    #new_file.save()
     
     """
     repos = g.get_organization("github").get_repos()
@@ -183,27 +169,9 @@ def search(request):
             break
     """
     # End temp code to populate the search page #
-
-    sg_ids = []
-    sgs = g.get_repo(3222).get_stargazers()
-    for sg in sgs :
-        sg_ids.append(sg.id)
-    if (g.get_user().id in sg_ids):
-    	print "YES"
-    else:
-    	print "NO"
-
-    #print "NAMED ID = " + str(g.get_user().id) + "\n"
-    #print "AUTH ID = " + str(Github().get_user('dmouli').has_in_starred(g.get_repo(3222)))
-    #sgs = g.get_repo(3222).get_stargazers()
-    #if (g.get_user() in g.get_repo(3222).get_stargazers()):
-    #	print "YESSSSSSSSSSS" 
-    #else:
-    #	print "NOOOOOOOOOOO"
-    #	print (g.get_user().has_in_starred(g.get_repo(3222)))
     
     context["repos"] = Repository.objects.all()
-    context['files'] = RepoFile.objects.filter(id=10)
+    context['files'] = RepoFile.objects.all()
     context["source"] = 'search'
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user 

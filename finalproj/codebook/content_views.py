@@ -80,10 +80,14 @@ def get_auth_user_git(request):
 
 def saved(request):
     context = {}
+    files = [] 
     profile_user = request.user
     user_saves = Saved.objects.filter(profile_user=profile_user)
 
-    context['files'] = user_saves.all
+    for save in user_saves:
+        files.append(save.repo_file)
+
+    context['files'] = files
     context["source"] = 'saved'
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user
@@ -152,14 +156,6 @@ def watching(request):
         else:
             break
 
-    """
-    context = {}
-    context['repos'] = request.user.get_watched()
-    context["source"] = 'codebook/watching'
-    context['comment_form'] = CommentForm()
-    context['profile_user'] = request.user
-    return render(request, 'codebook/watching-page.html', context)
-    """
     context["source"] = 'watching'
     context['repos'] = recent_watched
     context['comment_form'] = CommentForm()

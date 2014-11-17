@@ -26,7 +26,7 @@ function like_comment(comment_id)
         url: "/codebook/like_comment/" + comment_id,
         datatype: 'html',
         data: {
-            repo_id: comment_id,
+            comment_id: comment_id,
             csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
         },
         success: function() {
@@ -57,7 +57,7 @@ function unlike_comment(comment_id)
         url: "/codebook/unlike_comment/" + comment_id,
         datatype: 'html',
         data: {
-            repo_id: comment_id,
+            comment_id: comment_id,
             csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
         },
         success: function() {

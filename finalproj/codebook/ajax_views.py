@@ -151,6 +151,7 @@ def watch_repo(request, id):
 
 
 def unwatch_repo(request, id):
+    context = {}
     if request.is_ajax():
         g = get_auth_user_git(request)
         repo = g.get_repo(int(id))
@@ -161,12 +162,13 @@ def unwatch_repo(request, id):
         else:
             # User has not watched this repo
             pass
-        return HttpResponse('True', content_type="text")
+
+        context['gh_user'] = user
+        return render_to_response('codebook/repository.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
         pass
 
-@transaction.atomic
 def like_comment(request, id):
     print "COMING INTO AJAX LIKE \n" 
     if request.is_ajax():
@@ -192,7 +194,19 @@ def like_comment(request, id):
         pass
 
 def save_file(request, id):
+    print "IN SAVE FUNCTION"
     if request.is_ajax():
+        profile_user = request.user
+        repofile = RepoFile.objects.get(id=id)
+        try:
+            # User has already saved this post 
+            saved_file = Saved.objects.get(profile_user=profile_user, repo_file=repofile)
+            pass
+        except:
+            saved_file = Saved(profile_user=profile_user, repo_file=repofile)
+            saved_file.save() 
+            repofile.savers.add(profile_user)
+            repofile.save() 
         return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
@@ -200,8 +214,19 @@ def save_file(request, id):
 
 
 def unsave_file(request, id):
+    print "IN UNSAVE FUNCTION"
+    context = {}
     if request.is_ajax():
-        return HttpResponse('True', content_type="text")
+        profile_user = request.user
+        repofile = RepoFile.objects.get(id=id)
+        try:
+            # User has already saved this post - click will "un-save"
+            saved_file = Saved.objects.get(profile_user=profile_user, repo_file=repofile)
+            saved_file.delete() 
+        except:
+            # User has not saved this post
+            pass
+        return render_to_response('codebook/file.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
         pass
@@ -216,6 +241,14 @@ def like_comment(request, id):
 
 
 def unlike_comment(request, id):
+    if request.is_ajax():
+        return HttpResponse('True', content_type="text")
+    else:
+        # uhhhhhhhh awk. this should never happen
+        pass
+
+@login_required
+def rate_credibility(request):
     if request.is_ajax():
         return HttpResponse('True', content_type="text")
     else:
