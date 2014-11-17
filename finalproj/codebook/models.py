@@ -21,14 +21,7 @@ class Language(models.Model):
     icon = models.CharField(max_length=40)
     #extensions = models.CharField(max_length=20)
 
-class UserRating(models.Model):
-    language = models.ForeignKey(Language)
-    proficiency = models.IntegerField()  # how well they think they know the language
-    credibility = models.IntegerField()  # how well we think they know the language
-
 class ProfileUser(AbstractBaseUser):
-    # note that there will be some id that we can use to get profile info for this user from github
-    languages = models.ManyToManyField(Language, related_name="languages_liked")
     is_anonymous = models.BooleanField(default = False)
     username = models.CharField(default = "", max_length=100)
     firstname = models.CharField(default = "", max_length=100)
@@ -76,6 +69,14 @@ class ProfileUser(AbstractBaseUser):
 
     def get_bio(self):
         return "This is my user bio."
+
+
+class UserRating(models.Model):
+    profile_user = models.ForeignKey(ProfileUser)
+    language = models.ForeignKey(Language)
+    proficiency = models.IntegerField()  # how well they think they know the language
+    credibility = models.IntegerField()  # how well we think they know the language
+
 
 class Comment(models.Model):
     profile_user = models.ForeignKey(ProfileUser)
