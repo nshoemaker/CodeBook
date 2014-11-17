@@ -102,16 +102,16 @@ def post_file_comment(request, id):
 
 
 def star_repo(request, id):
+    print "COMING INTO THE STAR FUNCTION"
     if request.is_ajax():
-        """
-        TODO: put in code to star a repo (something like this:)
+        g = get_auth_user_git(request)
+        repo = g.get_repo(int(id))
+        user = g.get_user()
 
-	    g = get_auth_user_git(request)
-	    repo = g.get_repo(int(id))
-	    user = g.get_user()
-		user.add_to_starred(repo)
-
-        """
+        if (user.has_in_starred(repo)):
+            pass;
+        else:
+            user.add_to_starred(repo)
         return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
@@ -119,16 +119,16 @@ def star_repo(request, id):
 
 
 def unstar_repo(request, id):
+    print "COMING INTO THE UNSTAR FUNCTION"
     if request.is_ajax():
-        """
-        TODO: put in code to star a repo (something like this:)
+        g = get_auth_user_git(request)
+        repo = g.get_repo(int(id))
+        user = g.get_user()
 
-	    g = get_auth_user_git(request)
-	    repo = g.get_repo(int(id))
-	    user = g.get_user()
-		user.remove_from_starred(repo)
-
-        """
+        if (user.has_in_starred(repo)):
+            user.remove_from_starred(repo)
+        else:
+            pass; 
         return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
@@ -168,10 +168,28 @@ def unwatch_repo(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
+@transaction.atomic
 def like_comment(request, id):
+    print "COMING INTO AJAX LIKE \n" 
     if request.is_ajax():
-        return HttpResponse('True', content_type="text")
+        context = {}
+        comment = Comment.objects.get(id=id)
+        profile_user = request.user 
+
+        if not (comment.likers.filter(liked_by=profile_user)):
+            print "COMING INTO IF \n" 
+            comment.likers.add(profile_user)
+            comment.save()
+            context['comment'] = com_new
+            context['profile_user'] = profile_user
+            return render_to_response('codebook/comment.html', context, content_type="html")
+        else:
+            # Shouldn't happen 
+            context['comment'] = com_new
+            context['profile_user'] = profile_user
+            return render_to_response('codebook/comment.html', context, content_type="html")
     else:
+        print "COMING INTO ELSE? \n"
         # uhhhhhhhh awk. this should never happen
         pass
 

@@ -3,19 +3,21 @@
         <!--input type="text" class="form-control"-->
         {{ searchform.text }}
     </div>
-    <div class="col-md-2 dropdown">
+    <div class="col-md-3 dropdown">
         <div class="btn-group">
-            <button type="button" class="btn btn-default search-type-dropdown">
+            <div type="button" class="btn btn-default search-type-dropdown">
                 <!--dropdown-toggle search-type-dropdown" data-toggle="dropdown">-->
                 <span class="selection">Search Type</span>
-            </button>
-            {{ searchform.types }}
+            </div>
+                <span>
+                    {{ searchform.types }}
             <!--button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
             <ul class="dropdown-menu" role="menu">
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Language</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Repository</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Tag</a></li>
             </ul-->
+                    </span>
         </div>
     </div>
     <div class="col-md-1">

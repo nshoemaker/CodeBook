@@ -9,6 +9,8 @@ from github import Github
 g = Github('dmouli', 'Spongebob5%')
 
 import base64
+import multiprocessing 
+from joblib import Parallel, delayed  
 
 class Stack(models.Model):
     name = models.CharField(max_length=40)
@@ -115,7 +117,28 @@ class Repository(models.Model):
         return g.get_repo(self.repo_id).size
 
     def get_watchers(self):
-        pass
+        sg_ids = []
+        sgs = g.get_repo(self.repo_id).get_stargazers()
+        for sg in sgs :
+            sg_ids.append(sg.id)
+        return sg_ids
+
+    def get_stargazers(self):
+        sg_ids = []
+        sgs = g.get_repo(self.repo_id).get_stargazers()
+
+        for sg in sgs:
+            sg_ids.append(sg.id)
+
+        return sg_ids
+
+        #def makeList(sg):
+        #    sg_ids.append(sg.id)
+
+        #num_cores = multiprocessing.cpu_count()
+        #print "CORES =" + str(num_cores)
+        #results = Parallel(n_jobs=num_cores)(delayed(makeList)(sg) for sg in sgs)
+        #return results
 
 class RepoFile (models.Model):
     repository = models.ForeignKey(Repository)
@@ -157,7 +180,6 @@ class Difficulty(models.Model):
 
 
 class Saved(models.Model):
-    #profile_user = models.ForeignKey(ProfileUser, primary_key=True)
     profile_user = models.ForeignKey(ProfileUser)
-    files = models.ManyToManyField(RepoFile)
+    repo_file = models.ForeignKey(RepoFile)
     date_time = models.DateTimeField(auto_now_add=True)

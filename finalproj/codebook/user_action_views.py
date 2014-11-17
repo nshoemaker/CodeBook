@@ -49,12 +49,6 @@ def get_template(source):
 	else:
 		return "/"
 
-def get_auth_user_git(request):
-	social = request.user.social_auth.get(provider='github')
-	token = social.extra_data['access_token']
-	g = Github(token)
-	return g
-
 def signin(request):
     pass
 
@@ -108,22 +102,18 @@ def star_repo(request, source, repo_id):
 """
 # Save or Unsave a Post
 def save_file(request, source, file_id):
-	profile_user = request.user
-	repofile = RepoFile.objects.get(id=file_id)
-	user_saves = Saved.objects.get(profile_user=profile_user)
 
-	if not (user_saves.files.filter(id=file_id)):
-		user_saves.files.add(repofile)
-		user_saves.save()
-		repofile.savers.add(profile_user)
-		repofile.save()
-	# User has already saved this post - click will "un-save"
-	else:
-		user_saves.files.remove(repofile)
-		user_saves.save()
-		repofile.savers.remove(profile_user)
-		repofile.save()
-	# Ask others how they sent back to correct page
+    profile_user = request.user
+    repofile = RepoFile.objects.get(id=file_id)
+    try:
+        saved_file = Saved.objects.get(profile_user=profile_user, repo_file=repofile)
+        # User has already saved this post - click will "un-save"
+        saved_file.delete() 
+    except:
+        saved_file = Saved(profile_user=profile_user, repo_file=repofile)
+        saved_file.save() 
+        repofile.savers.add(profile_user)
+        repofile.save() 
 	return redirect('/' + source)
 
 def search(request):
@@ -193,12 +183,31 @@ def search(request):
             break
     """
     # End temp code to populate the search page #
+
+    sg_ids = []
+    sgs = g.get_repo(3222).get_stargazers()
+    for sg in sgs :
+        sg_ids.append(sg.id)
+    if (g.get_user().id in sg_ids):
+    	print "YES"
+    else:
+    	print "NO"
+
+    #print "NAMED ID = " + str(g.get_user().id) + "\n"
+    #print "AUTH ID = " + str(Github().get_user('dmouli').has_in_starred(g.get_repo(3222)))
+    #sgs = g.get_repo(3222).get_stargazers()
+    #if (g.get_user() in g.get_repo(3222).get_stargazers()):
+    #	print "YESSSSSSSSSSS" 
+    #else:
+    #	print "NOOOOOOOOOOO"
+    #	print (g.get_user().has_in_starred(g.get_repo(3222)))
     
     context["repos"] = Repository.objects.all()
     context['files'] = RepoFile.objects.filter(id=10)
     context["source"] = 'search'
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user 
+    context['gh_user'] = g.get_user()
     return render(request, "codebook/search-results-page.html", context)
 
 """

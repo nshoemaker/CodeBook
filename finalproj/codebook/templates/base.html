@@ -57,11 +57,11 @@
 <!-- end Fixed navbar -->
 
 <!-- main content area -->
-{% block search-panel %}
+{% block search-dropdown %}
 <div class="container-fluid">
-    {% include 'codebook/search-panel.html' %}
+{% include 'codebook/search-dropdown.html' %}
 </div>
-{% endblock search-panel %}
+{% endblock search-dropdown %}
 
 <div class="container-fluid" id="header">
     {% block header %}{% endblock %}
@@ -99,6 +99,7 @@
 <script src = "{% static "js/repo_watch.js" %}"></script>
 <script src = "{% static "js/save_file.js" %}"></script>
 <script src = "{% static "js/like_comment.js" %}"></script>
+<script src = "{% static "js/beautification.js" %}"></script>
 
 <!-- TODO: bring this back -->
 <!-- <script src="{% static "js/add_comment.js" %}"></script> -->

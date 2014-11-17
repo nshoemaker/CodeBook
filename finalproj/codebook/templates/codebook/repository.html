@@ -14,7 +14,7 @@
                     <a href="{{ repo.get_url }}"><h4 class="text-left">{{ repo.get_name }}</h4></a>
                 </div>
                 <div class="col-md-1">
-                        {% if starred == False %}
+                        {% if gh_user.id in repo.get_stargazers %}
                             <h4 id="star-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-star star-status"></h4>
                         {% else %}
                             <h4 id="star-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-star-empty star-status"></h4>
