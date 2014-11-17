@@ -72,6 +72,7 @@ def profile_view(request, username):
     context['searchform'] = SearchForm()
     if (profile_user == request.user):
         context["view_my_profile"] = 'true'
+    context['ratings'] = UserRating.objects.filter(profile_user = profile_user)
     return render(request, 'codebook/profile.html', context)
 
 def get_auth_user_git(request):
