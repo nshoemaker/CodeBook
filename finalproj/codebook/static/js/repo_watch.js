@@ -70,6 +70,11 @@ function unwatch_repository(repo_id)
             {
                 eye.removeClass("glyphicon-eye-close");
             }
+
+            if ($("#watching").length)
+            {
+                $("#repo-list").remove($("#repo" + repo_id));
+            }
         },
         error: function (xhr, textStatus, errorThrown) {
             if (!(xhr.status == 0 || xhr.status == '0' || errorThrown == 0 || errorThrown == '0' || xhr.response == 0 || xhr.response == '0')) {
