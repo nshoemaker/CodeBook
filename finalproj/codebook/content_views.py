@@ -59,6 +59,7 @@ import json
 def my_profile_view(request):
     context = {}
     context["profile_user"] = request.user
+    context['searchform'] = SearchForm()
     context["view_my_profile"] = 'true'
     return render(request, 'codebook/view_my_profile.html', context)
 
@@ -67,7 +68,7 @@ def profile_view(request, username):
     # TODO change this to the username of the user
     profile_user = get_object_or_404(ProfileUser, username=username)
     context["profile_user"] = profile_user
-
+    context['searchform'] = SearchForm()
     if (profile_user == request.user):
         context["view_my_profile"] = 'true'
     return render(request, 'codebook/profile.html', context)
@@ -86,7 +87,7 @@ def saved(request):
 
     for save in user_saves:
         files.append(save.repo_file)
-
+    context['searchform'] = SearchForm()
     context['files'] = files
     context["source"] = 'saved'
     context['comment_form'] = CommentForm()
@@ -106,7 +107,7 @@ def news(request):
     # TODO: this is just temporary. Replace with actual list of languages the user likes.
     lang_list = ['java', 'python', 'csharp', 'cpp', 'c']
     context['lang_list'] = lang_list
-
+    context['searchform'] = SearchForm()
     #profile_user = ProfileUser.objects.get(user=request.user)
     #user_langs = profile_user.languages.all
     #context['profile_user'] = profile_user
@@ -130,7 +131,7 @@ def watching(request):
             i = i+1
         else:
             break
-
+    context['searchform'] = SearchForm()
     context["source"] = 'watching'
     context['repos'] = recent_watched
     context['comment_form'] = CommentForm()
@@ -145,6 +146,7 @@ def following(request):
     # TODO: this is just temporary. Replace with actual list of user ids of people the user is following (max 10)
     following_list_short = ['1','2','3','4','5','6','7','8','9','10','11','12']
     context['following_list_short'] = following_list_short
+    context['searchform'] = SearchForm()
     #context['profile_user'] = ProfileUser.objects.get(user=request.user)
     return render(request, 'codebook/following-page.html', context)
 
@@ -176,7 +178,7 @@ def sandbox(request):
         print "++++++++++++++++++++++++++++++++++++++"
         print file.get_name
         print file.get_content
-
+    context['searchform'] = SearchForm()
     context["repos"] = Repository.objects.all
     context['files'] = RepoFile.objects.all
     context['file'] = RepoFile.objects.all()[0]
