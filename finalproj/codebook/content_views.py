@@ -95,23 +95,32 @@ def front(request):
     context = {}
     context['searchform'] = SearchForm()
     if request.user and not request.user.is_anonymous:
+        social = request.user.social_auth.get(provider='github')
+        token = social.extra_data['access_token']
+        g = Github(token) 
         try:
             ProfileUser.objects.get(user=request.user)
         except:
-          new_profile_user = request.user
-          new_profile_user.save()
-          new_saves = Saved(profile_user=new_profile_user)
-          new_saves.save()
+            new_profile_user = request.user
+            new_profile_user.save()
+            new_saves = Saved(profile_user=new_profile_user)
+            new_saves.save()
+            
+            #user statistics
+            #numFollowers = g.get_user().followers
+            #numRepos = g.get_user().public_repos
+            for repo in g.get_user().get_repos():
+                langs = repo.get_languages()
+                for lang in langs.keys():
+                    try:
+                        language = Language.objects.get(name=lang)
+                    except Language.DoesNotExist:
+                        language = Language(name = lang, proficiency=0,credibility = 0)
+                    print language.name
+                    print language.credibility
+                    language.credibility += langs[lang]/1000
+                    language.save()
         context['user'] = new_profile_user
-        social = request.user.social_auth.get(provider='github')
-        token = social.extra_data['access_token']
-        g = Github(token)
-        
-        #user statistics
-#        numFollowers = g.get_user().followers
- #       numRepos = g.get_user().total_private_repos + g.get_user().public_repos
-
-
     return render(request, 'codebook/front-page.html', context)
 
 #@login_required

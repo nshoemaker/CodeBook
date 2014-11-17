@@ -17,12 +17,9 @@ class Stack(models.Model):
 class Language(models.Model):
     name = models.CharField(max_length=20)
     icon = models.CharField(max_length=40)
-    #extensions = models.CharField(max_length=20)
-
-class UserRating(models.Model):
-    language = models.ForeignKey(Language)
     proficiency = models.IntegerField()  # how well they think they know the language
     credibility = models.IntegerField()  # how well we think they know the language
+    #extensions = models.CharField(max_length=20)
 
 class ProfileUser(AbstractBaseUser):
     # note that there will be some id that we can use to get profile info for this user from github
