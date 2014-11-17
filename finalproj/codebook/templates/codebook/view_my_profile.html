@@ -5,6 +5,10 @@
     {% load staticfiles %}
 {% endblock stylesheets %}
 
+{% block nav-left %}
+    {% include 'codebook/nav-buttons.html' with active='profile' %}
+{% endblock %}
+
 {% block header %}
 {% endblock header %}
 

@@ -59,7 +59,9 @@ import json
 def my_profile_view(request):
     context = {}
     context["profile_user"] = request.user
+    context['searchform'] = SearchForm()
     context["view_my_profile"] = 'true'
+    context['ratings'] = UserRating.objects.filter(profile_user = request.user)
     return render(request, 'codebook/view_my_profile.html', context)
 
 def profile_view(request, username):
@@ -67,9 +69,10 @@ def profile_view(request, username):
     # TODO change this to the username of the user
     profile_user = get_object_or_404(ProfileUser, username=username)
     context["profile_user"] = profile_user
-
+    context['searchform'] = SearchForm()
     if (profile_user == request.user):
         context["view_my_profile"] = 'true'
+    context['ratings'] = UserRating.objects.filter(profile_user = profile_user)
     return render(request, 'codebook/profile.html', context)
 
 def get_auth_user_git(request):
@@ -86,7 +89,7 @@ def saved(request):
 
     for save in user_saves:
         files.append(save.repo_file)
-
+    context['searchform'] = SearchForm()
     context['files'] = files
     context["source"] = 'saved'
     context['comment_form'] = CommentForm()
@@ -97,21 +100,7 @@ def front(request):
     context = {}
     context['searchform'] = SearchForm()
     if request.user and not request.user.is_anonymous:
-        try:
-            ProfileUser.objects.get(user=request.user)
-        except:
-          new_profile_user = request.user
-          new_profile_user.save()
-        context['user'] = new_profile_user
-        social = request.user.social_auth.get(provider='github')
-        token = social.extra_data['access_token']
-        g = Github(token)
-        
-        #user statistics
-#        numFollowers = g.get_user().followers
- #       numRepos = g.get_user().total_private_repos + g.get_user().public_repos
-
-
+        context['user'] = request.user
     return render(request, 'codebook/front-page.html', context)
 
 #@login_required
@@ -120,7 +109,7 @@ def news(request):
     # TODO: this is just temporary. Replace with actual list of languages the user likes.
     lang_list = ['java', 'python', 'csharp', 'cpp', 'c']
     context['lang_list'] = lang_list
-
+    context['searchform'] = SearchForm()
     #profile_user = ProfileUser.objects.get(user=request.user)
     #user_langs = profile_user.languages.all
     #context['profile_user'] = profile_user
@@ -144,7 +133,7 @@ def watching(request):
             i = i+1
         else:
             break
-
+    context['searchform'] = SearchForm()
     context["source"] = 'watching'
     context['repos'] = recent_watched
     context['comment_form'] = CommentForm()
@@ -159,6 +148,7 @@ def following(request):
     # TODO: this is just temporary. Replace with actual list of user ids of people the user is following (max 10)
     following_list_short = ['1','2','3','4','5','6','7','8','9','10','11','12']
     context['following_list_short'] = following_list_short
+    context['searchform'] = SearchForm()
     #context['profile_user'] = ProfileUser.objects.get(user=request.user)
     return render(request, 'codebook/following-page.html', context)
 
@@ -190,7 +180,7 @@ def sandbox(request):
         print "++++++++++++++++++++++++++++++++++++++"
         print file.get_name
         print file.get_content
-
+    context['searchform'] = SearchForm()
     context["repos"] = Repository.objects.all
     context['files'] = RepoFile.objects.all
     context['file'] = RepoFile.objects.all()[0]

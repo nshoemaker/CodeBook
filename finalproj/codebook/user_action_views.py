@@ -104,7 +104,8 @@ def search(request):
         repos = []
         users = g.search_users(text,sort='followers',order='desc')
         for user in users:
-            repos.append(user.get_repos())
+            for repo in user.get_repos():
+               repos.append(repo)
     
     elif(choice == 'Repo'):
         repos = g.search_repositories(text,sort='stars',order='desc')
