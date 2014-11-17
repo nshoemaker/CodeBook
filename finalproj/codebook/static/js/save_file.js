@@ -70,6 +70,9 @@ function unsave_file(file_id)
             {
                 eye.removeClass("glyphicon-floppy-saved");
             }
+            if ($("#saved").length) {
+                $("#file-list").remove($("#file"+file_id));
+            }
         },
         error: function (xhr, textStatus, errorThrown) {
             if (!(xhr.status == 0 || xhr.status == '0' || errorThrown == 0 || errorThrown == '0' || xhr.response == 0 || xhr.response == '0')) {
