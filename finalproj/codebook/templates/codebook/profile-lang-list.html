@@ -1,3 +1,4 @@
+<!--
 <ul class="skill-list">
     <li class="skill">
         <h5>Java</h5>
@@ -30,14 +31,14 @@
         </progress>
     </li>
 </ul>
+-->
 <!-- TODO: the stuff above is temporary -->
-<!--
+
 <ul class="skill-list">
-    % for rating in rating_list %}
+    {% for rating in ratings %}
         <li class="skill">
-        <h5>{ rating.language.name }}</h5>
-        <progress class="skill" max="10" value="rating.proficiency"></progress>
+        <h5>{{ rating.language.name }}</h5>
+        <progress class="skill" max="100" value="{{ rating.credibility }}"></progress>
         </li>
-    % endfor %}
-    -->
+    {% endfor %}
 </ul>
