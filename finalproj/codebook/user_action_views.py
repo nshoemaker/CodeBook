@@ -70,23 +70,6 @@ def like_comment(request, source, comment_id):
 	# Ask others how they sent back to correct page
 	return redirect('/' + source)
 
-"""
-# Watch or Unwatch a Repository 
-def watch_repo(request, source, repo_id):
-	g = get_auth_user_git(request)
-	repo = g.get_repo(int(repo_id))
-	user = g.get_user()
-
-	if (user.has_in_subscriptions(repo)):
-		print "CAME INTO HAS WATCHED"
-		# User has already watched this repo - click will "un-watch"
-		user.remove_from_subscriptions(repo)
-	else:
-		print "CAME INTO ADD TO WATCHED"
-		user.add_to_subscriptions(repo)
-
-	return redirect(reverse(source))
-"""
 # Save or Unsave a Post
 def save_file(request, source, file_id):
 
@@ -194,11 +177,12 @@ def search(request):
 Technically, this should never be called
 """
 def comment(request, comment_type, source, id):
-	context = {}
+    print "THIS IS GETTING CALLED"
+    context = {}
 
-	if request.method == "GET":
-		context['comment_form'] = CommentForm()
-		return redirect(reverse(source))
+    if request.method == "GET":
+        context['comment_form'] = CommentForm()
+        return redirect(reverse(source))
 
 	profile_user = request.user
 	new_comment = Comment(profile_user=profile_user)

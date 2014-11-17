@@ -80,7 +80,7 @@
         </div>
     </div>
 
-    <ol class="comment-list" id="comment-list">
+    <ol class="file-comment-list" id="file-comment-list-{{ file.id }}">
         {% for comment in file.comments.all %}
             <li id="comment{{ comment.id }}">
             {% include 'codebook/comment.html' %}
@@ -92,7 +92,7 @@
 
     <div class="row file-footer">
         <form method="POST" role="form" id="post-file-comment-form-{{ file.id }}" class="post-file-comment-form"
-                      data-item-id="{{ file.id }}" action="">
+                      data-item-id="{{ file.id }}" action="{% url 'comment' 'file' source file.id %}">
 
             <div class="col-md-9 col-lg-offset-1">
                 <div id="the_post{{ file.id }}">
