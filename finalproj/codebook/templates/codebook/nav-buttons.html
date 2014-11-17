@@ -5,7 +5,7 @@
 {% endif %}
 
 {% if active == 'watching' %}
-<li class="active"><a href="{% url 'watching' %}">Watching</a></li>
+<li class="active" id="watching"><a href="{% url 'watching' %}">Watching</a></li>
 {% else %}
 <li><a href="{% url 'watching' %}">Watching</a></li>
 {% endif %}
@@ -27,19 +27,19 @@
 -->
 
 {% if active == 'saved' %}
-<li class="active"><a href="{% url 'saved' %}">Saved Files</a></li>
+<li class="active" id="saved"><a href="{% url 'saved' %}">Saved Files</a></li>
 {% else %}
 <li><a href="{% url 'saved' %}">Saved Files</a></li>
 {% endif %}
 
 {% if active == 'profile' %}
-<li class="active"><a href="{% url 'view_my_profile' %}">Profile</a></li>
+<li class="active" id="profile"><a href="{% url 'view_my_profile' %}">Profile</a></li>
 {% else %}
 <li><a href="{% url 'view_my_profile' %}">Profile</a></li>
 {% endif %}
 
 {% if active == 'settings' %}
-<li class="active"><a href="#"><span class="glyphicon glyphicon-cog"></span></a></li>
+<li class="active" id="settings"><a href="#"><span class="glyphicon glyphicon-cog"></span></a></li>
 {% else %}
 <li><a href="#"><span class="glyphicon glyphicon-cog"></span></a></li>
 {% endif %}
