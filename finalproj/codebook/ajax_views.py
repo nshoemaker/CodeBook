@@ -246,3 +246,11 @@ def unlike_comment(request, id):
     else:
         # uhhhhhhhh awk. this should never happen
         pass
+
+@login_required
+def rate_credibility(request):
+    if request.is_ajax():
+        return HttpResponse('True', content_type="text")
+    else:
+        # uhhhhhhhh awk. this should never happen
+        pass

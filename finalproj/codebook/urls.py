@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     url(r'^signin', 'codebook.user_action_views.signin', name="signin"),
 
     url(r'^comment_file/(?P<id>\d+)$', 'codebook.ajax_views.post_file_comment', name='comment_file'),
+    url(r'^rate_credibility$', 'codebook.ajax_views.rate_credibility', name='rate_credibility'),
     url(r'^star_repo/(?P<id>\d+)$', 'codebook.ajax_views.star_repo', name='star_repo'),
     url(r'^unstar_repo/(?P<id>\d+)$', 'codebook.ajax_views.unstar_repo', name='unstar_repo'),
     url(r'^watch_repo/(?P<id>\d+)$', 'codebook.ajax_views.watch_repo', name='watch_repo'),
