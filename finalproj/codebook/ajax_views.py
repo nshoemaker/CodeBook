@@ -249,7 +249,9 @@ def unlike_comment(request, id):
 
 @login_required
 def rate_credibility(request):
+    print "entered rate credibility"
     if request.is_ajax():
+        print "hi"
         social = request.user.social_auth.get(provider='github')
         token = social.extra_data['access_token']
         g = Github(token)
@@ -272,8 +274,8 @@ def rate_credibility(request):
                     rating.save()
                 rating.credibility = langs[lang]/1000
                 rating.save()
-        #for r in UserRating.objects.filter(profile_user=request.user):
-        #    print r.language.name, r.credibility
+        for r in UserRating.objects.filter(profile_user=request.user):
+            print r.language.name, r.credibility
   
         return HttpResponse('True', content_type="text")
     else:
