@@ -117,12 +117,12 @@ def search(request):
     text = searchform.cleaned_data['text'] 
     choice = searchform.cleaned_data['types']
     
-    """
     if(choice == 'User'):
         repos = []
         users = g.search_users(text,sort='followers',order='desc')
         for user in users:
-            repos.append(user.get_repos())
+            for repo in user.get_repos():
+               repos.append(repo)
     
     elif(choice == 'Repo'):
         repos = g.search_repositories(text,sort='stars',order='desc')
@@ -141,7 +141,6 @@ def search(request):
     for i in xrange(min(len(list(repos)),10)):
         new_repo = Repository(repo_id = repos[i].id)
         new_repo.save()
-    """
 
     # Temp code to populate the search page #
     #repo_obj = Repository(repo_id = 7986587)
