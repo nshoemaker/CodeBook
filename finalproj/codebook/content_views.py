@@ -61,6 +61,7 @@ def my_profile_view(request):
     context["profile_user"] = request.user
     context['searchform'] = SearchForm()
     context["view_my_profile"] = 'true'
+    context['ratings'] = UserRating.objects.filter(profile_user = request.user)
     return render(request, 'codebook/view_my_profile.html', context)
 
 def profile_view(request, username):
