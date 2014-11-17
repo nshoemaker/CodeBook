@@ -97,21 +97,7 @@ def front(request):
     context = {}
     context['searchform'] = SearchForm()
     if request.user and not request.user.is_anonymous:
-        try:
-            ProfileUser.objects.get(user=request.user)
-        except:
-          new_profile_user = request.user
-          new_profile_user.save()
-        context['user'] = new_profile_user
-        social = request.user.social_auth.get(provider='github')
-        token = social.extra_data['access_token']
-        g = Github(token)
-        
-        #user statistics
-#        numFollowers = g.get_user().followers
- #       numRepos = g.get_user().total_private_repos + g.get_user().public_repos
-
-
+        context['user'] = request.user
     return render(request, 'codebook/front-page.html', context)
 
 #@login_required
