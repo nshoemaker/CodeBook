@@ -108,7 +108,7 @@
             <div class="row repository-footer">
                 <form method="POST" id="post-repo-comment-form-{{ repo.repo_id }}" class="post-repo-comment-form"
                       data-item-id="{{ repo.repo_id }}" role="form"
-                      action="{% url 'comment' 'repo' source repo.repo_id %}">
+                      action="{ url 'comment' 'repo' source repo.repo_id %}">
 
                     <div class="col-md-9 col-lg-offset-1">
                         <div id="the_post{{ repo.repo_id }}">

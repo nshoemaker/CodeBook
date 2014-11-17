@@ -122,9 +122,11 @@ def search(request):
         query = "language:"+text+" stars:>=500"
         repos = g.search_repositories(query,sort='stars',order='desc')
 
+    these_repo_results = []
     for i in xrange(min(len(list(repos)),10)):
         new_repo = Repository(repo_id = repos[i].id)
         new_repo.save()
+        these_repo_results.append(new_repo)
         """branches = repos[i].get_branches()
         SHA = branches[0].commit.sha
         tree = repos[i].get_git_tree(SHA,True).tree
@@ -147,25 +149,7 @@ def search(request):
     #new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
     #new_file.save()
     
-    """
-    repos = g.get_organization("github").get_repos()
-    i = 0
-    for repo in repos:
-        if (i < 5):
-            new_repo = Repository(repo_id = repo.id)
-            new_repo.save()
-            if (i == 0):
-                repofile = repo.get_contents("README.md")
-                path = repofile.path
-                new_file = RepoFile(repository=new_repo, path=path, average_difficulty=0, average_quality=0)
-                new_file.save()
-            i = i + 1
-        else:
-            break
-    """
-    # End temp code to populate the search page #
-    
-    context["repos"] = Repository.objects.all()
+    context["repos"] = these_repo_results
     context['files'] = RepoFile.objects.all()
     context["source"] = 'search'
     context['comment_form'] = CommentForm()
