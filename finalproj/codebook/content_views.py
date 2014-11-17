@@ -98,31 +98,6 @@ def front(request):
     context['searchform'] = SearchForm()
     if request.user and not request.user.is_anonymous:
         context['user'] = request.user
-        social = request.user.social_auth.get(provider='github')
-        token = social.extra_data['access_token']
-        g = Github(token) 
-            
-        #user statistics
-        #numFollowers = g.get_user().followers
-        #numRepos = g.get_user().public_repos
-        for repo in g.get_user('charliesome').get_repos():
-            langs = repo.get_languages()
-            for lang in langs.keys():
-                try:
-                    language = Language.objects.get(name=lang)
-                except:
-                    language = Language(name=lang,icon='icon-prog-python')
-                    language.save()
-                try:
-                    rating = UserRating.objects.get(language=language,profile_user=request.user)
-                except:
-                    rating = UserRating(profile_user=request.user,credibility=0,proficiency=0,language=language)
-                    rating.save()
-                rating.credibility = langs[lang]/1000
-                rating.save()
-        #for r in UserRating.objects.filter(profile_user=request.user):
-        #    print r.language.name, r.credibility
-
     return render(request, 'codebook/front-page.html', context)
 
 #@login_required
