@@ -103,15 +103,19 @@ def search(request):
     
     if(choice == 'User'):
         repos = []
+        files = [] 
         users = g.search_users(text,sort='followers',order='desc')
         for user in users:
             for repo in user.get_repos():
                repos.append(repo)
     
     elif(choice == 'Repo'):
+        files = [] 
         repos = g.search_repositories(text,sort='stars',order='desc')
     
     elif(choice == 'Code'):
+        print "CAME IN HERE"
+        repos = [] 
         query = text+" user:github size:>10000"
         files = g.search_code(query)
         for f in files:
@@ -119,8 +123,19 @@ def search(request):
     
     else:
         #check that language?
+        files = [] 
         query = "language:"+text+" stars:>=500"
         repos = g.search_repositories(query,sort='stars',order='desc')
+
+
+    these_file_results = []
+    for i in xrange(min(len(list(files)),10)):
+        file_name = files[i].name
+        print file_name + "\n"
+        file_contents = files[i].repository.get_contents(file_name)
+        print file_contents + "\n"
+        file_path = file_contents.path 
+        print file_path + "\n"
 
     these_repo_results = []
     for i in xrange(min(len(list(repos)),10)):

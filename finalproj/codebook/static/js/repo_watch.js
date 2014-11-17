@@ -71,11 +71,20 @@ function unwatch_repository(repo_id)
                 eye.removeClass("glyphicon-eye-close");
             }
 
-            if ($("#watching").length)
-            {
-                $("repo" + repo_id).remove();
-                //$("#repo-list").remove($("#repo" + repo_id));
+            // to show it in an alert window
+            //alert(window.location);
+
+            if (window.location.href.indexOf("watching") > -1) {
+                if ($("#repo" + repo_id)) {
+                    $("#repo" + repo_id).remove();
+                }
             }
+
+            //if ($("#watching")) {
+            //    if ($("#repo" + repo_id)) {
+            //        $("#repo" + repo_id).remove();
+            //    }
+           // }
         },
         error: function (xhr, textStatus, errorThrown) {
             if (!(xhr.status == 0 || xhr.status == '0' || errorThrown == 0 || errorThrown == '0' || xhr.response == 0 || xhr.response == '0')) {
