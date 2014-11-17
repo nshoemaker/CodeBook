@@ -10,7 +10,7 @@ g = Github('dmouli', 'Spongebob5%')
 
 import base64
 import multiprocessing 
-from joblib import Parallel, delayed  
+#from joblib import Parallel, delayed  
 
 class Stack(models.Model):
     name = models.CharField(max_length=40)
