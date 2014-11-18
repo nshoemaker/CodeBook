@@ -181,7 +181,7 @@ def sandbox(request):
         print file.get_name
         print file.get_content
     context['searchform'] = SearchForm()
-    context["repos"] = Repository.objects.all
+    context["repos"] = {}
     context['files'] = RepoFile.objects.all
     #context['file'] = RepoFile.objects.all()[0]
     context["source"] = 'codebook/search_results'
