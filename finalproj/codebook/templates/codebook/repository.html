@@ -15,16 +15,16 @@
                 </div>
                 <div class="col-md-1">
                         {% if gh_user.id in repo.get_stargazers %}
-                            <h4 id="star-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-star star-status cursor-pointer"></h4>
+                            <h4 id="star-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" title="Un-star this Repository." class="glyphicon glyphicon-star star-status cursor-pointer"></h4>
                         {% else %}
-                            <h4 id="star-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-star-empty star-status cursor-pointer"></h4>
+                            <h4 id="star-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" title="Star this Repository." class="glyphicon glyphicon-star-empty star-status cursor-pointer"></h4>
                         {% endif %}
                 </div>
                 <div class="col-md-1">
                         {% if gh_user.id in repo.get_watchers %}
-                            <h4 id="watch-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-eye-close watch-status cursor-pointer"></h4>
+                            <h4 id="watch-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" title="Un-watch this Repository." class="glyphicon glyphicon-eye-close watch-status cursor-pointer"></h4>
                         {% else %}
-                            <h4 id="watch-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-eye-open watch-status cursor-pointer"></h4>
+                            <h4 id="watch-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" title="Watch this Repository." class="glyphicon glyphicon-eye-open watch-status cursor-pointer"></h4>
                         {% endif %}
                 </div>
                 <div class="col-md-4">
