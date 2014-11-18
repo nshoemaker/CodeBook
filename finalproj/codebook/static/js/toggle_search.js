@@ -6,6 +6,10 @@ $(".repo-toggle-button").click(function()
     var repo_id = $(this).attr("data-item-id");
     toggle_repository_view(repo_id);
 });
+    $("#collapse-all").click(function()
+    {
+        $(".repo-body").slideUp();
+    });
 });
 
 

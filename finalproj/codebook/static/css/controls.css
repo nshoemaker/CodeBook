@@ -1,6 +1,13 @@
+#collapse-all {
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+}
+
 .cursor-pointer{
     cursor: pointer;
 }
+
 .profile-tabs{
     padding: 5px;
 }
