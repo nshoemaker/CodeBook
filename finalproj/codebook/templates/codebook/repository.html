@@ -7,7 +7,7 @@
             <div class="row repository-header">
                 <div class="col-md-1">
                     <!-- should have a link to the repository -->
-                    <h4 class="glyphicon glyphicon-expand repo-toggle-button" id="repo-toggle-button-{{ repo.repo_id }}"
+                    <h4 class="glyphicon glyphicon-expand repo-toggle-button cursor-pointer" id="repo-toggle-button-{{ repo.repo_id }}"
                         data-item-id="{{ repo.repo_id }}"></h4>
                 </div>
                 <div class="col-md-2 text-left">
@@ -15,23 +15,23 @@
                 </div>
                 <div class="col-md-1">
                         {% if gh_user.id in repo.get_stargazers %}
-                            <h4 id="star-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-star star-status"></h4>
+                            <h4 id="star-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-star star-status cursor-pointer"></h4>
                         {% else %}
-                            <h4 id="star-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-star-empty star-status"></h4>
+                            <h4 id="star-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-star-empty star-status cursor-pointer"></h4>
                         {% endif %}
                 </div>
                 <div class="col-md-1">
                         {% if gh_user.id in repo.get_watchers %}
-                            <h4 id="watch-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-eye-close watch-status"></h4>   
+                            <h4 id="watch-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-eye-close watch-status cursor-pointer"></h4>
                         {% else %}
-                            <h4 id="watch-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-eye-open watch-status"></h4>
+                            <h4 id="watch-status-{{ repo.repo_id }}" data-item-id="{{ repo.repo_id }}" class="glyphicon glyphicon-eye-open watch-status cursor-pointer"></h4>
                         {% endif %}
                 </div>
                 <div class="col-md-4">
 
                 </div>
                 <div class="col-md-2">
-                    <h4 class="text-right">{{ repo.get_creator }}</h4>
+                    <h4 class="text-right cursor-pointer">{{ repo.get_creator }}</h4>
                 </div>
                 <div class="col-md-1">
                     <!-- TODO: setup profile images -->
