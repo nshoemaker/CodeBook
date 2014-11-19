@@ -1,0 +1,133 @@
+{% load staticfiles %}
+<script src="{% static "js/bootstrap-rating-input.min.js" %}" type="text/javascript"></script>
+
+<div class="container repository">
+    <ol id="repo-parts-{{ repo.id }}">
+        <li id="repo-header-{{ repo.id }}">
+            <div class="row repository-header">
+                <div class="col-md-1">
+                    <!-- should have a link to the repository -->
+                    <h4 class="glyphicon glyphicon-expand repo-toggle-button cursor-pointer" id="repo-toggle-button-{{ repo.id }}"
+                        data-item-id="{{ repo.id }}"></h4>
+                </div>
+                <div class="col-md-2 text-left">
+                    <a href="{{ repo.url }}"><h4 class="text-left">{{ repo.name }}</h4></a>
+                </div>
+                <div class="col-md-1">
+                        {% if is_current_user_starring %}
+                            <h4 id="star-status-{{ repo.id }}" data-item-id="{{ repo.id }}" title="Un-star this Repository." class="glyphicon glyphicon-star star-status cursor-pointer"></h4>
+                        {% else %}
+                            <h4 id="star-status-{{ repo.id }}" data-item-id="{{ repo.id }}" title="Star this Repository." class="glyphicon glyphicon-star-empty star-status cursor-pointer"></h4>
+                        {% endif %}
+                </div>
+                <div class="col-md-1">
+                        {% if is_current_user_watching %}
+                            <h4 id="watch-status-{{ repo.id }}" data-item-id="{{ repo.id }}" title="Un-watch this Repository." class="glyphicon glyphicon-eye-close watch-status cursor-pointer"></h4>
+                        {% else %}
+                            <h4 id="watch-status-{{ repo.id }}" data-item-id="{{ repo.id }}" title="Watch this Repository." class="glyphicon glyphicon-eye-open watch-status cursor-pointer"></h4>
+                        {% endif %}
+                </div>
+                <div class="col-md-4">
+
+                </div>
+                <div class="col-md-2">
+                    <h4 class="text-right cursor-pointer">{{ repo.owner_name }}</h4>
+                </div>
+                <div class="col-md-1">
+                    <!-- TODO: setup profile images -->
+                    <h4><img src="{{ repo.owner_prof_pic }}"></h4>
+                </div>
+            </div>
+            <!-- end repository header top thingy -->
+        </li>
+        <li class="repo-body" id="repo-body-{{ repo.id }}">
+            <div class="row repository-file-view">
+                <!-- TODO: setup file explorer -->
+                <div class="col-md-3 repository-file-explorer">
+                    {% include 'codebook/file-explorer.html' %}
+                </div>
+                <div class="col-md-9 repository-file">
+                    {% include 'codebook/file-contents-combined.html' with file_content = default_file_contents %}
+                </div>
+            </div>
+            <!-- end file view -->
+
+            <div class="row tags">
+                <div class="col-md-10">
+                    <div class="btn-group-sm">
+                        {% for tag in repo.tag_list %}
+                            <ol class="tag-list" id="tag-list{{ repo.id }}">
+                                <!-- endorsed tags have x's next to them (toggle to unendorse) unendorsed tags have check -->
+                                <li id="tag{{ tag.id }}">
+                                    <button class="btn btn-sm tag-btn">
+                                        <span class="tag-text">{{ tag.text }}</span>
+                                        {% if tag.is_endorsed == 'true' %}
+                                            <span class="glyphicon glyphicon-ok"></span>
+                                        {% else %}
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        {% endif %}
+                                    </button>
+                                </li>
+                            </ol>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-1 tag-list">
+                    <button type="submit" class="btn btn-sm control-btn">Add Tag</button>
+                </div>
+            </div>
+            <!-- end tags -->
+            <!-- TODO get ratings working (make average read only)-->
+            <!-- begin ratings -->
+            <div class="row ratings">
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-1">
+                    <h4 class="text-right">Difficulty:</h4>
+                </div>
+                <div class="col-md-3">
+                    <div class="stars starrr" data-rating="{{ repo.difficulty_rating }}"></div>
+                </div>
+                <div class="col-md-2">
+                    <h4 class="text-right">Documentation:</h4>
+                </div>
+                <div class="col-md-3">
+                    <div class="stars starrr" data-rating="0">{{ repo.doc_rating }}</div>
+                </div>
+            </div>
+
+            <ol class="repo-comment-list" id="repo-comment-list-{{ repo.id }}">
+                {% for comment in repo.comments %}
+                    <li id="comment{{ comment.id }}">
+                        {% include 'codebook/comment.html' %}
+                    </li>
+                {% endfor %}
+            </ol>
+
+            <!-- end comment list -->
+            <div class="row repository-footer">
+                <form method="POST" id="post-repo-comment-form-{{ repo.id }}" class="post-repo-comment-form"
+                      data-item-id="{{ repo.id }}" role="form"
+                      action="{ url 'comment' 'repo' source repo.id %}">
+
+                    <div class="col-md-9 col-lg-offset-1">
+                        <div id="the_post{{ repo.id }}">
+                            <tr>
+                                <th><label for="id_text">{{ comment_form.text.label }}</label></th>
+                                <td>
+                                    {{ comment_form.errorlist }}
+                                    <input id="repo-post-text-{{ repo.id }}" maxlength="400" name="text" pla
+                                           ceholder="Say something..." required="True" type="text"/></td>
+                            </tr>
+                            {% csrf_token %}
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="submit" class="btn control-btn" value="Comment">
+                    </div>
+                    {% csrf_token %}
+                </form>
+            </div>
+        </li>
+    </ol>
+</div>
