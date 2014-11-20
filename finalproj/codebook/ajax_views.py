@@ -286,13 +286,16 @@ def add_proficiency(request):
         profile_user = request.user
         print language_name
         print proficiency
+        for l in Language.objects.filter(name=language_name):
+            print l.name
+            print l.id
         try:
             lang = Language.objects.get(name=language_name, icon='icon-prog-python')
         except:
+            print 0
             lang = Language(name=language_name, icon='icon-prog-python')
             lang.save()
         print lang.name
-        print 0
         try:
             rating = UserRating.objects.get(profile_user=profile_user, language=lang)
             rating.update(proficiency=proficiency)
@@ -303,6 +306,15 @@ def add_proficiency(request):
             rating = UserRating.objects.create(profile_user=profile_user, language=lang, proficiency=proficiency, credibility=0)
             rating.save()
         context['rating'] = rating
+        """
+        for r in UserRating.objects.all():
+            print "----------------------"
+            print r.profile_user.username
+            print r.language.name
+            print r.language.id
+            print 'cred: ' + str(r.credibility)
+            print 'prof: ' + str(r.proficiency)
+        """
         return render_to_response('codebook/proficiency.html', context, content_type="html")
         pass
     else:
