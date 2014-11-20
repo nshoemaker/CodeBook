@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'codebook',
     'social.apps.django_app.default',
+    'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -47,6 +48,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -130,3 +132,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_USER = 'Your-SMTP-username'      # perhaps your Andrew ID
 # EMAIL_HOST_PASSWORD = 'Your-SMTP-password'
 # EMAIL_USE_TLS = True
+
+
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
