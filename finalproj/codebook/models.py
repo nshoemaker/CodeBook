@@ -96,53 +96,6 @@ class Repository(models.Model):
     repo_id = models.IntegerField(primary_key=True)
     comments = models.ManyToManyField(Comment)
 
-    def get_url(self):
-        return g.get_repo(self.repo_id).html_url
-
-    def get_creator(self):
-        return g.get_repo(self.repo_id).owner.name
-
-    def get_name(self):
-        return g.get_repo(self.repo_id).name
-
-    def get_language(self):
-        return g.get_repo(self.repo_id).language
-
-    def get_date_created(self):
-        return g.get_repo(self.repo_id).created_at
-
-    def get_star_count(self):
-        return g.get_repo(self.repo_id).stargazers_count
-
-    def get_watch_count(self):
-        return g.get_repo(self.repo_id).watchers_count
-
-    def get_kb_size(self):
-        return g.get_repo(self.repo_id).size
-
-    def get_watchers(self):
-        w_ids = []
-        ws = g.get_repo(self.repo_id).get_subscribers()
-        for w in ws :
-            w_ids.append(w.id)
-        return w_ids
-
-    def get_stargazers(self):
-        sg_ids = []
-        sgs = g.get_repo(self.repo_id).get_stargazers()
-
-        for sg in sgs:
-            sg_ids.append(sg.id)
-
-        return sg_ids
-
-        #def makeList(sg):
-        #    sg_ids.append(sg.id)
-
-        #num_cores = multiprocessing.cpu_count()
-        #print "CORES =" + str(num_cores)
-        #results = Parallel(n_jobs=num_cores)(delayed(makeList)(sg) for sg in sgs)
-        #return results
 
 class RepoFile (models.Model):
     repository = models.ForeignKey(Repository)

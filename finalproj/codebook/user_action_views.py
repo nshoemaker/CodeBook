@@ -15,29 +15,38 @@ import sys
 g = Github('dmouli', 'Spongebob5%')
 
 class Repo:
-    def __init__(self, id, name, description, url, langs, org, owner_name, owner_prof_pic, is_current_user_starring, star_count, is_current_user_watching, watch_count, file_tree, readme, readme_contents, default_file_name, default_file_contents, default_file_path, doc_rating, difficulty_rating, tag_list, comments):
+    def __init__(self, repo, id):         
+        if(repo is None):
+            repo = g.get_repo(id)
+        branches = repo.get_branches()
+        SHA = branches[0].commit.sha
+        tree = repo.get_git_tree(SHA,True).tree
+        try:
+            deffile = repo.get_contents(tree[0].path)
+        except:
+            deffile = repo.get_readme()
         self.id = id
-        self.name = name
-        self.description = description
-        self.url = url
-        self.langs = langs
-        self.org = org
-        self.owner_name = owner_name
-        self.owner_prof_pic = owner_prof_pic
-        self.is_current_user_starring = is_current_user_starring
-        self.star_count = star_count
-        self.is_current_user_watching = is_current_user_watching
-        self.watch_count = watch_count
-        self.file_tree = file_tree
-        self.readme = readme
-        self.readme_contents = readme_contents
-        self.default_file_name = default_file_name
-        self.default_file_contents = default_file_contents
-        self.default_file_path = default_file_path
-        self.doc_rating = doc_rating
-        self.difficulty_rating = difficulty_rating
-        self.tag_list = tag_list
-        self.comments = comments
+        self.name = repo.name
+        self.description = repo.description
+        self.url = repo.html_url
+        self.langs = repo.language
+        self.org = repo.organization
+        self.owner_name = repo.owner.name
+        self.owner_prof_pic = repo.owner.avatar_url
+        self.is_current_user_starring = False #fix: is_current_user_starring
+        self.star_count = repo.stargazers_count
+        self.is_current_user_watching = False #fix: is_current_user_watching
+        self.watch_count = repo.watchers_count
+        self.file_tree = tree
+        self.readme = repo.get_readme()
+        self.readme_contents = base64.b64decode(self.readme.content)
+        self.default_file_name = deffile.name
+        self.default_file_contents = base64.b64decode(deffile.content)
+        self.default_file_path = deffile.path
+        self.doc_rating = 0
+        self.difficulty_rating = 0
+        self.tag_list = None
+        self.comments = Comment.objects.none()
 
 def quick_search(request, language):
     context={}
@@ -50,14 +59,7 @@ def quick_search(request, language):
     repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
     these_repo_results = []
     for repo in repos[:10]:
-        branches = repo.get_branches()
-        SHA = branches[0].commit.sha
-        tree = repo.get_git_tree(SHA,True).tree
-        try:
-            deffile = repo.get_contents(tree[0].path)
-        except:
-            deffile = repo.get_readme()
-        x = Repo(repo.id,repo.name,repo.description,repo.html_url,repo.language,repo.organization,repo.owner.name,repo.owner.avatar_url,False,repo.stargazers_count,False,repo.watchers_count,tree,repo.get_readme(),repo.get_readme().content,deffile.name,deffile.content,deffile.path,0,0,None,None) 
+        x = Repo(repo, repo.id)         
         print x.name
         these_repo_results.append(x) 
     context["repos"] = these_repo_results
@@ -174,23 +176,10 @@ def search(request):
 
     these_repo_results = []
     for repo in repos[:10]:
-        branches = repo.get_branches()
-        SHA = branches[0].commit.sha
-        tree = repo.get_git_tree(SHA,True).tree
-        try:
-            deffile = repo.get_contents(tree[0].path)
-        except:
-            deffile = repo.get_readme()
-        x = Repo(repo.id,repo.name,repo.description,repo.html_url,repo.language,repo.organization,repo.owner.name,repo.owner.avatar_url,False,repo.stargazers_count,False,repo.watchers_count,tree,repo.get_readme(),repo.get_readme().content,deffile.name,deffile.content,deffile.path,0,0,None,None) 
+        x = Repo(repo, repo.id)        
         print x.name
         these_repo_results.append(x) 
      
-        """new_repo = Repository(repo_id = repos[i].id)
-        new_repo.save()
-        these_repo_results.append(new_repo)"""
-        
-        
-
         """branches = repos[i].get_branches()
         SHA = branches[0].commit.sha
         tree = repos[i].get_git_tree(SHA,True).tree
