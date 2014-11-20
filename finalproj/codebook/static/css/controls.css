@@ -1,3 +1,18 @@
+#slider {
+    margin-top: 7px;
+}
+#language-choice {
+    width: 120px;
+}
+
+.proficiency-num {
+    border:0;
+    color:#66CC99;
+    font-weight:bold;
+    width: 20px;
+    padding-top: 5px;
+}
+
 #collapse-all {
     position: fixed;
     bottom: 5px;
