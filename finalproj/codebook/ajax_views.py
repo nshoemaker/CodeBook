@@ -281,16 +281,26 @@ def rate_credibility(request):
 def add_proficiency(request):
     if request.is_ajax():
         context = {}
-        language_name = request.language
-        proficiency = request.proficiency
+        language_name = request.POST.get('language')
+        proficiency = request.POST.get('proficiency')
         profile_user = request.user
-        lang = Language.objects.get_or_create(name=language_name, icon='icon-prog-python')
-
-        if UserRating.objects.get(profile_user=profile_user, language=lang).exists():
-            rating = UserRating.objects.get(profile_user=profile_user, language=lang).update(proficiency=proficiency)
+        print language_name
+        print proficiency
+        try:
+            lang = Language.objects.get(name=language_name, icon='icon-prog-python')
+        except:
+            lang = Language(name=language_name, icon='icon-prog-python')
+            lang.save()
+        print lang.name
+        print 0
+        try:
+            rating = UserRating.objects.get(profile_user=profile_user, language=lang)
+            rating.update(proficiency=proficiency)
             rating.save()
-        else:
-            rating = UserRating.objects.create(profile_user=profile_user, language_name=lang, proficiency=proficiency, credaility=0)
+            print 1
+        except:
+            print 2
+            rating = UserRating.objects.create(profile_user=profile_user, language=lang, proficiency=proficiency, credibility=0)
             rating.save()
         context['rating'] = rating
         return render_to_response('codebook/proficiency.html', context, content_type="html")

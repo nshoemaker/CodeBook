@@ -3,17 +3,16 @@
  */
 
 $('#add-proficiency-btn').click(function () {
-    var language = $('#language-choice').val();
+    var language = $('#language-prof').val();
     var proficiency = $('#amount').val();
     console.log("lang: " + language + " proficiency: " + proficiency);
-
     if (language == "") {
         alert("Must select a language.");
     }
     else {
         $.ajax({
             type: "POST",
-            url: "codebook/add_proficiency",
+            url: "/codebook/add_proficiency",
             data: {
                 language: language,
                 proficiency: proficiency,
