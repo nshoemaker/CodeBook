@@ -161,7 +161,7 @@
 
 <ol class="repository-list" id="repo-list">
     {% for repo in repos %}
-        <li id="repo{{ repo.repo_id }}">
+        <li id="repo{{ repo.id }}">
             {% include 'codebook/repository-combined.html' %}
         </li>
     {% endfor %}
