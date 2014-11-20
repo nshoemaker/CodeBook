@@ -5,14 +5,17 @@
    </div>
    <div class="col-md-3 form-inline">
        <label for="slider">Proficiency:</label>
-       <input class="proficiency-num" type="text" id="amount" readonly/>
+       <input id="amount" class="proficiency-num" type="text" readonly/>
    </div>
    <div class="col-md-2">
        <div id="slider"></div>
    </div>
    <div class="col-md-1 form-inline">
-       <button class="btn control-btn btn-sm">Add</button>
+       <button id="add-proficiency-btn" class="btn control-btn btn-sm">Add</button>
    </div>
 </div>
 <div class="row">
+    <div class="col-md-12">
+        {% include 'codebook/proficiency-list.html' %}
+    </div>
 </div>

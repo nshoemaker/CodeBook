@@ -36,9 +36,10 @@
 
 <ul class="skill-list">
     {% for rating in ratings %}
-        <li class="skill">
+        <li class="skill" id="skill-{{ rating.language.id }}">
         <h5>{{ rating.language.name }}</h5>
         <progress class="skill" max="100" value="{{ rating.credibility }}"></progress>
+        <progress class="proficiency" max="10" value="{{ rating.proficiency }}"></progress>
         </li>
     {% endfor %}
 </ul>

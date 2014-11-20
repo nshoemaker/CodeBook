@@ -35,6 +35,26 @@ progress, progress[role] {
   background: #77DDAA;
 }
 
+.proficiency i{
+    color: #55BB88;
+}
+
+.proficiency {
+  margin-bottom: 1em;
+  position: relative;
+}
+.proficiency ::-webkit-progress-value {
+  -webkit-animation: bar-fill 2s;
+  width: 0px;
+}
+.proficiency::-webkit-progress-value {
+  background: #55BB88;
+}
+
+.proficiency::-moz-progress-bar {
+  background: #55BB88;
+}
+
 @-webkit-keyframes bar-fill {
   0% {
     width: 0;

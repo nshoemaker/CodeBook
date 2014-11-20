@@ -276,3 +276,25 @@ def rate_credibility(request):
     else:
         # uhhhhhhhh awk. this should never happen
         pass
+
+@login_required
+def add_proficiency(request):
+    if request.is_ajax():
+        context = {}
+        language_name = request.language
+        proficiency = request.proficiency
+        profile_user = request.user
+        lang = Language.objects.get_or_create(name=language_name, icon='icon-prog-python')
+
+        if UserRating.objects.get(profile_user=profile_user, language=lang).exists():
+            rating = UserRating.objects.get(profile_user=profile_user, language=lang).update(proficiency=proficiency)
+            rating.save()
+        else:
+            rating = UserRating.objects.create(profile_user=profile_user, language_name=lang, proficiency=proficiency, credaility=0)
+            rating.save()
+        context['rating'] = rating
+        return render_to_response('codebook/proficiency.html', context, content_type="html")
+        pass
+    else:
+        # uhhhhhhhh awk. this should never happen
+        pass
