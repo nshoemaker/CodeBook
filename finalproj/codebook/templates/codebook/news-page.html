@@ -32,6 +32,17 @@
     </div>
 {% endblock header %}
 
+{% block stream-nav %}
+    <div class="btn-group-md btn-group">
+        <button class="btn btn-default btn-md" id="lang-recent">Recent</button>
+        <button class="btn btn-default btn-md" id="lang-popular">Popular</button>
+    </div>
+{% endblock %}
+
 {% block stream %}
     {% include 'codebook/repository-list.html' %}
 {% endblock stream %}
+
+{% block scripts %}
+<script src = "{% static "js/sort-language-stream.js" %}"></script>
+{% endblock scripts %}

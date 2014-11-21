@@ -47,7 +47,7 @@
                     {% include 'codebook/file-explorer.html' %}
                 </div>
                 <div class="col-md-9 repository-file">
-                    {% include 'codebook/file-contents-combined.html' with file_content='{{ repo.default_file_contents }}' %}
+                    {% include 'codebook/file-contents-combined.html' with file_content=repo.default_file_contents %}
                 </div>
             </div>
             <!-- end file view -->
