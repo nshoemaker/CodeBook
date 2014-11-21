@@ -15,7 +15,7 @@ import sys
 g = Github('dmouli', 'Spongebob5%')
 
 class Repo:
-    def __init__(self, repo, id):         
+    def __init__(self, repo, id, user):         
         if(repo is None):
             repo = g.get_repo(id)
         branches = repo.get_branches()
@@ -31,11 +31,11 @@ class Repo:
         self.url = repo.html_url
         self.langs = repo.language
         self.org = repo.organization
-        self.owner_name = repo.owner.name
+        self.owner_name = repo.owner.login
         self.owner_prof_pic = repo.owner.avatar_url
-        self.is_current_user_starring = False #fix: is_current_user_starring
+        self.is_current_user_starring = user.has_in_starred(repo) 
         self.star_count = repo.stargazers_count
-        self.is_current_user_watching = False #fix: is_current_user_watching
+        self.is_current_user_watching = user.has_in_watched(repo) 
         self.watch_count = repo.watchers_count
         self.file_tree = tree
         self.readme = repo.get_readme()
@@ -59,7 +59,7 @@ def quick_search(request, language):
     repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
     these_repo_results = []
     for repo in repos[:10]:
-        x = Repo(repo, repo.id)         
+        x = Repo(repo, repo.id, g.get_user())         
         print x.name
         these_repo_results.append(x) 
     context["repos"] = these_repo_results
@@ -178,7 +178,7 @@ def search(request):
 
     these_repo_results = []
     for repo in repos[:10]:
-        x = Repo(repo, repo.id)        
+        x = Repo(repo, repo.id, g.get_user())        
         print x.name
         these_repo_results.append(x) 
      
