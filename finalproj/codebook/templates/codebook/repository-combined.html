@@ -14,14 +14,14 @@
                     <a href="{{ repo.url }}"><h4 class="text-left">{{ repo.name }}</h4></a>
                 </div>
                 <div class="col-md-1">
-                        {% if is_current_user_starring %}
+                        {% if repo.is_current_user_starring %}
                             <h4 id="star-status-{{ repo.id }}" data-item-id="{{ repo.id }}" title="Un-star this Repository." class="glyphicon glyphicon-star star-status cursor-pointer"></h4>
                         {% else %}
                             <h4 id="star-status-{{ repo.id }}" data-item-id="{{ repo.id }}" title="Star this Repository." class="glyphicon glyphicon-star-empty star-status cursor-pointer"></h4>
                         {% endif %}
                 </div>
                 <div class="col-md-1">
-                        {% if is_current_user_watching %}
+                        {% if repo.is_current_user_watching %}
                             <h4 id="watch-status-{{ repo.id }}" data-item-id="{{ repo.id }}" title="Un-watch this Repository." class="glyphicon glyphicon-eye-close watch-status cursor-pointer"></h4>
                         {% else %}
                             <h4 id="watch-status-{{ repo.id }}" data-item-id="{{ repo.id }}" title="Watch this Repository." class="glyphicon glyphicon-eye-open watch-status cursor-pointer"></h4>
