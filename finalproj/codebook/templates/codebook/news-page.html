@@ -42,3 +42,7 @@
 {% block stream %}
     {% include 'codebook/repository-list.html' %}
 {% endblock stream %}
+
+{% block scripts %}
+<script src = "{% static "js/sort-language-stream.js" %}"></script>
+{% endblock scripts %}

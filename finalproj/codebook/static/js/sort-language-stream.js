@@ -1,7 +1,21 @@
 /**
  * Created by nora on 11/21/2014.
  */
+
+
+$(document).ready(function () {
+    recent_sort();
+});
+
 $('#lang-recent').click(function () {
+    recent_sort();
+});
+
+$('#lang-popular').click(function () {
+    popular_sort();
+});
+
+function recent_sort() {
             $("#lang-recent").css('background-color', '#77DDAA');
             $("#lang-popular").css('background-color', '#FFFFFF');
     $.ajax({
@@ -19,9 +33,10 @@ $('#lang-recent').click(function () {
             }
         }
     });
-});
 
-$('#lang-popular').click(function () {
+}
+
+function popular_sort(){
             $("#lang-popular").css('background-color', '#77DDAA');
             $("#lang-recent").css('background-color', '#FFFFFF');
     $.ajax({
@@ -39,4 +54,5 @@ $('#lang-popular').click(function () {
             }
         }
     });
-});
+
+}
