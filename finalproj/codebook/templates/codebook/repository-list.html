@@ -160,10 +160,13 @@
 
 
 <ol class="repository-list" id="repo-list">
+    <p> Search Results for {{searchtext}} with {{filter}} filter. </p>
     {% for repo in repos %}
         <li id="repo{{ repo.repo_id }}">
             {% include 'codebook/repository.html' %}
         </li>
+    {% empty %}
+        <li> Sorry no repository results were found </li>
     {% endfor %}
 </ol>
 <!-- end repository list -->
