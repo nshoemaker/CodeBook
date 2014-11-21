@@ -69,6 +69,11 @@
 </div>
 <div class="container-fluid">
     <div class="row">
+        <div class="col-md-3">
+            {% block stream-nav %}{% endblock %}
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             {% block stream %}{% endblock %}
         </div>
