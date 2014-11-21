@@ -14,6 +14,31 @@ from content_views import *
 import sys
 g = Github('dmouli', 'Spongebob5%')
 
+class Repo:
+    def __init__(self, id, name, description, url, langs, org, owner_name, owner_prof_pic, is_current_user_starring, star_count, is_current_user_watching, watch_count, file_tree, readme, readme_contents, default_file_name, default_file_contents, default_file_path, doc_rating, difficulty_rating, tag_list, comments):
+        self.id = id
+        self.name = name
+        self.description = description
+        self.url = url
+        self.langs = langs
+        self.org = org
+        self.owner_name = owner_name
+        self.owner_prof_pic = owner_prof_pic
+        self.is_current_user_starring = is_current_user_starring
+        self.star_count = star_count
+        self.is_current_user_watching = is_current_user_watching
+        self.watch_count = watch_count
+        self.file_tree = file_tree
+        self.readme = readme
+        self.readme_contents = readme_contents
+        self.default_file_name = default_file_name
+        self.default_file_contents = default_file_contents
+        self.default_file_path = default_file_path
+        self.doc_rating = doc_rating
+        self.difficulty_rating = difficulty_rating
+        self.tag_list = tag_list
+        self.comments = comments
+
 def quick_search(request, language):
     context={}
     if request.user:
@@ -22,11 +47,20 @@ def quick_search(request, language):
         token = social.extra_data['access_token']
         g = Github(token)
     query = "language:"+language+" stars:>=500"
-    repos = g.search_repositories(query,sort='stars',order='desc')
-    for i in xrange(min(len(list(repos)),10)):
-        new_repo = Repository(repo_id = repos[i].id)
-        new_repo.save()
-    context["repos"] = Repository.objects.all()
+    repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
+    these_repo_results = []
+    for repo in repos[:10]:
+        branches = repo.get_branches()
+        SHA = branches[0].commit.sha
+        tree = repo.get_git_tree(SHA,True).tree
+        try:
+            deffile = repo.get_contents(tree[0].path)
+        except:
+            deffile = repo.get_readme()
+        x = Repo(repo.id,repo.name,repo.description,repo.html_url,repo.language,repo.organization,repo.owner.name,repo.owner.avatar_url,False,repo.stargazers_count,False,repo.watchers_count,tree,repo.get_readme(),repo.get_readme().content,deffile.name,deffile.content,deffile.path,0,0,None,None) 
+        print x.name
+        these_repo_results.append(x) 
+    context["repos"] = these_repo_results
     context['files'] = RepoFile.objects.filter(id=10)
     context["source"] = 'search'
     context['comment_form'] = CommentForm()
@@ -86,6 +120,7 @@ def save_file(request, source, file_id):
         repofile.save() 
 	return redirect('/' + source)
 
+
 def search(request):
     social = request.user.social_auth.get(provider='github')
     token = social.extra_data['access_token']
@@ -106,12 +141,12 @@ def search(request):
         files = [] 
         users = g.search_users(text,sort='followers',order='desc')
         for user in users:
-            for repo in user.get_repos():
+            for repo in user.get_repos().get_page(0):
                repos.append(repo)
     
     elif(choice == 'Repo'):
         files = [] 
-        repos = g.search_repositories(text,sort='stars',order='desc')
+        repos = g.search_repositories(text,sort='stars',order='desc').get_page(0)
     
     elif(choice == 'Code'):
         print "CAME IN HERE"
@@ -125,7 +160,7 @@ def search(request):
         #check that language?
         files = [] 
         query = "language:"+text+" stars:>=500"
-        repos = g.search_repositories(query,sort='stars',order='desc')
+        repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
 
 
     these_file_results = []
@@ -138,10 +173,24 @@ def search(request):
         print file_path + "\n"
 
     these_repo_results = []
-    for i in xrange(min(len(list(repos)),10)):
-        new_repo = Repository(repo_id = repos[i].id)
+    for repo in repos[:10]:
+        branches = repo.get_branches()
+        SHA = branches[0].commit.sha
+        tree = repo.get_git_tree(SHA,True).tree
+        try:
+            deffile = repo.get_contents(tree[0].path)
+        except:
+            deffile = repo.get_readme()
+        x = Repo(repo.id,repo.name,repo.description,repo.html_url,repo.language,repo.organization,repo.owner.name,repo.owner.avatar_url,False,repo.stargazers_count,False,repo.watchers_count,tree,repo.get_readme(),repo.get_readme().content,deffile.name,deffile.content,deffile.path,0,0,None,None) 
+        print x.name
+        these_repo_results.append(x) 
+     
+        """new_repo = Repository(repo_id = repos[i].id)
         new_repo.save()
-        these_repo_results.append(new_repo)
+        these_repo_results.append(new_repo)"""
+        
+        
+
         """branches = repos[i].get_branches()
         SHA = branches[0].commit.sha
         tree = repos[i].get_git_tree(SHA,True).tree
