@@ -326,7 +326,7 @@ def sort_lang_stream_recent(request):
     if request.is_ajax():
         context = {}
         context['repos'] = {}
-        return render_to_response('codebook/repository-list.html', context, content_type="html")
+        return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
         pass
@@ -335,7 +335,7 @@ def sort_lang_stream_popular(request):
     if request.is_ajax():
         context = {}
         context['repos'] = {}
-        return render_to_response('codebook/repository-list.html', context, content_type="html")
+        return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
         pass
