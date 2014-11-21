@@ -25,7 +25,7 @@ class Repo:
             deffile = repo.get_contents(tree[0].path)
         except:
             deffile = repo.get_readme()
-        self.id = id
+        self.id = repo.id
         self.name = repo.name
         self.description = repo.description
         self.url = repo.html_url
@@ -67,6 +67,8 @@ def quick_search(request, language):
     context["source"] = 'search'
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user 
+    context['filter'] = 'Languages'
+    context['searchtext'] = language
     return render(request, "codebook/search-results-page.html", context)
 
 def get_correct_context(request, source):
@@ -208,6 +210,8 @@ def search(request):
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user 
     context['gh_user'] = g.get_user()
+    context['searchtext'] = text
+    context['filter'] = choice
     return render(request, "codebook/search-results-page.html", context)
 
 """
