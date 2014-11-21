@@ -33,4 +33,6 @@ urlpatterns = patterns('',
     url(r'^save_file/(?P<id>\d+)$', 'codebook.ajax_views.save_file', name='save_file'),
     url(r'^unsave_file/(?P<id>\d+)$', 'codebook.ajax_views.unsave_file', name='unsave_file'),
     url(r'^add_proficiency$', 'codebook.ajax_views.add_proficiency', name='add_proficiency'),
+    url(r'^sort_lang_stream_recent$', 'codebook.ajax_views.sort_lang_stream_recent', name='sort_lang_stream_recent'),
+    url(r'^sort_lang_stream_popular$', 'codebook.ajax_views.sort_lang_stream_popular', name='sort_lang_stream_popular'),
 )

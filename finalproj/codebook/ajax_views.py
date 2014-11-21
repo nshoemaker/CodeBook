@@ -320,3 +320,10 @@ def add_proficiency(request):
     else:
         # uhhhhhhhh awk. this should never happen
         pass
+
+
+def sort_lang_stream_recent(request):
+    pass
+
+def sort_lang_stream_popular(request):
+    pass
