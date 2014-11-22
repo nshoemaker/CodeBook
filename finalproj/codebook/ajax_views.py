@@ -340,7 +340,7 @@ def sort_lang_stream_popular(request):
         # uhhhhhhhh awk. this should never happen
         pass
 
-# Given a search type and some text, returns a list of repositories 
+# Given a search type and some text, returns a list of repositories
 def repo_search_list(request):
     if request.is_ajax():
         social = request.user.social_auth.get(provider='github')
