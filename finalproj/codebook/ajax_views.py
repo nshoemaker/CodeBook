@@ -254,7 +254,7 @@ def rate_credibility(request):
         #user statistics
         #numFollowers = g.get_user().followers
         #numRepos = g.get_user().public_repos
-        for repo in g.get_user('charliesome').get_repos():
+        for repo in g.get_user().get_repos():
             langs = repo.get_languages()
             for lang in langs.keys():
                 try:

@@ -14,10 +14,20 @@ from content_views import *
 import sys
 g = Github('dmouli', 'Spongebob5%')
 
+"""
+To use this class: 
+Initialize as Repo(None,Repository.repo_id,user) if want to create from database model repository. 
+Initialize as Repo(githubrepo,0,user) if want to create from github repo.
+User is github user, get by g.get_user() of authenticated g user.
+"""
+
 class Repo:
     def __init__(self, repo, id, user):         
         if(repo is None):
             repo = g.get_repo(id)
+            self.comments = Comment.objects.filter(repository__repo_id = repo.id)
+        else:
+            self.comments = Comment.objects.none()
         branches = repo.get_branches()
         SHA = branches[0].commit.sha
         tree = repo.get_git_tree(SHA,True).tree
