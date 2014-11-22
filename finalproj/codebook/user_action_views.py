@@ -136,76 +136,12 @@ def search(request):
     if not searchform.is_valid():
         print searchform.errors
         return None 
-        
-    text = searchform.cleaned_data['text'] 
+
+    text = searchform.cleaned_data['text']
     choice = searchform.cleaned_data['types']
-    
-    if(choice == 'User'):
-        repos = []
-        files = [] 
-        users = g.search_users(text,sort='followers',order='desc')
-        for user in users:
-            for repo in user.get_repos().get_page(0):
-               repos.append(repo)
-    
-    elif(choice == 'Repo'):
-        files = [] 
-        repos = g.search_repositories(text,sort='stars',order='desc').get_page(0)
-    
-    elif(choice == 'Code'):
-        print "CAME IN HERE"
-        repos = [] 
-        query = text+" user:github size:>10000"
-        files = g.search_code(query)
-        for f in files:
-            print f.name+": "+f.html_url
-    
-    else:
-        #check that language?
-        files = [] 
-        query = "language:"+text+" stars:>=500"
-        repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
 
-
-    these_file_results = []
-    for i in xrange(min(len(list(files)),10)):
-        file_name = files[i].name
-        print file_name + "\n"
-        file_contents = files[i].repository.get_contents(file_name)
-        print file_contents + "\n"
-        file_path = file_contents.path 
-        print file_path + "\n"
-
-    these_repo_results = []
-    for repo in repos[:10]:
-        x = Repo(repo, repo.id, g.get_user())        
-        print x.name
-        these_repo_results.append(x) 
-     
-        """branches = repos[i].get_branches()
-        SHA = branches[0].commit.sha
-        tree = repos[i].get_git_tree(SHA,True).tree
-        for elt in tree:
-            try:
-                size = repos[i].get_contents(elt.path).size
-                name = repos[i].get_contents(elt.path).name
-                if repos[i].get_contents(elt.path).size>0:
-                    new_file = RepoFile(repository=new_repo, path=elt.path, average_difficulty=0, average_quality=0)
-                    new_file.save()
-            except:
-                pass"""
-
-    # Temp code to populate the search page #
-    #repo_obj = Repository(repo_id = 7986587)
-    #repo_obj.save()
-    #repo_gilbert = g.get_repo(7986587)
-    #file_index = repo_gilbert.get_contents("index.html")
-    #path = file_index.path
-    #new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
-    #new_file.save()
-    
-    context["repos"] = these_repo_results
-    context['files'] = RepoFile.objects.all()
+    context['repos'] = {}
+    context['files'] = {}
     context["source"] = 'search'
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user 

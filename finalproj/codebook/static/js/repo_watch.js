@@ -3,6 +3,11 @@
  */
 
 $(document).ready(function () {
+    prepair_repo_watch();
+});
+
+function prepair_repo_watch()
+{
     $(".watch-status").click(function () {
         var repo_id = $(this).attr("data-item-id");
 
@@ -13,7 +18,8 @@ $(document).ready(function () {
             unwatch_repository(repo_id);
         }
     });
-});
+
+}
 
 function watch_repository(repo_id) {
     var eye = $("#watch-status-" + repo_id);

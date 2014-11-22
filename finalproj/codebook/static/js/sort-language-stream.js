@@ -16,7 +16,7 @@ $('#lang-popular').click(function () {
 
 function recent_sort() {
     var target = document.getElementById('base-stream');
-var spinner = new Spinner().spin(target);
+    var spinner = new Spinner().spin(target);
     $("#lang-recent").css('background-color', '#77DDAA');
     $("#lang-popular").css('background-color', '#FFFFFF');
     $.ajax({
@@ -29,7 +29,6 @@ var spinner = new Spinner().spin(target);
         },
         error: function (xhr, textStatus, errorThrown) {
             spinner.stop();
-            console.log("made it to repo comment function FAIL");
             if (!(xhr.status == 0 || xhr.status == '0' || errorThrown == 0 || errorThrown == '0' || xhr.response == 0 || xhr.response == '0')) {
                 alert("Please report this error: " + errorThrown + xhr.status + xhr.responseText);
 
@@ -41,7 +40,7 @@ var spinner = new Spinner().spin(target);
 
 function popular_sort() {
     var target = document.getElementById('base-stream');
-var spinner = new Spinner().spin(target);
+    var spinner = new Spinner().spin(target);
     $("#lang-popular").css('background-color', '#77DDAA');
     $("#lang-recent").css('background-color', '#FFFFFF');
     $.ajax({

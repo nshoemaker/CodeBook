@@ -4,6 +4,11 @@
 
 $(document).ready(function()
 {
+    prepair_file_save();
+});
+
+function prepair_file_save()
+{
     $(".save-status").click(function()
     {
         var file_id = $(this).attr("data-item-id");
@@ -17,7 +22,7 @@ $(document).ready(function()
             unsave_file(file_id);
         }
     });
-});
+}
 
 function save_file(file_id)
 {

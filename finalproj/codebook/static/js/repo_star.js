@@ -3,6 +3,11 @@
  */
 
 $(document).ready(function () {
+    prepair_repo_star();
+});
+
+function prepair_repo_star()
+{
     $(".star-status").click(function () {
         var repo_id = $(this).attr("data-item-id");
 
@@ -13,7 +18,7 @@ $(document).ready(function () {
             unstar_repository(repo_id);
         }
     });
-});
+}
 
 function star_repository(repo_id) {
     var star = $("#star-status-" + repo_id);

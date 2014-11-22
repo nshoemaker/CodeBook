@@ -4,6 +4,11 @@
 
 $(document).ready(function()
 {
+    prepair_like_comment();
+});
+
+function prepair_like_comment()
+{
     $(".like-status").click(function()
     {
         var comment_id = $(this).attr("data-item-id");
@@ -17,7 +22,8 @@ $(document).ready(function()
             unlike_comment(comment_id);
         }
     });
-});
+
+}
 
 function like_comment(comment_id)
 {
