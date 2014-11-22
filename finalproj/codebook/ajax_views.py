@@ -34,6 +34,48 @@ from django.utils import timezone
 
 import json
 
+"""
+To use this class: 
+Initialize as Repo(None,Repository.repo_id,user) if want to create from database model repository. 
+Initialize as Repo(githubrepo,0,user) if want to create from github repo.
+User is github user, get by g.get_user() of authenticated g user.
+"""
+class Repo:
+    def __init__(self, repo, id, user):    
+        if(repo is None):
+            repo = g.get_repo(id)
+            self.comments = Comment.objects.filter(repository__repo_id = repo.id)
+        else:
+            self.comments = Comment.objects.none()
+        branches = repo.get_branches()
+        SHA = branches[0].commit.sha
+        tree = repo.get_git_tree(SHA,True).tree
+        try:
+            deffile = repo.get_contents(tree[0].path)
+        except:
+            deffile = repo.get_readme()
+        self.id = repo.id
+        self.name = repo.name
+        self.description = repo.description
+        self.url = repo.html_url
+        self.langs = repo.language
+        self.org = repo.organization
+        self.owner_name = repo.owner.login
+        self.owner_prof_pic = repo.owner.avatar_url
+        self.is_current_user_starring = user.has_in_starred(repo) 
+        self.star_count = repo.stargazers_count
+        self.is_current_user_watching = user.has_in_watched(repo) 
+        self.watch_count = repo.watchers_count
+        self.file_tree = tree
+        self.readme = repo.get_readme()
+        self.readme_contents = base64.b64decode(self.readme.content)
+        self.default_file_name = deffile.name
+        self.default_file_contents = base64.b64decode(deffile.content)
+        self.default_file_path = deffile.path
+        self.doc_rating = 0
+        self.difficulty_rating = 0
+        self.tag_list = None
+
 
 @transaction.atomic
 def post_repo_comment(request, id):
@@ -60,6 +102,7 @@ def post_repo_comment(request, id):
         repo.comments.add(com_new)
         repo.save()
 
+        
         context = {}
         context['comment'] = com_new
 
@@ -112,6 +155,8 @@ def star_repo(request, id):
             pass;
         else:
             user.add_to_starred(repo)
+        
+        Repository.objects.get_or_create(repo_id=id)
         return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
@@ -145,6 +190,7 @@ def watch_repo(request, id):
             pass
         else:
             user.add_to_subscriptions(repo)
+        Repository.objects.get_or_create(repo_id=id)
         return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
@@ -386,31 +432,13 @@ def repo_search_list(request):
 
         these_repo_results = []
         for repo in repos[:10]:
-            x = Repo(repo, repo.id, g.get_user())
+            try:
+                repo = Repository.objects.get(repo_id = repo.id)
+                x = Repo(None,repo.repo_id,g.get_user())
+            except ObjectDoesNotExist:
+                x = Repo(repo, repo.id, g.get_user())
             print x.name
             these_repo_results.append(x)
-
-            """branches = repos[i].get_branches()
-            SHA = branches[0].commit.sha
-            tree = repos[i].get_git_tree(SHA,True).tree
-            for elt in tree:
-                try:
-                    size = repos[i].get_contents(elt.path).size
-                    name = repos[i].get_contents(elt.path).name
-                    if repos[i].get_contents(elt.path).size>0:
-                        new_file = RepoFile(repository=new_repo, path=elt.path, average_difficulty=0, average_quality=0)
-                        new_file.save()
-                except:
-                    pass"""
-
-        # Temp code to populate the search page #
-        #repo_obj = Repository(repo_id = 7986587)
-        #repo_obj.save()
-        #repo_gilbert = g.get_repo(7986587)
-        #file_index = repo_gilbert.get_contents("index.html")
-        #path = file_index.path
-        #new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
-        #new_file.save()
 
         context["repos"] = these_repo_results
         context['comment_form'] = CommentForm()
