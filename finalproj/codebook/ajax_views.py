@@ -175,7 +175,7 @@ def save_file(request, id):
         profile_user = request.user
         repofile = RepoFile.objects.get(id=id)
         try:
-            # User has already saved this post 
+            # User has already saved this post
             saved_file = Saved.objects.get(profile_user=profile_user, repo_file=repofile)
             pass
         except:
@@ -289,12 +289,8 @@ def add_proficiency(request):
         for l in Language.objects.filter(name=language_name):
             print l.name
             print l.id
-        try:
-            lang = Language.objects.get(name=language_name, icon='icon-prog-python')
-        except:
-            print 0
-            lang = Language(name=language_name, icon='icon-prog-python')
-            lang.save()
+
+        lang = Language.objects.get_or_create(name=language_name, icon='icon-prog-python')
         print lang.name
         try:
             rating = UserRating.objects.get(profile_user=profile_user, language=lang)
