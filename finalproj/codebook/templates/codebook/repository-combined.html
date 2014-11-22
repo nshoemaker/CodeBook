@@ -52,6 +52,7 @@
             </div>
             <!-- end file view -->
 
+            <!-- start tags -->
             <div class="row tags">
                 <div class="col-md-10">
                     <div class="btn-group-sm">
@@ -92,16 +93,16 @@
                     <h4 class="text-right">Documentation:</h4>
                 </div>
                 <div class="col-md-3">
-                    <div class="stars starrr" data-rating="0">{{ repo.doc_rating }}</div>
+                    <div class="stars starrr" data-rating="{{ repo.doc_rating }}"></div>
                 </div>
             </div>
 
             <ol class="repo-comment-list" id="repo-comment-list-{{ repo.id }}">
-                <!--% for comment in repo.comments %}
+                {% for comment in repo.comments %}
                     <li id="comment{ comment.id }}">
-                        % include 'codebook/comment.html' %}
+                        {% include 'codebook/comment.html' %}
                     </li>
-                % endfor %}-->
+                {% endfor %}
             </ol>
 
             <!-- end comment list -->
