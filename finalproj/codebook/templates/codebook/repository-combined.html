@@ -11,7 +11,7 @@
                         data-item-id="{{ repo.id }}"></h4>
                 </div>
                 <div class="col-md-2 text-left">
-                    <a href="{{ repo.url }}"><h4 class="text-left">{{ repo.name }}</h4></a>
+                    <a href="{{ repo.url }}"><h5 class="text-left">{{ repo.name }}</h5></a>
                 </div>
                 <div class="col-md-1">
                         {% if repo.is_current_user_starring %}
@@ -31,7 +31,7 @@
 
                 </div>
                 <div class="col-md-2">
-                    <h4 class="text-right cursor-pointer">{{ repo.owner_name }}</h4>
+                    <h5 class="text-right cursor-pointer">{{ repo.owner_name }}</h5>
                 </div>
                 <div class="col-md-1">
                     <!-- TODO: setup profile images -->
@@ -47,6 +47,9 @@
                     {% include 'codebook/file-explorer.html' %}
                 </div>
                 <div class="col-md-9 repository-file">
+                    <div class="btn-group btn-group-xs file-controls">
+                        <button id="current-file-save-{{ repo.id }}" class="btn btn-xs control-btn glyphicon glyphicon-floppy-save" title="Save File"></button>
+                    </div>
                     {% include 'codebook/file-contents-combined.html' with file_content=repo.default_file_contents %}
                 </div>
             </div>
@@ -87,13 +90,13 @@
                     <h4 class="text-right">Difficulty:</h4>
                 </div>
                 <div class="col-md-3">
-                    <div class="stars starrr" data-rating="{{ repo.difficulty_rating }}"></div>
+                    <div class="stars starrr" data-rating="{{ repo.difficulty_rating }}" readonly></div>
                 </div>
                 <div class="col-md-2">
                     <h4 class="text-right">Documentation:</h4>
                 </div>
                 <div class="col-md-3">
-                    <div class="stars starrr" data-rating="{{ repo.doc_rating }}"></div>
+                    <div class="stars starrr" data-rating="{{ repo.doc_rating }}" readonly></div>
                 </div>
             </div>
 

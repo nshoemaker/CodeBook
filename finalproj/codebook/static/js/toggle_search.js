@@ -9,6 +9,8 @@ $(".repo-toggle-button").click(function()
     $("#collapse-all").click(function()
     {
         $(".repo-body").slideUp();
+        $(".repo-toggle-button").removeClass("glyphicon-collapse-down");
+        $(".repo-toggle-button").addClass("glyphicon-expand");
     });
 });
 

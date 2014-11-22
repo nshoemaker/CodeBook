@@ -27,6 +27,13 @@
     padding-top: 5px;
 }
 
+.file-controls {
+    z-index: 1;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
 #collapse-all {
     position: fixed;
     bottom: 5px;
@@ -77,6 +84,7 @@
     padding: 0px;
     margin: 0px;
     height: 200px;
+    position:relative;
 }
 
 
