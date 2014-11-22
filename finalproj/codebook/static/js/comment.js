@@ -3,6 +3,23 @@
  * Created by nora on 11/13/2014.
  */
 
+function prepair_comments()
+{
+$('.post-repo-comment-form').on('submit', function (e) {
+    e.preventDefault();
+    var repo_id = $(this).attr("data-item-id");
+    create_repo_comment_post(repo_id);
+    console.log("made it to repo comment on submit handler");
+});
+
+$('.post-file-comment-form').on('submit', function (e) {
+    e.preventDefault();
+    var file_id = $(this).attr("data-item-id");
+    create_file_comment_post(file_id);
+});
+
+}
+
 $('.post-repo-comment-form').on('submit', function (e) {
     e.preventDefault();
     var repo_id = $(this).attr("data-item-id");

@@ -10,6 +10,7 @@ function prepair_results()
     prepair_repo_star();
     prepair_repo_toggle_buttons();
     prepair_repo_watch();
+    prepair_comments();
 }
 
 $(document).ready(function() {
