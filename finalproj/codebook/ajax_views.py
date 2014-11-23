@@ -122,14 +122,14 @@ def expand_folder(request):
         print "NEXT LEVEL SIZE: "+ str(len(next_level))
         for el in next_level:
             title = el.path
-            hideCheckbox = 'true'
+            hideCheckbox = True
             if el.type == 'tree':
                 print "FOLDER: " + el.path
-                isFolder = 'true'
-                isLazy = 'true'
+                isFolder = True
+                isLazy = True
             else:
-                isFolder = 'false'
-                isLazy = 'false'
+                isFolder = False
+                isLazy = False
             key = str(rep.id) + '---' + el.sha
             node = {"title": title,
                     "key": key,
@@ -170,14 +170,14 @@ def get_top_level(request):
         print "NEXT LEVEL SIZE: "+ str(len(next_level))
         for el in next_level:
             title = el.path
-            hideCheckbox = 'true'
+            hideCheckbox = True
             if el.type == 'tree':
                 print "FOLDER: " + el.path
-                isFolder = 'true'
-                isLazy = 'true'
+                isFolder = True
+                isLazy = True
             else:
-                isFolder = 'false'
-                isLazy = 'false'
+                isFolder = False
+                isLazy = False
             key = str(rep.id) + '---' + el.sha
             node = {"title": title,
                     "key": key,
