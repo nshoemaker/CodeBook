@@ -44,7 +44,8 @@
             <div class="row repository-file-view">
                 <!-- TODO: setup file explorer -->
                 <div class="col-md-3 repository-file-explorer">
-                    {% include 'codebook/file-explorer.html' %}
+                    <div class="rep-file-explorer" id="rep-file-explorer-{{ repo.id }}" data-item-id="{{ repo.id }}">
+                    </div>
                 </div>
                 <div class="col-md-9 repository-file">
                     <div class="btn-group btn-group-xs file-controls">

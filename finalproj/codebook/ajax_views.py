@@ -77,6 +77,7 @@ class Repo:
         self.tag_list = None
 
 def get_formatted_nodes(self, tree, repo):
+    print tree
     print " "
     print tree.path
     print tree.mode
@@ -114,11 +115,78 @@ def expand_folder(request):
         elif request.POST:
             rep_id = request.POST.get("repo_id")
             sha = request.POST.get("sha")
-        rep = hub.get_repo(rep_id)
-        next_level = rep.get_git_tree(sha, False).tree
-        return get_formatted_nodes(next_level, rep)
+        rep = hub.get_repo(int(rep_id))
+        next_level = rep.get_git_tree(sha).tree
+        #j = get_formatted_nodes(next_level, rep)
+        res = []
+        print "NEXT LEVEL SIZE: "+ str(len(next_level))
+        for el in next_level:
+            title = el.path
+            hideCheckbox = 'true'
+            if el.type == 'tree':
+                print "FOLDER: " + el.path
+                isFolder = 'true'
+                isLazy = 'true'
+            else:
+                isFolder = 'false'
+                isLazy = 'false'
+            key = str(rep.id) + '---' + el.sha
+            node = {"title": title,
+                    "key": key,
+                    "isFolder": isFolder,
+                    "isLazy": isLazy,
+                    "hideCheckox": hideCheckbox}
+            res.append(node)
+        j = json.dumps(res, encoding="Latin-1")
+        print rep_id
+        return HttpResponse(j, content_type="application/json")
     else:
         pass
+
+def get_top_level(request):
+    if request.is_ajax():
+        social = request.user.social_auth.get(provider='github')
+        token = social.extra_data['access_token']
+        hub = Github(token)
+        if request.GET:
+            rep_id = request.GET.get("repo_id")
+        elif request.POST:
+            rep_id = request.POST.get("repo_id")
+        print rep_id
+        try:
+            rep = hub.get_repo(int(rep_id))
+        except:
+            print 'bad'
+            rep = g.get_repo(int(rep_id))
+        branches = rep.get_branches()
+        SHA = branches[0].commit.sha
+        next_level = rep.get_git_tree(SHA).tree
+        #j = get_formatted_nodes(next_level, rep)
+        res = []
+        print "NEXT LEVEL SIZE: "+ str(len(next_level))
+        for el in next_level:
+            title = el.path
+            hideCheckbox = 'true'
+            if el.type == 'tree':
+                print "FOLDER: " + el.path
+                isFolder = 'true'
+                isLazy = 'true'
+            else:
+                isFolder = 'false'
+                isLazy = 'false'
+            key = str(rep.id) + '---' + el.sha
+            node = {"title": title,
+                    "key": key,
+                    "isFolder": isFolder,
+                    "isLazy": isLazy,
+                    "hideCheckox": hideCheckbox}
+            res.append(node)
+        j = json.dumps(res, encoding="Latin-1")
+        print rep_id
+        return HttpResponse(j, content_type="application/json")
+    else:
+        pass
+
 
 @transaction.atomic
 def post_repo_comment(request, id):

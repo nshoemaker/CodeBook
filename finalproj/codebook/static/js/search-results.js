@@ -17,6 +17,13 @@ $(document).ready(function() {
    search_results();
 });
 
+$(document).ajaxComplete(function()
+{
+    console.log("ajax complete");
+    //prepair_results();
+    //load_trees();
+});
+
 function search_results() {
     var target = document.getElementById('base-stream');
     var spinner = new Spinner().spin(target);
@@ -51,9 +58,11 @@ function search_results() {
             csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
         },
         success: function(html) {
+            console.log("success");
             spinner.stop();
-            $("#repo-list").replaceWith(html);
+            $("#repository-list-container").replaceWith(html);
             prepair_results();
+            load_trees();
         },
         error: function (xhr, textStatus, errorThrown) {
             spinner.stop();
