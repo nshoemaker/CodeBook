@@ -76,6 +76,49 @@ class Repo:
         self.difficulty_rating = 0
         self.tag_list = None
 
+def get_formatted_nodes(self, tree, repo):
+    print " "
+    print tree.path
+    print tree.mode
+    print tree.url
+    print tree.type
+    res = {}
+    for el in tree:
+        title = repo.get_file_contents(el.path).name
+        hideCheckbox = 'true'
+        if el.type == 'tree':
+            isFolder = 'true'
+            isLazy = 'true'
+        else:
+            isFolder = 'false'
+            isLazy = 'false'
+        key = str(repo.id) + '---' + el.sha
+        node = {"title": title,
+                "key": key,
+                "isFolder": isFolder,
+                "isLazy": isLazy,
+                "hideCheckox": hideCheckbox}
+        res.append(node)
+    return json.dumps(res, encoding="Latin-1")
+
+@login_required
+def expand_folder(request):
+    if request.is_ajax():
+        social = request.user.social_auth.get(provider='github')
+        token = social.extra_data['access_token']
+        hub = Github(token)
+        profile_user = request.user
+        if request.GET:
+            rep_id = request.GET.get("repo_id")
+            sha = request.GET.get("sha")
+        elif request.POST:
+            rep_id = request.POST.get("repo_id")
+            sha = request.POST.get("sha")
+        rep = hub.get_repo(rep_id)
+        next_level = rep.get_git_tree(sha, False).tree
+        return get_formatted_nodes(next_level, rep)
+    else:
+        pass
 
 @transaction.atomic
 def post_repo_comment(request, id):
