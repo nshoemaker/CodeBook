@@ -54,7 +54,8 @@ function load_tree(elem, id) {
                     repo_id: repo_id,
                     sha: sha
                 },
-                success: function (data, textStatus) {
+                success: function (json) {
+                    /*
                     //if (data.status == 'ok')
                     //{
                     var list = data.result;
@@ -65,6 +66,7 @@ function load_tree(elem, id) {
                     }
                     node.setLazyNodeStatus(DTNodeStatus_Ok);
                     node.addChild(res);
+                    console.log("LAZY READ: " + node + " (" + node.getKeyPath() + ")");
                     //}
                     /*
                      else {
@@ -74,6 +76,8 @@ function load_tree(elem, id) {
                      info: data.faultString
                      });
                      }*/
+                    node.setLazyNodeStatus(DTNodeStatus_Ok);
+                    node.addChild(json);
                 }
             });
         }

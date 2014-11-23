@@ -158,8 +158,12 @@ def get_top_level(request):
         except:
             print 'bad'
             rep = g.get_repo(int(rep_id))
-        branches = rep.get_branches()
-        SHA = branches[0].commit.sha
+        # TODO: what if there is no mater branch????
+        try:
+            master = rep.get_branch('master')
+        except:
+            master = rep.get_branches()[0]
+        SHA = master.commit.sha
         next_level = rep.get_git_tree(SHA).tree
         #j = get_formatted_nodes(next_level, rep)
         res = []
