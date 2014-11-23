@@ -41,15 +41,15 @@ Initialize as Repo(githubrepo,0,user) if want to create from github repo.
 User is github user, get by g.get_user() of authenticated g user.
 """
 class Repo:
-    def __init__(self, repo, id, user):    
+    def __init__(self, repo, id, user, hub):
         if(repo is None):
-            repo = g.get_repo(id)
+            repo = hub.get_repo(id)
             self.comments = Comment.objects.filter(repository__repo_id = repo.id)
         else:
             self.comments = Comment.objects.none()
         branches = repo.get_branches()
         SHA = branches[0].commit.sha
-        tree = repo.get_git_tree(SHA,True).tree
+        tree = repo.get_git_tree(SHA,False).tree
         try:
             deffile = repo.get_contents(tree[0].path)
         except:
@@ -434,15 +434,34 @@ def repo_search_list(request):
         for repo in repos[:10]:
             try:
                 repo = Repository.objects.get(repo_id = repo.id)
-                x = Repo(None,repo.repo_id,g.get_user())
+                x = Repo(None,repo.repo_id,g.get_user(), g)
             except ObjectDoesNotExist:
-                x = Repo(repo, repo.id, g.get_user())
+                x = Repo(repo, repo.id, g.get_user(), g)
             print x.name
             these_repo_results.append(x)
 
         context["repos"] = these_repo_results
         context['comment_form'] = CommentForm()
-
+        """
+        for r in these_repo_results:
+            print "----------------------"
+            print r.name
+            for t in r.file_tree:
+                rep = g.get_repo(r.id)
+                if (t.type == 'tree'):
+                    el = rep.get_git_tree(t.sha).tree
+                    print " "
+                    print t.path
+                    print t.mode
+                    print t.url
+                    print t.type
+                    for l in el:
+                        print " "
+                        print "     " + l.path
+                        print "     " + str(l.size)
+                        print "     " + l.mode
+                        print "     " + l.url
+                        print "     " + l.type"""
         return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
