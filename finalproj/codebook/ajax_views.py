@@ -410,26 +410,37 @@ def repo_search_list(request):
             print "CAME IN HERE"
             repos = []
             query = text+" user:github size:>10000"
-            files = g.search_code(query)
-            for f in files:
-                print f.name+": "+f.html_url
-
+            files = g.search_code(query).get_page(0)
+                
         else:
             #check that language?
             files = []
             query = "language:"+text+" stars:>=500"
             repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
-
+"""
+   repository = models.ForeignKey(Repository)
+102     path = models.CharField(max_length=400)
+103     comments = models.ManyToManyField(Comment)
+104     savers = models.ManyToManyField(ProfileUser, related_name="saved_by")
+105     average_difficulty = models.IntegerField(blank=True)
+106     average_quality = models.IntegerField(blank=True)
+107     tags = models.ManyToManyField(Tag)
 
         these_file_results = []
-        for i in xrange(min(len(list(files)),10)):
-            file_name = files[i].name
+        for f in files[:10]:
+            file_name = f.name
             print file_name + "\n"
-            file_contents = files[i].repository.get_contents(file_name)
+            file_contents = base64.b64decode(f.content)
             print file_contents + "\n"
-            file_path = file_contents.path
+            file_path = f.path
             print file_path + "\n"
-
+            try:
+                repo = Repository.objects.get(repo_id = repo.f.repository.id)
+                x = Repo(None,repo.repo_id,g.get_user())
+            except ObjectDoesNotExist:
+                x = Repo(repo, repo.id, g.get_user())
+            repofile(repository = Repo(f.repository,id=f.repository.id,g.get_user()),   
+"""
         these_repo_results = []
         for repo in repos[:10]:
             try:
