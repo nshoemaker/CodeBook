@@ -36,4 +36,6 @@ urlpatterns = patterns('',
     url(r'^add_proficiency$', 'codebook.ajax_views.add_proficiency', name='add_proficiency'),
     url(r'^sort_lang_stream_recent$', 'codebook.ajax_views.sort_lang_stream_recent', name='sort_lang_stream_recent'),
     url(r'^sort_lang_stream_popular$', 'codebook.ajax_views.sort_lang_stream_popular', name='sort_lang_stream_popular'),
+    url(r'^expand_folder$', 'codebook.ajax_views.expand_folder', name='expand_folder'),
+    url(r'^get_top_level$', 'codebook.ajax_views.get_top_level', name='get_top_level'),
 )

@@ -41,15 +41,15 @@ Initialize as Repo(githubrepo,0,user) if want to create from github repo.
 User is github user, get by g.get_user() of authenticated g user.
 """
 class Repo:
-    def __init__(self, repo, id, user):    
+    def __init__(self, repo, id, user, hub):
         if(repo is None):
-            repo = g.get_repo(id)
+            repo = hub.get_repo(id)
             self.comments = Comment.objects.filter(repository__repo_id = repo.id)
         else:
             self.comments = Comment.objects.none()
         branches = repo.get_branches()
         SHA = branches[0].commit.sha
-        tree = repo.get_git_tree(SHA,True).tree
+        tree = repo.get_git_tree(SHA,False).tree
         try:
             deffile = repo.get_contents(tree[0].path)
         except:
@@ -75,6 +75,121 @@ class Repo:
         self.doc_rating = 0
         self.difficulty_rating = 0
         self.tag_list = None
+
+def get_formatted_nodes(self, tree, repo):
+    print tree
+    print " "
+    print tree.path
+    print tree.mode
+    print tree.url
+    print tree.type
+    res = {}
+    for el in tree:
+        title = repo.get_file_contents(el.path).name
+        hideCheckbox = 'true'
+        if el.type == 'tree':
+            isFolder = 'true'
+            isLazy = 'true'
+        else:
+            isFolder = 'false'
+            isLazy = 'false'
+        key = str(repo.id) + '---' + el.sha
+        node = {"title": title,
+                "key": key,
+                "isFolder": isFolder,
+                "isLazy": isLazy,
+                "hideCheckox": hideCheckbox}
+        res.append(node)
+    return json.dumps(res, encoding="Latin-1")
+
+@login_required
+def expand_folder(request):
+    if request.is_ajax():
+        social = request.user.social_auth.get(provider='github')
+        token = social.extra_data['access_token']
+        hub = Github(token)
+        profile_user = request.user
+        if request.GET:
+            rep_id = request.GET.get("repo_id")
+            sha = request.GET.get("sha")
+        elif request.POST:
+            rep_id = request.POST.get("repo_id")
+            sha = request.POST.get("sha")
+        rep = hub.get_repo(int(rep_id))
+        next_level = rep.get_git_tree(sha).tree
+        #j = get_formatted_nodes(next_level, rep)
+        res = []
+        print "NEXT LEVEL SIZE: "+ str(len(next_level))
+        for el in next_level:
+            title = el.path
+            hideCheckbox = True
+            if el.type == 'tree':
+                print "FOLDER: " + el.path
+                isFolder = True
+                isLazy = True
+            else:
+                isFolder = False
+                isLazy = False
+            key = str(rep.id) + '---' + el.sha
+            node = {"title": title,
+                    "key": key,
+                    "isFolder": isFolder,
+                    "isLazy": isLazy,
+                    "hideCheckox": hideCheckbox}
+            res.append(node)
+        j = json.dumps(res, encoding="Latin-1")
+        print rep_id
+        return HttpResponse(j, content_type="application/json")
+    else:
+        pass
+
+def get_top_level(request):
+    if request.is_ajax():
+        social = request.user.social_auth.get(provider='github')
+        token = social.extra_data['access_token']
+        hub = Github(token)
+        if request.GET:
+            rep_id = request.GET.get("repo_id")
+        elif request.POST:
+            rep_id = request.POST.get("repo_id")
+        print rep_id
+        try:
+            rep = hub.get_repo(int(rep_id))
+        except:
+            print 'bad'
+            rep = g.get_repo(int(rep_id))
+        # TODO: what if there is no mater branch????
+        try:
+            master = rep.get_branch('master')
+        except:
+            master = rep.get_branches()[0]
+        SHA = master.commit.sha
+        next_level = rep.get_git_tree(SHA).tree
+        #j = get_formatted_nodes(next_level, rep)
+        res = []
+        print "NEXT LEVEL SIZE: "+ str(len(next_level))
+        for el in next_level:
+            title = el.path
+            hideCheckbox = True
+            if el.type == 'tree':
+                print "FOLDER: " + el.path
+                isFolder = True
+                isLazy = True
+            else:
+                isFolder = False
+                isLazy = False
+            key = str(rep.id) + '---' + el.sha
+            node = {"title": title,
+                    "key": key,
+                    "isFolder": isFolder,
+                    "isLazy": isLazy,
+                    "hideCheckox": hideCheckbox}
+            res.append(node)
+        j = json.dumps(res, encoding="Latin-1")
+        print rep_id
+        return HttpResponse(j, content_type="application/json")
+    else:
+        pass
 
 
 @transaction.atomic
@@ -445,15 +560,34 @@ def repo_search_list(request):
         for repo in repos[:10]:
             try:
                 repo = Repository.objects.get(repo_id = repo.id)
-                x = Repo(None,repo.repo_id,g.get_user())
+                x = Repo(None,repo.repo_id,g.get_user(), g)
             except ObjectDoesNotExist:
-                x = Repo(repo, repo.id, g.get_user())
+                x = Repo(repo, repo.id, g.get_user(), g)
             print x.name
             these_repo_results.append(x)
 
         context["repos"] = these_repo_results
         context['comment_form'] = CommentForm()
-
+        """
+        for r in these_repo_results:
+            print "----------------------"
+            print r.name
+            for t in r.file_tree:
+                rep = g.get_repo(r.id)
+                if (t.type == 'tree'):
+                    el = rep.get_git_tree(t.sha).tree
+                    print " "
+                    print t.path
+                    print t.mode
+                    print t.url
+                    print t.type
+                    for l in el:
+                        print " "
+                        print "     " + l.path
+                        print "     " + str(l.size)
+                        print "     " + l.mode
+                        print "     " + l.url
+                        print "     " + l.type"""
         return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
