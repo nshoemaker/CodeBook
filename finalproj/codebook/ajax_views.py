@@ -50,16 +50,20 @@ class Repo:
         branches = repo.get_branches()
         SHA = branches[0].commit.sha
         tree = repo.get_git_tree(SHA).tree
+        self.default_file_name = ""
+        self.default_file_contents = ""
+        self.default_file_path = ""
         try:
+            for i in xrange(len(tree)):
+                deffile = repo.get_contents(tree[i].path)
+                if deffile.type == 'file':
+                    self.default_file_name = deffile.name
+                    self.default_file_contents = base64.b64decode(deffile.content)
+                    self.default_file_path = deffile.path
+                    break
             #check first thing blob type
-            deffile = repo.get_contents(tree[0].path)
-            self.default_file_name = deffile.name
-            self.default_file_contents = base64.b64decode(deffile.content)
-            self.default_file_path = deffile.path
         except:
-            self.default_file_name = ""
-            self.default_file_contents = ""
-            self.default_file_path = ""
+            pass
         self.id = repo.id
         self.name = repo.name
         self.description = repo.description
@@ -551,7 +555,6 @@ def repo_search_list(request):
                 x = Repo(repo, repo.id, g.get_user())
             repofile(repository = Repo(f.repository,id=f.repository.id,g.get_user()),   
         """
-        print "HI GOT HERE"
         these_repo_results = []
         for repo in repos[:10]:
             try:
@@ -561,7 +564,6 @@ def repo_search_list(request):
                 x = Repo(repo, repo.id, g.get_user(), g)
             print x.name
             these_repo_results.append(x)
-        print "HI GOT HERE 2"
         context["repos"] = these_repo_results
         context['comment_form'] = CommentForm()
         """
