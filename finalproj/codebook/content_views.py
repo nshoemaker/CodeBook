@@ -56,6 +56,7 @@ from django.utils import timezone
 
 import json
 
+@login_required
 def my_profile_view(request):
     context = {}
     context["profile_user"] = request.user
@@ -64,6 +65,7 @@ def my_profile_view(request):
     context['ratings'] = UserRating.objects.filter(profile_user = request.user)
     return render(request, 'codebook/view_my_profile.html', context)
 
+@login_required
 def profile_view(request, username):
     context = {}
     # TODO change this to the username of the user
@@ -75,12 +77,14 @@ def profile_view(request, username):
     context['ratings'] = UserRating.objects.filter(profile_user = profile_user)
     return render(request, 'codebook/profile.html', context)
 
+@login_required
 def get_auth_user_git(request):
     social = request.user.social_auth.get(provider='github')
     token = social.extra_data['access_token']
     g = Github(token)
     return g
 
+@login_required
 def saved(request):
     context = {}
     files = [] 
@@ -103,7 +107,7 @@ def front(request):
         context['user'] = request.user
     return render(request, 'codebook/front-page.html', context)
 
-#@login_required
+@login_required
 def news(request):
     context = {}
     # TODO: this is just temporary. Replace with actual list of languages the user likes.
@@ -116,7 +120,7 @@ def news(request):
     #context['lang_list'] = user_langs
     return render(request, 'codebook/news-page.html', context)
 
-#@login_required
+@login_required
 def watching(request):
     context = {}
     g = get_auth_user_git(request)
@@ -142,7 +146,7 @@ def watching(request):
     return render(request, 'codebook/watching-page.html', context)
 
 
-#@login_required
+@login_required
 def following(request):
     context = {}
     # TODO: this is just temporary. Replace with actual list of user ids of people the user is following (max 10)
@@ -157,17 +161,17 @@ def sandbox(request):
     social = request.user.social_auth.get(provider='github')
     token = social.extra_data['access_token']
     context = {}
-    """
-    g = Github(token)
-    repo_obj = Repository(repo_id = 7986587)
-    repo_obj.save()
-    print repo_obj.get_url()
-    repo_gilbert = g.get_repo(7986587)
-    file_index = repo_gilbert.get_contents("index.html")
-    path = file_index.path
-    new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
-    new_file.save()
-    """
+
+    #g = Github(token)
+    #repo_obj = Repository(repo_id = 7986587)
+    #repo_obj.save()
+    #print repo_obj.get_url()
+    #repo_gilbert = g.get_repo(7986587)
+    #file_index = repo_gilbert.get_contents("index.html")
+    #path = file_index.path
+    #new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
+    #new_file.save()
+
     profile_user = request.user
 
     for repo in Repository.objects.all():
@@ -188,3 +192,4 @@ def sandbox(request):
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user #ProfileUser.objects.get(id=1)
     return render(request, "codebook/sandbox.html", context)
+

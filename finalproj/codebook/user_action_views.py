@@ -14,7 +14,7 @@ from content_views import *
 import sys
 g = Github('dmouli', 'Spongebob5%')
 
-
+@login_required
 def get_correct_context(request, source):
 	context = {}
 	profile_user = request.user
@@ -26,6 +26,7 @@ def get_correct_context(request, source):
     	context['profile_user'] = profile_user
 	return context 
 
+@login_required
 def get_template(source):
 	if (source == 'search'):
 		return "codebook/search-results-page.html"
@@ -36,6 +37,7 @@ def signin(request):
     pass
 
 # Like or Unlike a Comment
+@login_required
 def like_comment(request, source, comment_id):
 	context = {}
 	comment = Comment.objects.get(id=comment_id)
@@ -53,6 +55,7 @@ def like_comment(request, source, comment_id):
 	return redirect('/' + source)
 
 # Save or Unsave a Post
+@login_required
 def save_file(request, source, file_id):
 
     profile_user = request.user
@@ -72,6 +75,7 @@ def save_file(request, source, file_id):
 """
 Technically, this should never be called
 """
+@login_required
 def comment(request, comment_type, source, id):
     print "THIS IS GETTING CALLED"
     context = {}
