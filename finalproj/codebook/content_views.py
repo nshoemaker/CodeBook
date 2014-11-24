@@ -19,11 +19,7 @@ from django.db import transaction
 from django.core.exceptions import ObjectDoesNotExist
 
 from github import Github 
-# g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
-g = Github('dmouli', 'Spongebob5%')
-"""
-g = Github(token)
-"""
+# g = Github('dmouli', 'Spongebob5%')
 
 # Needed to manually create HttpResponses or raise an Http404 exception
 from django.http import HttpResponse, Http404, HttpResponseRedirect

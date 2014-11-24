@@ -5,12 +5,11 @@ from django.db.models import Q
 from django.contrib.auth.models import User, UserManager, AbstractBaseUser
 from django.utils import timezone
 from github import Github 
-# g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
+
 g = Github('dmouli', 'Spongebob5%')
 
 import base64
 import multiprocessing 
-#from joblib import Parallel, delayed  
 
 class Stack(models.Model):
     name = models.CharField(max_length=40)
