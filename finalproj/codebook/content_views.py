@@ -1,60 +1,25 @@
-############################################################
-############################################################
-##  content_views.py:                                     ##
-##                                                        ##
-##  Contains actions which populate pages of the web app  ##
-##  Actions:                                              ##
-##      front     - populates front-page.html             ##
-##      news      - populates news-page.html              ##
-##      watching  - populates watching-page.html          ##
-##      starred   - populates starred-page.html           ##
-##      following - populates following-page.html         ##
-############################################################
-############################################################
+##############################################################
+##############################################################
+##  content_views.py:                                       ##
+##                                                          ##
+##  Contains actions which populate pages of the web app    ##
+##  Actions:                                                ##
+##      front           - populates front page              ##
+##      news            - populates my languages stream     ##
+##      watching        - populates watch stream            ##
+##      saved           - populates saved stream            ##
+##      following       - populates following-page.html     ##
+##      my_profile_view - populates view of own profile     ##
+##      profile_view    - populates view of a profile page  ##
+##                                                          ##
+##############################################################
+##############################################################
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.core.urlresolvers import reverse
-from django.db import transaction
-
-from django.core.exceptions import ObjectDoesNotExist
-
-from github import Github 
-# g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
+from views_base import *
 g = Github('dmouli', 'Spongebob5%')
 """
 g = Github(token)
 """
-
-# Needed to manually create HttpResponses or raise an Http404 exception
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-
-# Decorator to use built-in authentication system
-from django.contrib.auth.decorators import login_required
-
-# Used to create and manually log in a user
-from django.contrib.auth.models import User
-from django.contrib.auth import login, authenticate
-
-# Used to generate a one-time-use token to verify a user's email address
-from django.contrib.auth.tokens import default_token_generator
-
-# Used to send mail from within Django
-from django.core.mail import send_mail
-
-from django.template.context import RequestContext
-
-# Helper function to guess a MIME type from a file name
-from mimetypes import guess_type
-
-from django.db.models import Q
-
-from codebook.models import *
-from codebook.forms import *
-
-from datetime import datetime
-from django.utils import timezone
-
-import json
 
 @login_required
 def my_profile_view(request):
@@ -76,13 +41,6 @@ def profile_view(request, username):
         context["view_my_profile"] = 'true'
     context['ratings'] = UserRating.objects.filter(profile_user = profile_user)
     return render(request, 'codebook/profile.html', context)
-
-@login_required
-def get_auth_user_git(request):
-    social = request.user.social_auth.get(provider='github')
-    token = social.extra_data['access_token']
-    g = Github(token)
-    return g
 
 @login_required
 def saved(request):
@@ -126,17 +84,16 @@ def watching(request):
     g = get_auth_user_git(request)
     user = g.get_user()
     watched = user.get_subscriptions()
-    recent_watched = []  
 
-    i = 0
-    for repo in watched:
-        if (i < 10):
-            new_repo = Repository(repo_id = repo.id)
-            new_repo.save()
-            recent_watched.append(new_repo)
-            i = i+1
-        else:
-            break
+    recent_watched = []
+    for repo in watched[:10]:
+        try:
+            repo = Repository.objects.get(repo_id = repo.id)
+            x = Repo(None, repo.repo_id, user, g)
+        except ObjectDoesNotExist:
+            x = Repo(repo, repo.id, user, g)
+        print x.name
+        recent_watched.append(x)
     context['searchform'] = SearchForm()
     context["source"] = 'watching'
     context['repos'] = recent_watched
@@ -144,17 +101,6 @@ def watching(request):
     context['profile_user'] = request.user
     context['gh_user'] = user
     return render(request, 'codebook/watching-page.html', context)
-
-
-@login_required
-def following(request):
-    context = {}
-    # TODO: this is just temporary. Replace with actual list of user ids of people the user is following (max 10)
-    following_list_short = ['1','2','3','4','5','6','7','8','9','10','11','12']
-    context['following_list_short'] = following_list_short
-    context['searchform'] = SearchForm()
-    #context['profile_user'] = ProfileUser.objects.get(user=request.user)
-    return render(request, 'codebook/following-page.html', context)
 
 
 def sandbox(request):

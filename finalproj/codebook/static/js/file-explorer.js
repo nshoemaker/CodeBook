@@ -37,8 +37,26 @@ function load_tree(elem, id) {
         onActivate: function (node) {
             console.log("ACTIVATE: " + node + " (" + node.getKeyPath() + ")");
 
-            if (node.isFolder()) {
-                console.log("folder");
+            if (!node.data.isFolder) {
+                console.log("I AM A FILE");
+                var key = node.data.key;
+                var parts = key.split('---');
+                var repo_id = parts[0];
+                var sha = parts[1];
+
+                $.ajax({
+                    type: "GET",
+                    url: '/codebook/get_file_contents',
+                    data: {
+                        repo_id: repo_id,
+                        sha: sha
+                    },
+                    success: function (html) {
+                        console.log(html.toString());
+                        $('#file-content-' + repo_id).replaceWith(html);
+                        prepair_repo_scroll();
+                    }
+                });
             }
         },
         onLazyRead: function (node) {
@@ -56,19 +74,19 @@ function load_tree(elem, id) {
                 },
                 success: function (json) {
                     /*
-                    //if (data.status == 'ok')
-                    //{
-                    var list = data.result;
-                    for (var i = 0, l = list.length; i < l; i++) {
-                        var e = list[i];
-                        res.push({title: "" + i + ": " + e.fcurr + "-" + e.tcurr + ":" + e.ukurs,
-                            icon: false});
-                    }
-                    node.setLazyNodeStatus(DTNodeStatus_Ok);
-                    node.addChild(res);
-                    console.log("LAZY READ: " + node + " (" + node.getKeyPath() + ")");
-                    //}
-                    /*
+                     //if (data.status == 'ok')
+                     //{
+                     var list = data.result;
+                     for (var i = 0, l = list.length; i < l; i++) {
+                     var e = list[i];
+                     res.push({title: "" + i + ": " + e.fcurr + "-" + e.tcurr + ":" + e.ukurs,
+                     icon: false});
+                     }
+                     node.setLazyNodeStatus(DTNodeStatus_Ok);
+                     node.addChild(res);
+                     console.log("LAZY READ: " + node + " (" + node.getKeyPath() + ")");
+                     //}
+                     /*
                      else {
                      // Server returned an error condition: set node status accordingly
                      node.setLazyNodeStatus(DTNodeStatus_Error, {
