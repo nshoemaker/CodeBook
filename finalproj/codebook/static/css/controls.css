@@ -83,7 +83,7 @@
 {
     padding: 0px;
     margin: 0px;
-    height: 200px;
+    min-height: 300px;
     position:relative;
 }
 
@@ -197,6 +197,7 @@ list-style-type: none;
 .repository-file-explorer {
   background-color: #c0c0c0;
   min-height: 200px;
+  padding:0px;
 }
 
 .repository-header {

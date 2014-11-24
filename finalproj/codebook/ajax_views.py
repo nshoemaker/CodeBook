@@ -601,3 +601,32 @@ def repo_search_list(request):
     else:
         # uhhhhhhhh awk. this should never happen
         pass
+
+@login_required
+def get_file_contents(request):
+    if request.is_ajax():
+        social = request.user.social_auth.get(provider='github')
+        token = social.extra_data['access_token']
+        hub = Github(token)
+        if request.GET:
+            rep_id = request.GET.get("repo_id")
+            sha = request.GET.get("sha")
+        elif request.POST:
+            rep_id = request.POST.get("repo_id")
+            sha = request.POST.get("sha")
+        rep = hub.get_repo(int(rep_id))
+        blob = rep.get_git_blob(sha)
+        print blob.encoding
+        content = blob.content
+        filecontent = "no file content to show."
+        if blob and content:
+            filecontent = base64.b64decode(content)
+        else:
+            pass
+        context = {}
+        context['file_content'] = filecontent
+        context['repo'] = rep
+        return render_to_response('codebook/file-contents-combined.html', context, content_type="html")
+
+    else:
+        pass
