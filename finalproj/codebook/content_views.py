@@ -56,6 +56,59 @@ from django.utils import timezone
 
 import json
 
+class Repo:
+    def __init__(self, repo, id, user, hub):
+        if(repo is None):
+            repo = hub.get_repo(id)
+            self.comments = Comment.objects.filter(repository__repo_id = repo.id)
+        else:
+            self.comments = Comment.objects.none()
+        branches = repo.get_branches()
+        SHA = branches[0].commit.sha
+        tree = repo.get_git_tree(SHA).tree
+        self.default_file_name = ""
+        self.default_file_contents = ""
+        self.default_file_path = ""
+        self.file_tree = None
+        try:
+            branches = repo.get_branches()
+            SHA = branches[0].commit.sha
+            tree = repo.get_git_tree(SHA,False).tree
+            self.file_tree = tree
+            for i in xrange(len(tree)):
+                deffile = repo.get_contents(tree[i].path)
+                if deffile.type == 'file':
+                    self.default_file_name = deffile.name
+                    self.default_file_contents = base64.b64decode(deffile.content)
+                    self.default_file_path = deffile.path
+                    break
+            self.readme = None
+            self.readme_contents = ""
+            #check first thing blob type
+        except:
+            pass
+        self.id = repo.id
+        self.name = repo.name
+        self.description = repo.description
+        self.url = repo.html_url
+        self.langs = repo.language
+        self.org = repo.organization
+        self.owner_name = repo.owner.login
+        self.owner_prof_pic = repo.owner.avatar_url
+        self.is_current_user_starring = user.has_in_starred(repo) 
+        self.star_count = repo.stargazers_count
+        self.is_current_user_watching = user.has_in_subscriptions(repo) 
+        self.watch_count = repo.watchers_count
+        self.doc_rating = 0
+        self.difficulty_rating = 0
+        self.tag_list = None
+"""      except Exception,e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno) 
+            print str(e)
+"""
+
 def my_profile_view(request):
     context = {}
     context["profile_user"] = request.user
@@ -122,17 +175,15 @@ def watching(request):
     g = get_auth_user_git(request)
     user = g.get_user()
     watched = user.get_subscriptions()
-    recent_watched = []  
 
-    i = 0
-    for repo in watched:
-        if (i < 10):
-            new_repo = Repository(repo_id = repo.id)
-            new_repo.save()
-            recent_watched.append(new_repo)
-            i = i+1
-        else:
-            break
+    recent_watched = []
+    for repo in watched[:10]:
+        try:
+            repo = Repository.objects.get(repo_id = repo.id)
+            x = Repo(None, repo.repo_id, user, g)
+        except ObjectDoesNotExist:
+            x = Repo(repo, repo.id, user, g)
+        recent_watched.append(x)
     context['searchform'] = SearchForm()
     context["source"] = 'watching'
     context['repos'] = recent_watched
