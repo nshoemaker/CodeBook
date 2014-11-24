@@ -18,7 +18,6 @@ class Stack(models.Model):
 
 class Language(models.Model):
     name = models.CharField(max_length=20)
-    icon = models.CharField(max_length=40)
     #extensions = models.CharField(max_length=20)
 
 class ProfileUser(AbstractBaseUser):

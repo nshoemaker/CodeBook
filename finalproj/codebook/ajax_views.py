@@ -51,9 +51,15 @@ class Repo:
         SHA = branches[0].commit.sha
         tree = repo.get_git_tree(SHA,False).tree
         try:
+            #check first thing blob type
             deffile = repo.get_contents(tree[0].path)
+            self.default_file_name = deffile.name
+            self.default_file_contents = base64.b64decode(deffile.content)
+            self.default_file_path = deffile.path
         except:
-            deffile = repo.get_readme()
+            self.default_file_name = ""
+            self.default_file_contents = ""
+            self.default_file_path = ""
         self.id = repo.id
         self.name = repo.name
         self.description = repo.description
@@ -69,9 +75,6 @@ class Repo:
         self.file_tree = tree
         self.readme = repo.get_readme()
         self.readme_contents = base64.b64decode(self.readme.content)
-        self.default_file_name = deffile.name
-        self.default_file_contents = base64.b64decode(deffile.content)
-        self.default_file_path = deffile.path
         self.doc_rating = 0
         self.difficulty_rating = 0
         self.tag_list = None
@@ -421,7 +424,7 @@ def rate_credibility(request):
                 try:
                     language = Language.objects.get(name=lang)
                 except:
-                    language = Language(name=lang,icon='icon-prog-python')
+                    language = Language(name=lang)
                     language.save()
                 try:
                     rating = UserRating.objects.get(language=language,profile_user=request.user)
@@ -532,15 +535,7 @@ def repo_search_list(request):
             files = []
             query = "language:"+text+" stars:>=500"
             repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
-"""
-   repository = models.ForeignKey(Repository)
-102     path = models.CharField(max_length=400)
-103     comments = models.ManyToManyField(Comment)
-104     savers = models.ManyToManyField(ProfileUser, related_name="saved_by")
-105     average_difficulty = models.IntegerField(blank=True)
-106     average_quality = models.IntegerField(blank=True)
-107     tags = models.ManyToManyField(Tag)
-
+        """
         these_file_results = []
         for f in files[:10]:
             file_name = f.name
@@ -555,7 +550,8 @@ def repo_search_list(request):
             except ObjectDoesNotExist:
                 x = Repo(repo, repo.id, g.get_user())
             repofile(repository = Repo(f.repository,id=f.repository.id,g.get_user()),   
-"""
+        """
+        print "HI GOT HERE"
         these_repo_results = []
         for repo in repos[:10]:
             try:
@@ -565,7 +561,7 @@ def repo_search_list(request):
                 x = Repo(repo, repo.id, g.get_user(), g)
             print x.name
             these_repo_results.append(x)
-
+        print "HI GOT HERE 2"
         context["repos"] = these_repo_results
         context['comment_form'] = CommentForm()
         """
