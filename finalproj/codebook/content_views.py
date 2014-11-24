@@ -183,6 +183,7 @@ def watching(request):
             x = Repo(None, repo.repo_id, user, g)
         except ObjectDoesNotExist:
             x = Repo(repo, repo.id, user, g)
+        print x.name
         recent_watched.append(x)
     context['searchform'] = SearchForm()
     context["source"] = 'watching'
