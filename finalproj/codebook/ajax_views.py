@@ -33,7 +33,8 @@ from datetime import datetime
 from django.utils import timezone
 
 import json
-
+import sys
+import os
 """
 To use this class: 
 Initialize as Repo(None,Repository.repo_id,user) if want to create from database model repository. 
@@ -47,13 +48,15 @@ class Repo:
             self.comments = Comment.objects.filter(repository__repo_id = repo.id)
         else:
             self.comments = Comment.objects.none()
-        branches = repo.get_branches()
-        SHA = branches[0].commit.sha
-        tree = repo.get_git_tree(SHA,False).tree
         self.default_file_name = ""
         self.default_file_contents = ""
         self.default_file_path = ""
+        self.file_tree = None
         try:
+            branches = repo.get_branches()
+            SHA = branches[0].commit.sha
+            tree = repo.get_git_tree(SHA,False).tree
+            self.file_tree = tree
             for i in xrange(len(tree)):
                 deffile = repo.get_contents(tree[i].path)
                 if deffile.type == 'file':
@@ -61,6 +64,8 @@ class Repo:
                     self.default_file_contents = base64.b64decode(deffile.content)
                     self.default_file_path = deffile.path
                     break
+            self.readme = None
+            self.readme_contents = ""
             #check first thing blob type
         except:
             pass
@@ -74,15 +79,17 @@ class Repo:
         self.owner_prof_pic = repo.owner.avatar_url
         self.is_current_user_starring = user.has_in_starred(repo) 
         self.star_count = repo.stargazers_count
-        self.is_current_user_watching = user.has_in_watched(repo) 
+        self.is_current_user_watching = user.has_in_subscriptions(repo) 
         self.watch_count = repo.watchers_count
-        self.file_tree = tree
-        self.readme = repo.get_readme()
-        self.readme_contents = base64.b64decode(self.readme.content)
         self.doc_rating = 0
         self.difficulty_rating = 0
         self.tag_list = None
-
+"""      except Exception,e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno) 
+            print str(e)
+"""
 def get_formatted_nodes(self, tree, repo):
     print tree
     print " "
@@ -523,6 +530,7 @@ def repo_search_list(request):
             for user in users:
                 for repo in user.get_repos().get_page(0):
                    repos.append(repo)
+
 
         elif(choice == 'Repo'):
             files = []
