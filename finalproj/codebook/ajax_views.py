@@ -49,7 +49,7 @@ class Repo:
             self.comments = Comment.objects.none()
         branches = repo.get_branches()
         SHA = branches[0].commit.sha
-        tree = repo.get_git_tree(SHA,False).tree
+        tree = repo.get_git_tree(SHA).tree
         try:
             #check first thing blob type
             deffile = repo.get_contents(tree[0].path)

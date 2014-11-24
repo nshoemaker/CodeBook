@@ -98,6 +98,12 @@ def comment(request, comment_type, source, id):
 		repoFile.save()
 	return redirect(reverse(source))
 
+# new_search is called when a user searches with the textbox and
+# search type dropdown list.
+# This is an initial funciton that fleshes out the front end
+# subsiquently (on document ready) and ajax function is called
+# to actually populate the search with a real list of repositories
+# (ajax_views.py action repo_search_list)
 @login_required
 def new_search(request):
     social = request.user.social_auth.get(provider='github')
@@ -124,6 +130,11 @@ def new_search(request):
     context['filter'] = choice
     return render(request, "codebook/search-results-page.html", context)
 
+# new_quick_search is called when a user clicks a language button
+# This is an initial funciton that fleshes out the front end
+# subsiquently (on document ready) and ajax function is called
+# to actually populate the search with a real list of repositories
+# (ajax_views.py action repo_search_list
 @login_required
 def new_quick_search(request, language):
     context={}
