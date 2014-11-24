@@ -605,24 +605,19 @@ def repo_search_list(request):
 @login_required
 def get_file_contents(request):
     if request.is_ajax():
-        print 1
         social = request.user.social_auth.get(provider='github')
         token = social.extra_data['access_token']
         hub = Github(token)
-        profile_user = request.user
         if request.GET:
             rep_id = request.GET.get("repo_id")
             sha = request.GET.get("sha")
         elif request.POST:
             rep_id = request.POST.get("repo_id")
             sha = request.POST.get("sha")
-        print 2
         rep = hub.get_repo(int(rep_id))
         blob = rep.get_git_blob(sha)
-        print blob
         print blob.encoding
         content = blob.content
-        print content
         filecontent = "no file content to show."
         if blob and content:
             filecontent = base64.b64decode(content)

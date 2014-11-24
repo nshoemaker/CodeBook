@@ -53,7 +53,8 @@ function load_tree(elem, id) {
                     },
                     success: function (html) {
                         console.log(html.toString());
-                       $('#file-content-' + repo_id).replaceWith(html);
+                        $('#file-content-' + repo_id).replaceWith(html);
+                        prepair_repo_scroll();
                     }
                 });
             }
