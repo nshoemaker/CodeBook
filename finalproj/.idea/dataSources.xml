@@ -3,10 +3,10 @@
   <component name="DataSourceManagerImpl" format="xml" hash="1749580426">
     <data-source source="LOCAL" name="Django default" uuid="5ec2d17e-e44f-4533-9d95-4e301a20571a">
       <driver-ref>postgresql</driver-ref>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://127.0.0.1/codebook</jdbc-url>
-      <user-name>webapps</user-name>
-      <user-password>dfccdfdfdfc4</user-password>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql:///codebook</jdbc-url>
+      <user-name>root</user-name>
+      <user-password>dfd8dfc5dfc5dfde</user-password>
       <libraries />
     </data-source>
   </component>
