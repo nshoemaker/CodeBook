@@ -1,98 +1,13 @@
-__author__ = 'nora'
-from content_views import *
-from user_action_views import *
-from django.shortcuts import render, redirect, get_object_or_404
-from django.core.urlresolvers import reverse
-from django.db import transaction
+##############################################################
+##############################################################
+##  ajax_views.py:                                          ##
+##                                                          ##
+##  Contains actions which implement different user actions ##
+##      with ajax calls for quick loading                   ##
+##############################################################
+##############################################################
+from views_base import *
 
-from django.core.exceptions import ObjectDoesNotExist
-
-# Needed to manually create HttpResponses or raise an Http404 exception
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response
-
-
-# Decorator to use built-in authentication system
-from django.contrib.auth.decorators import login_required
-
-# Used to generate a one-time-use token to verify a user's email address
-from django.contrib.auth.tokens import default_token_generator
-
-# Used to send mail from within Django
-from django.core.mail import send_mail
-
-# Helper function to guess a MIME type from a file name
-from mimetypes import guess_type
-
-from django.db.models import Q
-
-from codebook.models import *
-from codebook.forms import *
-
-from datetime import datetime
-from django.utils import timezone
-
-import json
-import sys
-import os
-"""
-To use this class: 
-Initialize as Repo(None,Repository.repo_id,user) if want to create from database model repository. 
-Initialize as Repo(githubrepo,0,user) if want to create from github repo.
-User is github user, get by g.get_user() of authenticated g user.
-"""
-class Repo:
-    def __init__(self, repo, id, user, hub):
-        if(repo is None):
-            repo = hub.get_repo(id)
-            self.comments = Comment.objects.filter(repository__repo_id = repo.id)
-        else:
-            self.comments = Comment.objects.none()
-        branches = repo.get_branches()
-        SHA = branches[0].commit.sha
-        tree = repo.get_git_tree(SHA).tree
-        self.default_file_name = ""
-        self.default_file_contents = ""
-        self.default_file_path = ""
-        self.file_tree = None
-        try:
-            branches = repo.get_branches()
-            SHA = branches[0].commit.sha
-            tree = repo.get_git_tree(SHA,False).tree
-            self.file_tree = tree
-            for i in xrange(len(tree)):
-                deffile = repo.get_contents(tree[i].path)
-                if deffile.type == 'file':
-                    self.default_file_name = deffile.name
-                    self.default_file_contents = base64.b64decode(deffile.content)
-                    self.default_file_path = deffile.path
-                    break
-            self.readme = None
-            self.readme_contents = ""
-            #check first thing blob type
-        except:
-            pass
-        self.id = repo.id
-        self.name = repo.name
-        self.description = repo.description
-        self.url = repo.html_url
-        self.langs = repo.language
-        self.org = repo.organization
-        self.owner_name = repo.owner.login
-        self.owner_prof_pic = repo.owner.avatar_url
-        self.is_current_user_starring = user.has_in_starred(repo) 
-        self.star_count = repo.stargazers_count
-        self.is_current_user_watching = user.has_in_subscriptions(repo) 
-        self.watch_count = repo.watchers_count
-        self.doc_rating = 0
-        self.difficulty_rating = 0
-        self.tag_list = None
-"""      except Exception,e:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno) 
-            print str(e)
-"""
 def get_formatted_nodes(self, tree, repo):
     print tree
     print " "
@@ -147,7 +62,7 @@ def expand_folder(request):
             else:
                 isFolder = False
                 isLazy = False
-            key = str(rep.id) + '---' + el.sha
+            key = str(rep.id) + '---' + el.sha + '---' + el.path
             node = {"title": title,
                     "key": key,
                     "isFolder": isFolder,
@@ -160,6 +75,7 @@ def expand_folder(request):
     else:
         pass
 
+@login_required
 def get_top_level(request):
     if request.is_ajax():
         social = request.user.social_auth.get(provider='github')
@@ -195,7 +111,7 @@ def get_top_level(request):
             else:
                 isFolder = False
                 isLazy = False
-            key = str(rep.id) + '---' + el.sha
+            key = str(rep.id) + '---' + el.sha + '---' + el.path
             node = {"title": title,
                     "key": key,
                     "isFolder": isFolder,
@@ -208,7 +124,7 @@ def get_top_level(request):
     else:
         pass
 
-
+@login_required
 @transaction.atomic
 def post_repo_comment(request, id):
     if request.is_ajax():
@@ -243,7 +159,7 @@ def post_repo_comment(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
-
+@login_required
 @transaction.atomic
 def post_file_comment(request, id):
     if request.is_ajax():
@@ -276,7 +192,7 @@ def post_file_comment(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
-
+@login_required
 def star_repo(request, id):
     if request.is_ajax():
         g = get_auth_user_git(request)
@@ -295,6 +211,7 @@ def star_repo(request, id):
         pass
 
 
+@login_required
 def unstar_repo(request, id):
     if request.is_ajax():
         g = get_auth_user_git(request)
@@ -311,6 +228,7 @@ def unstar_repo(request, id):
         pass
 
 
+@login_required
 def watch_repo(request, id):
     if request.is_ajax():
         g = get_auth_user_git(request)
@@ -329,6 +247,7 @@ def watch_repo(request, id):
         pass
 
 
+@login_required
 def unwatch_repo(request, id):
     context = {}
     if request.is_ajax():
@@ -348,6 +267,7 @@ def unwatch_repo(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
+@login_required
 def save_file(request, id):
     if request.is_ajax():
         profile_user = request.user
@@ -367,6 +287,7 @@ def save_file(request, id):
         pass
 
 
+@login_required
 def unsave_file(request, id):
     context = {}
     if request.is_ajax():
@@ -385,6 +306,7 @@ def unsave_file(request, id):
         pass
 
 
+@login_required
 def like_comment(request, id):
     if request.is_ajax():
         context = {}
@@ -404,6 +326,7 @@ def like_comment(request, id):
         pass
 
 
+@login_required
 def unlike_comment(request, id):
     if request.is_ajax():
         context = {}
@@ -505,16 +428,20 @@ def sort_lang_stream_recent(request):
         # uhhhhhhhh awk. this should never happen
         pass
 
+@login_required
 def sort_lang_stream_popular(request):
     if request.is_ajax():
         context = {}
         context['repos'] = {}
+        context['profile_user'] = request.user
         return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
         pass
 
+
 # Given a search type and some text, returns a list of repositories
+@login_required
 def repo_search_list(request):
     if request.is_ajax():
         social = request.user.social_auth.get(provider='github')
@@ -576,6 +503,7 @@ def repo_search_list(request):
             print x.name
             these_repo_results.append(x)
         context["repos"] = these_repo_results
+        context['profile_user'] = profile_user
         context['comment_form'] = CommentForm()
         """
         for r in these_repo_results:
@@ -600,4 +528,83 @@ def repo_search_list(request):
         return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
+        pass
+
+@login_required
+def get_file_contents(request):
+    if request.is_ajax():
+        social = request.user.social_auth.get(provider='github')
+        token = social.extra_data['access_token']
+        hub = Github(token)
+        if request.GET:
+            rep_id = request.GET.get("repo_id")
+            sha = request.GET.get("sha")
+            path = request.GET.get("path")
+        elif request.POST:
+            rep_id = request.POST.get("repo_id")
+            sha = request.POST.get("sha")
+            path = request.POST.get("path")
+        rep = hub.get_repo(int(rep_id))
+        blob = rep.get_git_blob(sha)
+        print blob.encoding
+        content = blob.content
+        filecontent = "no file content to show."
+        if blob and content:
+            filecontent = base64.b64decode(content)
+        else:
+            pass
+        context = {}
+        context['file_content'] = filecontent
+        context['repo'] = rep
+        context['file_path'] = path
+        return render_to_response('codebook/file-contents-combined-extra-info.html', context, content_type="html")
+
+    else:
+        pass
+
+@login_required
+def watch_list(request):
+    g = get_auth_user_git(request)
+    user = g.get_user()
+    watched = user.get_subscriptions()
+
+    recent_watched = []
+    for repo in watched[:10]:
+        try:
+            repo = Repository.objects.get(repo_id = repo.id)
+            x = Repo(None, repo.repo_id, user, g)
+        except ObjectDoesNotExist:
+            x = Repo(repo, repo.id, user, g)
+        print x.name
+        recent_watched.append(x)
+
+    context = {}
+    context['repos'] = recent_watched
+    context['comment_form'] = CommentForm()
+    context['profile_user'] = request.user
+    return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
+
+@login_required
+def save_file_from_repo(request):
+    if request.is_ajax:
+        profile_user = request.user
+        #social = request.user.social_auth.get(provider='github')
+        #token = social.extra_data['access_token']
+        #hub = Github(token)
+        if request.GET:
+            repo_id = int(request.GET.get("repo_id"))
+            path = request.GET.get("file_path")
+        elif request.POST:
+            repo_id = int(request.POST.get("repo_id"))
+            path = request.POST.get("file_path")
+
+        if path == None or repo_id == None:
+            return HttpResponse('False', content_type="text")
+        repo, repo_created = Repository.objects.get_or_create(repo_id=repo_id)
+        file, file_created = RepoFile.objects.get_or_create( path=path, average_difficulty=0, average_quality=0, repository=repo)
+        saved, saved_created = Saved.objects.get_or_create(profile_user=profile_user, repo_file=file)
+        file.savers.add(profile_user)
+        file.save()
+        return HttpResponse('True', content_type="text")
+    else:
         pass

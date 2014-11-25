@@ -3,8 +3,7 @@
 # Python/Django connector script
 # By Martin Skou
 #
-import os
-import urllib
+from views_base import *
 
 def dirlist(request):
    r=['<ul class="jqueryFileTree" style="display: none;">']
