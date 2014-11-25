@@ -598,10 +598,9 @@ def save_file_from_repo(request):
             repo_id = int(request.POST.get("repo_id"))
             path = request.POST.get("file_path")
 
-        print path
-        print repo_id
+        if path == None or repo_id == None:
+            return HttpResponse('False', content_type="text")
         repo, repo_created = Repository.objects.get_or_create(repo_id=repo_id)
-        print 1
         file, file_created = RepoFile.objects.get_or_create( path=path, average_difficulty=0, average_quality=0, repository=repo)
         saved, saved_created = Saved.objects.get_or_create(profile_user=profile_user, repo_file=file)
         file.savers.add(profile_user)
