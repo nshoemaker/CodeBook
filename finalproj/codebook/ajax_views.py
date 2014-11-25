@@ -433,6 +433,7 @@ def sort_lang_stream_popular(request):
     if request.is_ajax():
         context = {}
         context['repos'] = {}
+        context['profile_user'] = request.user
         return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
@@ -503,6 +504,7 @@ def repo_search_list(request):
             these_repo_results.append(x)
         context["repos"] = these_repo_results
         context['comment_form'] = CommentForm()
+        context['profile_user'] = profile_user
         """
         for r in these_repo_results:
             print "----------------------"
@@ -576,4 +578,5 @@ def watch_list(request):
     context = {}
     context['repos'] = recent_watched
     context['comment_form'] = CommentForm()
+    context['profile_user'] = request.user
     return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
