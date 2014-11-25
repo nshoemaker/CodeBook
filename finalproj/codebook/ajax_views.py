@@ -503,8 +503,8 @@ def repo_search_list(request):
             print x.name
             these_repo_results.append(x)
         context["repos"] = these_repo_results
-        context['comment_form'] = CommentForm()
         context['profile_user'] = profile_user
+        context['comment_form'] = CommentForm()
         """
         for r in these_repo_results:
             print "----------------------"
