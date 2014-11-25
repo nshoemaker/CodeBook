@@ -78,21 +78,10 @@ def watching(request):
     context = {}
     g = get_auth_user_git(request)
     user = g.get_user()
-    watched = user.get_subscriptions()
 
-    recent_watched = []
-    for repo in watched[:10]:
-        try:
-            repo = Repository.objects.get(repo_id = repo.id)
-            x = Repo(None, repo.repo_id, user, g)
-        except ObjectDoesNotExist:
-            x = Repo(repo, repo.id, user, g)
-        print x.id
-        recent_watched.append(x)
     context['searchform'] = SearchForm()
     context["source"] = 'watching'
-    context['repos'] = recent_watched
-    context['comment_form'] = CommentForm()
+    context['repos'] = {}
     context['profile_user'] = request.user
     context['gh_user'] = user
     return render(request, 'codebook/watching-page.html', context)

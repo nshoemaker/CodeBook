@@ -43,13 +43,15 @@ function load_tree(elem, id) {
                 var parts = key.split('---');
                 var repo_id = parts[0];
                 var sha = parts[1];
+                var path = parts[2];
 
                 $.ajax({
                     type: "GET",
                     url: '/codebook/get_file_contents',
                     data: {
                         repo_id: repo_id,
-                        sha: sha
+                        sha: sha,
+                        path: path
                     },
                     success: function (html) {
                         console.log(html.toString());
