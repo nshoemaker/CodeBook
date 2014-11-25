@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = patterns('',
     url(r'^codebook/', include('codebook.urls')),
@@ -14,4 +15,4 @@ if settings.DEBUG:
     import debug_toolbar
     urlpatterns += patterns('',
         url(r'^__debug__/', include(debug_toolbar.urls)),
-    )
+    ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
