@@ -160,6 +160,7 @@ def expand_folder(request):
     else:
         pass
 
+@login_required
 def get_top_level(request):
     if request.is_ajax():
         social = request.user.social_auth.get(provider='github')
@@ -208,7 +209,7 @@ def get_top_level(request):
     else:
         pass
 
-
+@login_required
 @transaction.atomic
 def post_repo_comment(request, id):
     if request.is_ajax():
@@ -243,7 +244,7 @@ def post_repo_comment(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
-
+@login_required
 @transaction.atomic
 def post_file_comment(request, id):
     if request.is_ajax():
@@ -276,7 +277,7 @@ def post_file_comment(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
-
+@login_required
 def star_repo(request, id):
     if request.is_ajax():
         g = get_auth_user_git(request)
@@ -295,6 +296,7 @@ def star_repo(request, id):
         pass
 
 
+@login_required
 def unstar_repo(request, id):
     if request.is_ajax():
         g = get_auth_user_git(request)
@@ -311,6 +313,7 @@ def unstar_repo(request, id):
         pass
 
 
+@login_required
 def watch_repo(request, id):
     if request.is_ajax():
         g = get_auth_user_git(request)
@@ -329,6 +332,7 @@ def watch_repo(request, id):
         pass
 
 
+@login_required
 def unwatch_repo(request, id):
     context = {}
     if request.is_ajax():
@@ -348,6 +352,7 @@ def unwatch_repo(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
+@login_required
 def save_file(request, id):
     if request.is_ajax():
         profile_user = request.user
@@ -367,6 +372,7 @@ def save_file(request, id):
         pass
 
 
+@login_required
 def unsave_file(request, id):
     context = {}
     if request.is_ajax():
@@ -385,6 +391,7 @@ def unsave_file(request, id):
         pass
 
 
+@login_required
 def like_comment(request, id):
     if request.is_ajax():
         context = {}
@@ -404,6 +411,7 @@ def like_comment(request, id):
         pass
 
 
+@login_required
 def unlike_comment(request, id):
     if request.is_ajax():
         context = {}
@@ -505,6 +513,7 @@ def sort_lang_stream_recent(request):
         # uhhhhhhhh awk. this should never happen
         pass
 
+@login_required
 def sort_lang_stream_popular(request):
     if request.is_ajax():
         context = {}
@@ -514,7 +523,9 @@ def sort_lang_stream_popular(request):
         # uhhhhhhhh awk. this should never happen
         pass
 
+
 # Given a search type and some text, returns a list of repositories
+@login_required
 def repo_search_list(request):
     if request.is_ajax():
         social = request.user.social_auth.get(provider='github')
