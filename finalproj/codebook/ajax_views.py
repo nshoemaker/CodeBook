@@ -556,3 +556,24 @@ def get_file_contents(request):
 
     else:
         pass
+
+@login_required
+def watch_list(request):
+    g = get_auth_user_git(request)
+    user = g.get_user()
+    watched = user.get_subscriptions()
+
+    recent_watched = []
+    for repo in watched[:10]:
+        try:
+            repo = Repository.objects.get(repo_id = repo.id)
+            x = Repo(None, repo.repo_id, user, g)
+        except ObjectDoesNotExist:
+            x = Repo(repo, repo.id, user, g)
+        print x.name
+        recent_watched.append(x)
+
+    context = {}
+    context['repos'] = recent_watched
+    context['comment_form'] = CommentForm()
+    return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
