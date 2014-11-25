@@ -49,7 +49,7 @@
                 </div>
                 <div class="col-md-9 repository-file">
                     <div class="btn-group btn-group-xs file-controls">
-                        <button id="current-file-save-{{ repo.id }}" class="btn btn-xs control-btn glyphicon glyphicon-floppy-save" title="Save File"></button>
+                        <button id="current-file-save-{{ repo.id }}" class="btn btn-xs control-btn glyphicon glyphicon-floppy-save current-file-save" title="Save File" data-item-id="{{ repo.id }}"></button>
                     </div>
                     {% include 'codebook/file-contents-combined.html' with file_content=repo.default_file_contents %}
                 </div>

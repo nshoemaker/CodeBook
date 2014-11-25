@@ -62,7 +62,7 @@ def expand_folder(request):
             else:
                 isFolder = False
                 isLazy = False
-            key = str(rep.id) + '---' + el.sha
+            key = str(rep.id) + '---' + el.sha + '---' + el.path
             node = {"title": title,
                     "key": key,
                     "isFolder": isFolder,
@@ -111,7 +111,7 @@ def get_top_level(request):
             else:
                 isFolder = False
                 isLazy = False
-            key = str(rep.id) + '---' + el.sha
+            key = str(rep.id) + '---' + el.sha + '---' + el.path
             node = {"title": title,
                     "key": key,
                     "isFolder": isFolder,
@@ -539,9 +539,11 @@ def get_file_contents(request):
         if request.GET:
             rep_id = request.GET.get("repo_id")
             sha = request.GET.get("sha")
+            path = request.GET.get("path")
         elif request.POST:
             rep_id = request.POST.get("repo_id")
             sha = request.POST.get("sha")
+            path = request.POST.get("path")
         rep = hub.get_repo(int(rep_id))
         blob = rep.get_git_blob(sha)
         print blob.encoding
@@ -554,7 +556,8 @@ def get_file_contents(request):
         context = {}
         context['file_content'] = filecontent
         context['repo'] = rep
-        return render_to_response('codebook/file-contents-combined.html', context, content_type="html")
+        context['file_path'] = path
+        return render_to_response('codebook/file-contents-combined-extra-info.html', context, content_type="html")
 
     else:
         pass
@@ -580,3 +583,28 @@ def watch_list(request):
     context['comment_form'] = CommentForm()
     context['profile_user'] = request.user
     return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
+
+@login_required
+def save_file_from_repo(request):
+    if request.is_ajax:
+        profile_user = request.user
+        #social = request.user.social_auth.get(provider='github')
+        #token = social.extra_data['access_token']
+        #hub = Github(token)
+        if request.GET:
+            repo_id = int(request.GET.get("repo_id"))
+            path = request.GET.get("file_path")
+        elif request.POST:
+            repo_id = int(request.POST.get("repo_id"))
+            path = request.POST.get("file_path")
+
+        if path == None or repo_id == None:
+            return HttpResponse('False', content_type="text")
+        repo, repo_created = Repository.objects.get_or_create(repo_id=repo_id)
+        file, file_created = RepoFile.objects.get_or_create( path=path, average_difficulty=0, average_quality=0, repository=repo)
+        saved, saved_created = Saved.objects.get_or_create(profile_user=profile_user, repo_file=file)
+        file.savers.add(profile_user)
+        file.save()
+        return HttpResponse('True', content_type="text")
+    else:
+        pass
