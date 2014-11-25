@@ -6,7 +6,7 @@ from django.contrib.auth.models import User, UserManager, AbstractBaseUser
 from django.utils import timezone
 from github import Github 
 
-g = Github('dmouli', 'Spongebob5%')
+#g = Github('dmouli', 'Spongebob5%')
 
 import base64
 import multiprocessing 
@@ -104,23 +104,23 @@ class RepoFile (models.Model):
     average_quality = models.IntegerField(blank=True)
     tags = models.ManyToManyField(Tag)
 
-    def get_creator(self):
+    def get_creator(self, g):
         repo_id = self.repository.repo_id
         repo = g.get_repo(repo_id)
         return repo.owner.name
 
-    def get_name(self):
+    def get_name(self, g):
         repo_id = self.repository.repo_id
         repo = g.get_repo(repo_id)
         return repo.get_contents(self.path).name
 
-    def get_language(self):
+    def get_language(self, g):
         return "file_lang"
 
-    def get_date_created(self):
+    def get_date_created(self, g):
         return "1/1/2014"
 
-    def get_content(self):
+    def get_content(self, g):
         repo_id = self.repository.repo_id
         repo = g.get_repo(repo_id)
         content = repo.get_contents(self.path).content

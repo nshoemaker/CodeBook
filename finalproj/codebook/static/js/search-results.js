@@ -20,6 +20,9 @@ $(document).ready(function() {
 $(document).ajaxComplete(function()
 {
     console.log("ajax complete");
+                        $('pre code').each(function (i, block) {
+                            hljs.highlightBlock(block);
+                        });
     //prepair_results();
     //load_trees();
 });
