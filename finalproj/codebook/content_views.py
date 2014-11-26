@@ -43,8 +43,11 @@ def saved(request):
     context = {}
     files = [] 
     profile_user = request.user
+    user_saves = Saved.objects.filter(profile_user=profile_user)
+    g = get_auth_user_git(request)
 
     for save in user_saves:
+        save.repo_file.get_name = save.repo_file.get_name(repo_file, g)
         files.append(save.repo_file)
     context['searchform'] = SearchForm()
     context['files'] = files
@@ -81,7 +84,8 @@ def watching(request):
 
     context['searchform'] = SearchForm()
     context["source"] = 'watching'
-    context['repos'] = {}
+    context['repos'] = recent_watched
+    context['comment_form'] = CommentForm()
     context['profile_user'] = request.user
     context['gh_user'] = user
     return render(request, 'codebook/watching-page.html', context)
