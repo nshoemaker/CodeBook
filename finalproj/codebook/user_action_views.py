@@ -12,7 +12,7 @@
 
 from content_views import *
 import sys
-#g = Github('dmouli', 'Spongebob5%')
+g = Github('dmouli', 'Spongebob5%')
 
 
 def get_correct_context(request, source):
@@ -106,7 +106,9 @@ def comment(request, comment_type, source, id):
 # (ajax_views.py action repo_search_list)
 @login_required
 def new_search(request):
-    g = get_auth_user_git(request)
+    social = request.user.social_auth.get(provider='github')
+    token = social.extra_data['access_token']
+    g = Github(token)
     profile_user = request.user
     context = {}
 
