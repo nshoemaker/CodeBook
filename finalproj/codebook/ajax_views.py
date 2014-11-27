@@ -389,10 +389,27 @@ def add_proficiency(request):
         print proficiency
         for l in Language.objects.filter(name=language_name):
             print l.name
-            print l.id
 
-        lang = Language.objects.get_or_create(name=language_name, icon='icon-prog-python')
-        print lang.name
+        print "----"
+
+        lang, lang_created = Language.objects.get_or_create(name=language_name)
+        print lang.name + " " + str(lang_created)
+
+        user_ratings = UserRating.objects.filter(profile_user=profile_user)
+        updated = False
+        for r in user_ratings:
+            if r.language.name == language_name:
+                print "updated"
+                r.proficiency = proficiency
+                r.save()
+                updated = True
+                rating = r
+
+        if (not updated):
+            print "not updated"
+            rating = UserRating.objects.create(profile_user=profile_user, language=lang, proficiency=proficiency, credibility=0)
+            rating.save()
+        """
         try:
             rating = UserRating.objects.get(profile_user=profile_user, language=lang)
             rating.update(proficiency=proficiency)
@@ -401,7 +418,7 @@ def add_proficiency(request):
         except:
             print 2
             rating = UserRating.objects.create(profile_user=profile_user, language=lang, proficiency=proficiency, credibility=0)
-            rating.save()
+            rating.save()"""
         context['rating'] = rating
         """
         for r in UserRating.objects.all():
