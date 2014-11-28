@@ -40,5 +40,67 @@ $(function(){
 
   $('.starrr').on('starrr:change', function(e, value){
     ratingsField.val(value);
+
+      var $this = $(this);
+      if ($this.hasClass("documentation-rating"))
+      {
+          console.log("documentation " + value);
+          console.log($this.attr("data-item-id"));
+          repo_id = $this.attr("data-item-id");
+          rate_documentation(repo_id, value);
+      }
+      else if ($this.hasClass("difficulty-rating"))
+      {
+          console.log("difficulty " + value);
+          console.log($this.attr("data-item-id"));
+          repo_id = $this.attr("data-item-id");
+          rate_difficulty(repo_id, value);
+      }
   });
 });
+
+function rate_documentation(repo_id, rating) {
+    $.ajax({
+        type: "POST",
+        url: "/codebook/rate_documentation",
+        datatype: "html",
+        data: {
+            repo_id: repo_id,
+            rating: rating,
+            csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
+        },
+        success: function () {
+            console.log("successful documentation rating!");
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            if (!(xhr.status == 0 || xhr.status == '0' || errorThrown == 0 || errorThrown == '0' || xhr.response == 0 || xhr.response == '0')) {
+                alert("Please report this error: " + errorThrown + xhr.status + xhr.responseText);
+
+            }
+        }
+    });
+}
+
+function rate_difficulty(repo_id, rating)
+{
+    $.ajax({
+        type: "POST",
+        url: "/codebook/rate_difficulty",
+        datatype: "html",
+        data: {
+            repo_id: repo_id,
+            rating: rating,
+            csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
+        },
+        success: function () {
+            console.log("successful difficulty rating!");
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            if (!(xhr.status == 0 || xhr.status == '0' || errorThrown == 0 || errorThrown == '0' || xhr.response == 0 || xhr.response == '0')) {
+                alert("Please report this error: " + errorThrown + xhr.status + xhr.responseText);
+
+            }
+        }
+    });
+
+}

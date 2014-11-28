@@ -130,10 +130,15 @@ class RepoFile (models.Model):
 
 class Difficulty(models.Model):
     rating = models.IntegerField()
-    repo_file = models.ForeignKey(RepoFile)
+    repository = models.ForeignKey(Repository)
     profile_user = models.ForeignKey(ProfileUser)
     date_time = models.DateTimeField(auto_now_add=True)
 
+class Documentation(models.Model):
+    rating = models.IntegerField()
+    repository = models.ForeignKey(Repository)
+    profile_user = models.ForeignKey(ProfileUser)
+    date_time = models.DateTimeField(auto_now_add=True)
 
 class Saved(models.Model):
     profile_user = models.ForeignKey(ProfileUser)
