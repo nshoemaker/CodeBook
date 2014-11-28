@@ -625,3 +625,38 @@ def save_file_from_repo(request):
         return HttpResponse('True', content_type="text")
     else:
         pass
+
+
+@login_required
+def rate_documentation(request):
+    if request.is_ajax:
+        profile_user = request.user
+        repo_id = int(request.POST.get("repo_id"))
+        rating = int(request.POST.get("rating"))
+
+        print repo_id
+        print rating
+
+        repo, repo_created= Repository.objects.get_or_create(repo_id=repo_id)
+        print repo_created
+        documentation, documentation_created = Documentation.objects.update_or_create(profile_user=profile_user, rating=rating, repository=repo)
+        print documentation_created
+        return HttpResponse('True', content_type="text")
+    else:
+        pass
+
+@login_required
+def rate_difficulty(request):
+    if request.is_ajax:
+        profile_user = request.user
+        repo_id = int(request.POST.get("repo_id"))
+        rating = int(request.POST.get("rating"))
+
+        repo, repo_created= Repository.objects.get_or_create(repo_id=repo_id)
+        print repo
+        print repo_created
+        difficulty, difficulty_updated = Difficulty.objects.update_or_create(profile_user=profile_user, rating=rating, repository=repo)
+        print difficulty_updated
+        return HttpResponse('True', content_type="text")
+    else:
+        pass
