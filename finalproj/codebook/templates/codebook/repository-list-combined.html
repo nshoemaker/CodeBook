@@ -1,161 +1,8 @@
 {% load staticfiles %}
-<script src="{% static "js/bootstrap-rating-input.min.js" %}" type="text/javascript"></script>
 <!-- start repository list row-->
 <div class="row top-padded" id="repository-list-container">
 <div class="col-md-12">
 
-
-<!-- TODO: this is temporarily here to show static usage -->
-<!--
-<ol class="repository-list">
-    <li>
-        <div class="container repository">
-            <div class="row repository-header">
-                <div class="col-md-3">
-                    <h4>repository</h4>
-                </div>
-                <div class="col-md-1">
-                    <h4 class="glyphicon glyphicon-star"></h4> 
-                    
-
-                </div>
-                <div class="col-md-1">
-                    <h4 class="glyphicon glyphicon-eye-open"></h4>
-
-
-                </div>
-                <div class="col-md-4">
-
-                </div>
-                <div class="col-md-2">
-                    <h4>creator</h4>
-                </div>
-                <div class="col-md-1">
-                    <h4>{% include 'codebook/get-profpic.html' %}</h4>
-                </div>
-            </div>
-
-
-            <div class="row repository-file-view">
-                <div class="col-md-3 repository-file-explorer">
-                    this is where the file explorer will be
-                </div>
-                <div class="col-md-9 repository-file">
-                    this is where the code will be
-                </div>
-            </div>
-
-
-            <div class="row tags">
-                <div class="col-md-10">
-                    <div class="btn-group-sm">
-                        <ol class="tag-list">
-
-
-                            <li>
-                                <button class="btn btn-sm tag-btn">
-                                    <span class="tag-text">Tag 1</span>
-                                    <span class="glyphicon glyphicon-ok"></span>
-                                </button>
-                            </li>
-                            <li>
-                                <button class="btn btn-sm tag-btn">
-                                    <span class="tag-text">Tag 2</span>
-                                    <span class="glyphicon glyphicon-ok"></span>
-                                </button>
-                            </li>
-                            <li>
-                                <button class="btn btn-sm tag-btn">
-                                    <span class="tag-text">Tag 3</span>
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </button>
-                            </li>
-                        </ol>
-                    </div>
-                </div>
-                <div class="col-md-2 tag-list">
-                    <button type="submit" class="btn btn-sm control-btn">Add Tag</button>
-                </div>
-            </div>
-
-            <div class="row ratings">
-                <div class="col-md-2">
-                    <h4>Difficulty</h4>
-                </div>
-                <div class="col-md-1">
-                    <h6>Average Rating:</h6>
-                </div>
-                <div class="col-md-3">
-                    <div class="stars starrr" data-rating="3"></div>
-                </div>
-                <div class="col-md-1">
-                    <h6>Your Rating:</h6>
-                </div>
-                <div class="col-md-3">
-                    <div class="stars starrr" data-rating="0"></div>
-                </div>
-            </div>
-
-            <ol class="comment-list">
-                <li>
-                    <div class="row comment">
-                        <div class="col-md-1">
-                            <h5>{% include 'codebook/get-profpic.html' %}</h5>
-                        </div>
-                        <div class="col-md-2">
-                            <h5>username</h5>
-                        </div>
-                        <div class="col-md-1 col-md-offset-7">
-                            <h5 class="glyphicon glyphicon-ok"></h5>
-                        </div>
-                        <div class="col-md-10 comment-text">
-                            <h6>
-                                this is the text from a comment this is the text from a comment this is the
-                                text
-                                from a
-                                comment this is the text from a comment
-                            </h6>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="row comment">
-                        <div class="col-md-1">
-                            <h5>{% include 'codebook/get-profpic.html'%}</h5>
-                        </div>
-                        <div class="col-md-2">
-                            <h5>username_2</h5>
-                        </div>
-                        <div class="col-md-1 col-md-offset-7">
-                            <h5 class="glyphicon glyphicon-ok"></h5>
-                        </div>
-                        <div class="col-md-10 comment-text ">
-                            <h6>
-                                this is the text from a comment this is the text from a comment g s s s s s
-                                this is
-                                the
-                                text from a comment this is the text from a comment
-                            </h6>
-                        </div>
-                    </div>
-                </li>
-            </ol>
-
-            <div class="row repository-footer">
-                <form role="form">
-                    <div class="col-md-9 col-lg-offset-1">
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="col-md-1">
-                        <input type="submit" class="btn control-btn" value="Comment">
-                    </div>
-                </form>
-            </div>
-        </div>
-    </li>
-</ol>
-
--->
 <!-- TODO: everything above this comment and below the static usage comment should be deleted eventually -->
 
 <ol class="repository-list" id="repo-list">
@@ -170,3 +17,7 @@
 </div>
 </div>
 <!-- end repository list row-->
+
+
+<script src="{% static "js/bootstrap-rating-input.min.js" %}" type="text/javascript"></script>
+<script src = "{% static "js/ratings.js" %}"></script>

@@ -34,4 +34,6 @@ urlpatterns = patterns('',
     url(r'^add_proficiency$', 'codebook.ajax_views.add_proficiency', name='add_proficiency'),
     url(r'^watch_list$', 'codebook.ajax_views.watch_list', name='watch_list'),
     url(r'^save_file_from_repo$', 'codebook.ajax_views.save_file_from_repo', name='save_file_from_repo'),
+    url(r'^rate_difficulty$', 'codebook.ajax_views.rate_difficulty', name='rate_difficulty'),
+    url(r'^rate_documentation$', 'codebook.ajax_views.rate_documentation', name='rate_documentation'),
 )
