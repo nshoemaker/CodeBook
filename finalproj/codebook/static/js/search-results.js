@@ -63,7 +63,9 @@ function search_results() {
         success: function(html) {
             console.log("success");
             spinner.stop();
+            console.log("4");
             $("#repository-list-container").replaceWith(html);
+            console.log("5");
             prepair_results();
             load_trees();
         },
