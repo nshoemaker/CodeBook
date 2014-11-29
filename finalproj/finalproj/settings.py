@@ -69,12 +69,12 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # these are the settings for local development
-#SOCIAL_AUTH_GITHUB_KEY = '31fd927b2ac22678d050'
-#SOCIAL_AUTH_GITHUB_SECRET = '431197c65d51dc0ae5e4919fc44a999b95e2fef3'
+SOCIAL_AUTH_GITHUB_KEY = '31fd927b2ac22678d050'
+SOCIAL_AUTH_GITHUB_SECRET = '431197c65d51dc0ae5e4919fc44a999b95e2fef3'
 
 # new keys for deployment:
-SOCIAL_AUTH_GITHUB_KEY = 'aca57928bf5933e6f19e'
-SOCIAL_AUTH_GITHUB_SECRET = '477759c2ab4260dcb708c1c719a370d316891840'
+#SOCIAL_AUTH_GITHUB_KEY = 'aca57928bf5933e6f19e'
+#SOCIAL_AUTH_GITHUB_SECRET = '477759c2ab4260dcb708c1c719a370d316891840'
 SOCIAL_AUTH_GITHUB_SCOPE = ['repo']
 SOCIAL_AUTH_USER_MODEL = 'codebook.ProfileUser'
 
@@ -93,7 +93,7 @@ DATABASES = {
         # The following settings are not used with sqlite3:
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': '',    # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'HOST': '127.0.0.1',    # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',             # Set to empty string for default.
     }
 }
