@@ -106,12 +106,12 @@ class RepoFile (models.Model):
     tags = models.ManyToManyField(Tag)
 
     def get_creator(self):
-        repo_id = self.repository.repo_id
+        repo_id = int(self.repository.repo_id)
         repo = g.get_repo(repo_id)
         return repo.owner.name
 
     def get_name(self):
-        repo_id = self.repository.repo_id
+        repo_id = int(self.repository.repo_id)
         repo = g.get_repo(repo_id)
         return repo.get_contents(self.path).name
 
@@ -122,7 +122,7 @@ class RepoFile (models.Model):
         return "1/1/2014"
 
     def get_content(self):
-        repo_id = self.repository.repo_id
+        repo_id = int(self.repository.repo_id)
         repo = g.get_repo(repo_id)
         content = repo.get_contents(self.path).content
         return base64.b64decode(content)
