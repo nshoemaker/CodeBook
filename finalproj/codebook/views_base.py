@@ -38,6 +38,7 @@ import json
 import sys
 import os
 import urllib
+from django.db.models import Avg
 
 """
 To use this class: 
@@ -49,9 +50,24 @@ class Repo:
     def __init__(self, repo, id, user, hub):
         if(repo is None):
             repo = hub.get_repo(id)
+            try:
+                repository = Repository.objects.get(repo_id__exact=id)
+                self.doc_rating = repository.documentation_set.aggregate(Avg('rating')).values()[0]
+                self.difficulty_rating = repository.difficulty_set.aggregate(Avg('rating')).values()[0]
+            except:
+                self.difficulty_rating = 0
+                self.doc_rating = 0
+            if self.doc_rating == None:
+                self.doc_rating = 0
+            if self.difficulty_rating == None:
+                self.difficulty_rating = 0
             self.comments = Comment.objects.filter(repository__repo_id = repo.id)
+
         else:
             self.comments = Comment.objects.none()
+            self.doc_rating = 0
+            self.difficulty_rating = 0
+
         branches = repo.get_branches()
         SHA = branches[0].commit.sha
         tree = repo.get_git_tree(SHA).tree
@@ -88,8 +104,6 @@ class Repo:
         self.star_count = repo.stargazers_count
         self.is_current_user_watching = user.has_in_subscriptions(repo) 
         self.watch_count = repo.watchers_count
-        self.doc_rating = 0
-        self.difficulty_rating = 0
         self.tag_list = None
 """      except Exception,e:
             exc_type, exc_obj, exc_tb = sys.exc_info()

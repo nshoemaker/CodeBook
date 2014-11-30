@@ -389,10 +389,27 @@ def add_proficiency(request):
         print proficiency
         for l in Language.objects.filter(name=language_name):
             print l.name
-            print l.id
 
-        lang = Language.objects.get_or_create(name=language_name, icon='icon-prog-python')
-        print lang.name
+        print "----"
+
+        lang, lang_created = Language.objects.get_or_create(name=language_name)
+        print lang.name + " " + str(lang_created)
+
+        user_ratings = UserRating.objects.filter(profile_user=profile_user)
+        updated = False
+        for r in user_ratings:
+            if r.language.name == language_name:
+                print "updated"
+                r.proficiency = proficiency
+                r.save()
+                updated = True
+                rating = r
+
+        if (not updated):
+            print "not updated"
+            rating = UserRating.objects.create(profile_user=profile_user, language=lang, proficiency=proficiency, credibility=0)
+            rating.save()
+        """
         try:
             rating = UserRating.objects.get(profile_user=profile_user, language=lang)
             rating.update(proficiency=proficiency)
@@ -401,7 +418,7 @@ def add_proficiency(request):
         except:
             print 2
             rating = UserRating.objects.create(profile_user=profile_user, language=lang, proficiency=proficiency, credibility=0)
-            rating.save()
+            rating.save()"""
         context['rating'] = rating
         """
         for r in UserRating.objects.all():
@@ -605,6 +622,41 @@ def save_file_from_repo(request):
         saved, saved_created = Saved.objects.get_or_create(profile_user=profile_user, repo_file=file)
         file.savers.add(profile_user)
         file.save()
+        return HttpResponse('True', content_type="text")
+    else:
+        pass
+
+
+@login_required
+def rate_documentation(request):
+    if request.is_ajax:
+        profile_user = request.user
+        repo_id = int(request.POST.get("repo_id"))
+        rating = int(request.POST.get("rating"))
+
+        print repo_id
+        print rating
+
+        repo, repo_created= Repository.objects.get_or_create(repo_id=repo_id)
+        print repo_created
+        documentation, documentation_created = Documentation.objects.update_or_create(profile_user=profile_user, rating=rating, repository=repo)
+        print documentation_created
+        return HttpResponse('True', content_type="text")
+    else:
+        pass
+
+@login_required
+def rate_difficulty(request):
+    if request.is_ajax:
+        profile_user = request.user
+        repo_id = int(request.POST.get("repo_id"))
+        rating = int(request.POST.get("rating"))
+
+        repo, repo_created= Repository.objects.get_or_create(repo_id=repo_id)
+        print repo
+        print repo_created
+        difficulty, difficulty_updated = Difficulty.objects.update_or_create(profile_user=profile_user, rating=rating, repository=repo)
+        print difficulty_updated
         return HttpResponse('True', content_type="text")
     else:
         pass
