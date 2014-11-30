@@ -47,7 +47,9 @@ def saved(request):
     g = get_auth_user_git(request)
 
     for save in user_saves:
-        save.repo_file.get_name = save.repo_file.get_name(repo_file, g)
+        save.repo_file.get_name = save.repo_file.get_name(g)
+        save.repo_file.get_creator = save.repo_file.get_creator(g)
+        save.repo_file.get_content = save.repo_file.get_content(g)
         files.append(save.repo_file)
     context['searchform'] = SearchForm()
     context['files'] = files
@@ -84,7 +86,6 @@ def watching(request):
 
     context['searchform'] = SearchForm()
     context["source"] = 'watching'
-    context['repos'] = recent_watched
     context['comment_form'] = CommentForm()
     context['profile_user'] = request.user
     context['gh_user'] = user

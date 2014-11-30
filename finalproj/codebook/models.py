@@ -6,8 +6,6 @@ from django.contrib.auth.models import User, UserManager, AbstractBaseUser
 from django.utils import timezone
 from github import Github 
 
-#g = Github('dmouli', 'Spongebob5%')
-
 import base64
 import multiprocessing 
 
@@ -105,14 +103,20 @@ class RepoFile (models.Model):
     tags = models.ManyToManyField(Tag)
 
     def get_creator(self, g):
-        repo_id = self.repository.repo_id
-        repo = g.get_repo(repo_id)
-        return repo.owner.name
+        try:
+            repo_id = self.repository.repo_id
+            repo = g.get_repo(repo_id)
+            return repo.owner.name
+        except:
+            return ""
 
     def get_name(self, g):
-        repo_id = self.repository.repo_id
-        repo = g.get_repo(repo_id)
-        return repo.get_contents(self.path).name
+        try:
+            repo_id = self.repository.repo_id
+            repo = g.get_repo(repo_id)
+            return repo.get_contents(self.path).name
+        except:
+            return ""
 
     def get_language(self, g):
         return "file_lang"
@@ -121,10 +125,13 @@ class RepoFile (models.Model):
         return "1/1/2014"
 
     def get_content(self, g):
-        repo_id = self.repository.repo_id
-        repo = g.get_repo(repo_id)
-        content = repo.get_contents(self.path).content
-        return base64.b64decode(content)
+        try:
+            repo_id = self.repository.repo_id
+            repo = g.get_repo(repo_id)
+            content = repo.get_contents(self.path).content
+            return base64.b64decode(content)
+        except:
+            return "-- No Content --"
 
 
 class Difficulty(models.Model):
