@@ -461,6 +461,7 @@ def sort_lang_stream_popular(request):
 @login_required
 def repo_search_list(request):
     if request.is_ajax():
+        print "COMING INTO SEARCH \n"
         social = request.user.social_auth.get(provider='github')
         token = social.extra_data['access_token']
         g = Github(token)
@@ -468,13 +469,16 @@ def repo_search_list(request):
         context = {}
         context['repos'] = {}
         choice = request.GET.get("types")
-        text = request.GET.get("text")
+        query = request.GET.get("text")
+        text = query.replace(" ","")
 
         if(choice == 'User'):
+            print "CHOICE IS USER \n"
             repos = []
             files = []
             users = g.search_users(text,sort='followers',order='desc')
             for user in users:
+                print "FOUND USER \n"
                 for repo in user.get_repos().get_page(0):
                    repos.append(repo)
 
@@ -512,6 +516,7 @@ def repo_search_list(request):
         """
         these_repo_results = []
         for repo in repos[:10]:
+            print "THERE IS A REPO RESULT \n"
             try:
                 repo = Repository.objects.get(repo_id = repo.id)
                 x = Repo(None,repo.repo_id,g.get_user(), g)
