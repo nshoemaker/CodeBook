@@ -20,6 +20,13 @@ from views_base import *
 @login_required
 def my_profile_view(request):
     context = {}
+
+    g = get_auth_user_git(request)
+    profile_user = request.user
+    profile_user.get_git_profile_url = profile_user.get_git_profile_url(g)
+    profile_user.get_email = profile_user.get_email(g)
+    profile_user.get_avatar_url = profile_user.get_avatar_url(g)
+
     context["profile_user"] = request.user
     context['searchform'] = SearchForm()
     context["view_my_profile"] = 'true'

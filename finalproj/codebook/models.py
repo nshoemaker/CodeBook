@@ -39,32 +39,64 @@ class ProfileUser(AbstractBaseUser):
     def get_username(self):
         return self.username
 
-    def get_id(self):
-        return 1
+    def get_id(self, g):
+        try:
+            return g.get_user().id
+        except:
+            return 0
 
-    def get_avatar_url(self):
-        return "https://github.com/images/error/octocat_happy.gif"
+    def get_avatar_url(self, g):
+        try:
+            return g.get_user().avatar_url
+        except:
+            return "% static 'img/default_profile.jpg' %"
 
-    def get_git_profile_url(self):
-        return "https://api.github.com/users/octocat"
+    def get_git_profile_url(self, g):
+        try:
+            return g.get_user().html_url
+        except:
+            return "None"
     
-    def get_repos(self):
-        pass
+    def get_repos(self, g):
+        try:
+            return g.get_user().get_repos()
+        except:
+            pass 
 
-    def get_following(self):
-        pass
+    def get_following(self, g):
+        try:
+            return g.get_user().get_followers()
+        except:
+            pass
 
-    def get_email(self):
-        return "user@email.com"
+    def get_email(self, g):
+        try:
+            email = g.get_user().email
+            if (email == "" or email == " "):
+                return "None"
+            else:
+                return email
+        except:
+            return "None"
 
-    def get_website(self):
-        return "userwebsite.com"
 
-    def get_company(self):
-        return "User Company"
+    def get_website(self, g):
+        try:
+            return g.get_user().blog
+        except:
+            return "None"
 
-    def get_bio(self):
-        return "This is my user bio."
+    def get_company(self, g):
+        try:
+            return g.get_user().company
+        except:
+            return "None"
+
+    def get_bio(self, g):
+        try:
+            return g.get_user().bio 
+        except:
+            return "None"
 
 
 class UserRating(models.Model):
