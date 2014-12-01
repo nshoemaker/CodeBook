@@ -76,11 +76,9 @@ def news(request):
         lang = rating.language
         lang_list.append(lang.name)
 
-    for lang in lang_list:
-        print lang
     # TODO: this is just temporary. Replace with actual list of languages the user likes.
     #lang_list = ['java', 'python', 'csharp', 'cpp', 'c']
-    context['lang_list'] = lang_list
+    context['lang_list'] = lang_list[:12]
     context['searchform'] = SearchForm()
     #profile_user = ProfileUser.objects.get(user=request.user)
     #user_langs = profile_user.languages.all
