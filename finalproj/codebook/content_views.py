@@ -16,10 +16,6 @@
 ##############################################################
 
 from views_base import *
-g = Github('dmouli', 'Spongebob5%')
-"""
-g = Github(token)
-"""
 
 @login_required
 def my_profile_view(request):
@@ -48,8 +44,12 @@ def saved(request):
     files = [] 
     profile_user = request.user
     user_saves = Saved.objects.filter(profile_user=profile_user)
+    g = get_auth_user_git(request)
 
     for save in user_saves:
+        save.repo_file.get_name = save.repo_file.get_name(g)
+        save.repo_file.get_creator = save.repo_file.get_creator(g)
+        save.repo_file.get_content = save.repo_file.get_content(g)
         files.append(save.repo_file)
     context['searchform'] = SearchForm()
     context['files'] = files
@@ -86,7 +86,7 @@ def watching(request):
 
     context['searchform'] = SearchForm()
     context["source"] = 'watching'
-    context['repos'] = {}
+    context['comment_form'] = CommentForm()
     context['profile_user'] = request.user
     context['gh_user'] = user
     return render(request, 'codebook/watching-page.html', context)
@@ -98,7 +98,7 @@ def sandbox(request):
     context = {}
 
     #g = Github(token)
-    #repo_obj = Repository(repo_id = 7986587)
+    #repo_obj = Repository(repo_id = 23319657)
     #repo_obj.save()
     #print repo_obj.get_url()
     #repo_gilbert = g.get_repo(7986587)
