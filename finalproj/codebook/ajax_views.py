@@ -468,23 +468,35 @@ def repo_search_list(request):
         context = {}
         context['repos'] = {}
         choice = request.GET.get("types")
-        query = request.GET.get("text")
-        text = query.replace(" ","")
+        text = request.GET.get("text").split('+')
+        text = [item for item in text if item.isalnum()]
+
+        easy = ['easy','beginner','simple']
+        medium = ['medium', 'intermediate']
+        hard = ['hard','difficult','advanced']
+        levels = easy+medium+hard
 
         if(choice == 'User'):
             repos = []
             files = []
-            users = g.search_users(text,sort='followers',order='desc')
-            for user in users:
-                for repo in user.get_repos().get_page(0):
-                   repos.append(repo)
+            for word in text:
+                if word not in levels:
+                    users = g.search_users(word,sort='followers',order='desc')
+                    for user in users:
+                        for repo in user.get_repos().get_page(0):
+                           repos.append(repo)
 
 
         elif(choice == 'Repo'):
             files = []
-            repos = g.search_repositories(text,sort='stars',order='desc').get_page(0)
+            repos = []
+            for word in text:
+                if word not in levels:
+                    results = g.search_repositories(word,sort='stars',order='desc').get_page(0)
+                    repos.append(results)
 
         elif(choice == 'Code'):
+            print "CAME IN HERE"
             repos = []
             query = text+" user:github size:>10000"
             files = g.search_code(query).get_page(0)
@@ -492,34 +504,63 @@ def repo_search_list(request):
         else:
             #check that language?
             files = []
-            query = "language:"+text+" stars:>=500"
-            repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
-        """
-        these_file_results = []
-        for f in files[:10]:
-            file_name = f.name
-            print file_name + "\n"
-            file_contents = base64.b64decode(f.content)
-            print file_contents + "\n"
-            file_path = f.path
-            print file_path + "\n"
-            try:
-                repo = Repository.objects.get(repo_id = repo.f.repository.id)
-                x = Repo(None,repo.repo_id,g.get_user())
-            except ObjectDoesNotExist:
-                x = Repo(repo, repo.id, g.get_user())
-            repofile(repository = Repo(f.repository,id=f.repository.id,g.get_user()),   
-        """
+            repos = []
+            for word in text:
+                if word not in levels:
+                    query = "language:"+word+" stars:>=500"
+                    results = g.search_repositories(query,sort='stars',order='desc').get_page(0)
+                    repos.append(results)
+        
         these_repo_results = []
+        level = 0
+        if any(word in text for word in easy):
+            level = 1
+        if any(word in text for word in medium):
+            level = 2
+        if any(word in text for word in hard):
+            level = 3
+        """    
+                these_file_results = []
+                for f in files[:10]:
+                    file_name = f.name
+                    print file_name + "\n"
+                    file_contents = base64.b64decode(f.content)
+                    print file_contents + "\n"
+                    file_path = f.path
+                    print file_path + "\n"
+                    try:
+                        repo = Repository.objects.get(repo_id = repo.f.repository.id)
+                        x = Repo(None,repo.repo_id,g.get_user())
+                    except ObjectDoesNotExist:
+                        x = Repo(repo, repo.id, g.get_user())
+                    repofile(repository = Repo(f.repository,id=f.repository.id,g.get_user()),   
+        """
+        repos=list(itertools.chain(*repos))
+        if len(repos) <=1:
+            return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
+       
         for repo in repos[:10]:
             try:
-                repo = Repository.objects.get(repo_id = repo.id)
-                x = Repo(None,repo.repo_id,g.get_user(), g)
+                currrepo = Repository.objects.get(repo_id = repo.id)
+                difobjs = currrepo.difficulty_set.all()
+                avg = 0
+                count = 0
+                for obj in difobjs:
+                    avg+=obj.rating
+                    count+=1
+                if count > 0:
+                    avg = avg/count
+                else:
+                    avg = 0
+                if level==0 or (level==1 and avg<=3) or (level==2 and avg>3 and avg<=6) or (level==3 and avg>6):
+                    x = Repo(None,currrepo.repo_id,g.get_user(), g)
+                    these_repo_results.insert(0,x)
+                    print x.name
             except ObjectDoesNotExist:
                 x = Repo(repo, repo.id, g.get_user(), g)
-            these_repo_results.append(x)
+                these_repo_results.append(x)
+                print x.name
         context["repos"] = these_repo_results
-        context['profile_user'] = profile_user
         context['comment_form'] = CommentForm()
         """
         for r in these_repo_results:
