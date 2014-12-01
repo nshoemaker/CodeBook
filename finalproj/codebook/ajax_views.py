@@ -313,11 +313,11 @@ def like_comment(request, id):
         comment = Comment.objects.get(id=id)
         profile_user = request.user 
 
-        if (comment.likers.filter(liked_by=profile_user)):
-            # User has already liked comment
+        if (profile_user in comment.likers.all()):
+            # User has already liked comment\
             pass
         else:
-            # User has not liked comment 
+            # 'User has not liked comment... liking'
             comment.likers.add(profile_user)
             comment.save()
         return HttpResponse('True', content_type="text")
@@ -333,12 +333,12 @@ def unlike_comment(request, id):
         comment = Comment.objects.get(id=id)
         profile_user = request.user
 
-        if (comment.likers.filter(liked_by=profile_user)):
-            # User has already liked comment
+        if (profile_user in comment.likers.all()):
+            #'User has already liked comment... unliking'
             comment.likers.remove(profile_user)
             comment.save()
         else:
-            # User has not liked comment 
+            #'User has not liked comment'
             pass
         return HttpResponse('True', content_type="text")
     else:
@@ -485,7 +485,8 @@ def repo_search_list(request):
         context = {}
         context['repos'] = {}
         choice = request.GET.get("types")
-        text = request.GET.get("text")
+        query = request.GET.get("text")
+        text = query.replace(" ","")
 
         if(choice == 'User'):
             repos = []
@@ -501,7 +502,6 @@ def repo_search_list(request):
             repos = g.search_repositories(text,sort='stars',order='desc').get_page(0)
 
         elif(choice == 'Code'):
-            print "CAME IN HERE"
             repos = []
             query = text+" user:github size:>10000"
             files = g.search_code(query).get_page(0)
@@ -534,7 +534,6 @@ def repo_search_list(request):
                 x = Repo(None,repo.repo_id,g.get_user(), g)
             except ObjectDoesNotExist:
                 x = Repo(repo, repo.id, g.get_user(), g)
-            print x.name
             these_repo_results.append(x)
         context["repos"] = these_repo_results
         context['profile_user'] = profile_user
@@ -609,7 +608,6 @@ def watch_list(request):
             x = Repo(None, repo.repo_id, user, g)
         except ObjectDoesNotExist:
             x = Repo(repo, repo.id, user, g)
-        print x.name
         recent_watched.append(x)
 
     context = {}
