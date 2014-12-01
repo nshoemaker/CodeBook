@@ -5,7 +5,6 @@
 function prepair_results()
 {
     prepair_file_save();
-    prepair_like_comment();
     prepair_repo_scroll();
     prepair_repo_star();
     prepair_repo_toggle_buttons();
