@@ -468,7 +468,8 @@ def repo_search_list(request):
         context = {}
         context['repos'] = {}
         choice = request.GET.get("types")
-        text = request.GET.get("text")
+        query = request.GET.get("text")
+        text = query.replace(" ","")
 
         if(choice == 'User'):
             repos = []
@@ -484,7 +485,6 @@ def repo_search_list(request):
             repos = g.search_repositories(text,sort='stars',order='desc').get_page(0)
 
         elif(choice == 'Code'):
-            print "CAME IN HERE"
             repos = []
             query = text+" user:github size:>10000"
             files = g.search_code(query).get_page(0)
@@ -517,7 +517,6 @@ def repo_search_list(request):
                 x = Repo(None,repo.repo_id,g.get_user(), g)
             except ObjectDoesNotExist:
                 x = Repo(repo, repo.id, g.get_user(), g)
-            print x.name
             these_repo_results.append(x)
         context["repos"] = these_repo_results
         context['profile_user'] = profile_user
@@ -592,7 +591,6 @@ def watch_list(request):
             x = Repo(None, repo.repo_id, user, g)
         except ObjectDoesNotExist:
             x = Repo(repo, repo.id, user, g)
-        print x.name
         recent_watched.append(x)
 
     context = {}
