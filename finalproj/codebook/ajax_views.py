@@ -461,7 +461,6 @@ def sort_lang_stream_popular(request):
 @login_required
 def repo_search_list(request):
     if request.is_ajax():
-        print "COMING INTO SEARCH \n"
         social = request.user.social_auth.get(provider='github')
         token = social.extra_data['access_token']
         g = Github(token)
@@ -473,12 +472,10 @@ def repo_search_list(request):
         text = query.replace(" ","")
 
         if(choice == 'User'):
-            print "CHOICE IS USER \n"
             repos = []
             files = []
             users = g.search_users(text,sort='followers',order='desc')
             for user in users:
-                print "FOUND USER \n"
                 for repo in user.get_repos().get_page(0):
                    repos.append(repo)
 
@@ -488,7 +485,6 @@ def repo_search_list(request):
             repos = g.search_repositories(text,sort='stars',order='desc').get_page(0)
 
         elif(choice == 'Code'):
-            print "CAME IN HERE"
             repos = []
             query = text+" user:github size:>10000"
             files = g.search_code(query).get_page(0)
@@ -516,13 +512,11 @@ def repo_search_list(request):
         """
         these_repo_results = []
         for repo in repos[:10]:
-            print "THERE IS A REPO RESULT \n"
             try:
                 repo = Repository.objects.get(repo_id = repo.id)
                 x = Repo(None,repo.repo_id,g.get_user(), g)
             except ObjectDoesNotExist:
                 x = Repo(repo, repo.id, g.get_user(), g)
-            print x.name
             these_repo_results.append(x)
         context["repos"] = these_repo_results
         context['profile_user'] = profile_user
@@ -597,7 +591,6 @@ def watch_list(request):
             x = Repo(None, repo.repo_id, user, g)
         except ObjectDoesNotExist:
             x = Repo(repo, repo.id, user, g)
-        print x.name
         recent_watched.append(x)
 
     context = {}
