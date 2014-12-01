@@ -68,8 +68,18 @@ def front(request):
 @login_required
 def news(request):
     context = {}
+    profile_user = request.user
+    user_ratings = UserRating.objects.filter(profile_user=profile_user)
+    lang_list = []
+
+    for rating in user_ratings:
+        lang = rating.language
+        lang_list.append(lang.name)
+
+    for lang in lang_list:
+        print lang
     # TODO: this is just temporary. Replace with actual list of languages the user likes.
-    lang_list = ['java', 'python', 'csharp', 'cpp', 'c']
+    #lang_list = ['java', 'python', 'csharp', 'cpp', 'c']
     context['lang_list'] = lang_list
     context['searchform'] = SearchForm()
     #profile_user = ProfileUser.objects.get(user=request.user)
