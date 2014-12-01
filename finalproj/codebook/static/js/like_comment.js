@@ -4,13 +4,7 @@
 
 $(document).ready(function()
 {
-    prepair_like_comment();
 });
-
-function prepair_like_comment()
-{
-
-}
 
     $('#base-stream').on('click', '.like-status', function()
     {
