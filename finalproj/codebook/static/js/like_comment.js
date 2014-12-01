@@ -9,7 +9,10 @@ $(document).ready(function()
 
 function prepair_like_comment()
 {
-    $(".like-status").click(function()
+
+}
+
+    $('#base-stream').on('click', '.like-status', function()
     {
         var comment_id = $(this).attr("data-item-id");
 
@@ -22,9 +25,6 @@ function prepair_like_comment()
             unlike_comment(comment_id);
         }
     });
-
-}
-
 function like_comment(comment_id)
 {
     $.ajax({
