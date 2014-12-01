@@ -20,9 +20,6 @@ $(document).ready(function() {
 $(document).ajaxComplete(function()
 {
     console.log("ajax complete");
-                        $('pre code').each(function (i, block) {
-                            hljs.highlightBlock(block);
-                        });
     //prepair_results();
     //load_trees();
 });
@@ -63,9 +60,7 @@ function search_results() {
         success: function(html) {
             console.log("success");
             spinner.stop();
-            console.log("4");
             $("#repository-list-container").replaceWith(html);
-            console.log("5");
             prepair_results();
             load_trees();
         },

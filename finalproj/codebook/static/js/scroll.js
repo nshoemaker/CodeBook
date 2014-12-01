@@ -7,15 +7,9 @@ $(document).ready(function(){
 
 function prepair_repo_scroll()
 {
-    console.log("SCROLLLLLLLLLLLLLLLLLLLLLLLL");
     $('.file-content').slimScroll({
-        height: '300px'
+        height: '250px'
     });
-
-    $('.rep-file-explorer').slimScroll({
-        height: '300px'
-    });
-
     $('.tab-content').slimScroll({
         height: '400px'
     });
