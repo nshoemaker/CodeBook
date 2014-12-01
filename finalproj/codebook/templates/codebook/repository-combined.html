@@ -1,6 +1,3 @@
-{% load staticfiles %}
-<script src="{% static "js/bootstrap-rating-input.min.js" %}" type="text/javascript"></script>
-
 <div class="container repository">
     <ol id="repo-parts-{{ repo.id }}">
         <li id="repo-header-{{ repo.id }}">
@@ -49,7 +46,7 @@
                 </div>
                 <div class="col-md-9 repository-file">
                     <div class="btn-group btn-group-xs file-controls">
-                        <button id="current-file-save-{{ repo.id }}" class="btn btn-xs control-btn glyphicon glyphicon-floppy-save" title="Save File"></button>
+                        <button id="current-file-save-{{ repo.id }}" class="btn btn-xs control-btn glyphicon glyphicon-floppy-save current-file-save" title="Save File" data-item-id="{{ repo.id }}"></button>
                     </div>
                     {% include 'codebook/file-contents-combined.html' with file_content=repo.default_file_contents %}
                 </div>
@@ -91,19 +88,19 @@
                     <h4 class="text-right">Difficulty:</h4>
                 </div>
                 <div class="col-md-3">
-                    <div class="stars starrr" data-rating="{{ repo.difficulty_rating }}" readonly></div>
+                    <div class="stars starrr difficulty-rating" data-rating="{{ repo.difficulty_rating }}" id="difficulty-rating-{{ repo.id }}" data-item-id="{{ repo.id }}"></div>
                 </div>
                 <div class="col-md-2">
                     <h4 class="text-right">Documentation:</h4>
                 </div>
                 <div class="col-md-3">
-                    <div class="stars starrr" data-rating="{{ repo.doc_rating }}" readonly></div>
+                    <div class="stars starrr documentation-rating" data-rating="{{ repo.doc_rating }}" id="documentation-rating-{{ repo.id }}" data-item-id="{{ repo.id }}"></div>
                 </div>
             </div>
 
             <ol class="repo-comment-list" id="repo-comment-list-{{ repo.id }}">
                 {% for comment in repo.comments %}
-                    <li id="comment{ comment.id }}">
+                    <li id="comment{{ comment.id }}">
                         {% include 'codebook/comment.html' %}
                     </li>
                 {% endfor %}
@@ -136,4 +133,3 @@
         </li>
     </ol>
 </div>
-<script src = "{% static "js/ratings.js" %}"></script>
