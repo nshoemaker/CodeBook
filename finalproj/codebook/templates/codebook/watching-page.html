@@ -21,5 +21,8 @@
     </div>
 {% endblock header %}
 {% block stream %}
-    {% include 'codebook/repository-list.html' %}
+    {% include 'codebook/repository-list-combined.html' %}
 {% endblock stream %}
+{% block scripts %}
+<script src = "{% static "js/watch-page.js" %}"></script>
+{% endblock scripts %}

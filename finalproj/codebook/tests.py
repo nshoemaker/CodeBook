@@ -22,17 +22,17 @@ class Responses_200(TestCase):
         self.assertEqual(response.status_code, 200)
 
         response = self.client.get('/codebook/watching')
-        print "Testing /codebook/news/watching not logged in"
+        print "Testing /codebook/watching not logged in"
         self.assertEqual(response.status_code, 200)
 
         response = self.client.get('/codebook/following')
-        print "Testing /codebook/news/following not logged in"
+        print "Testing /codebook/following not logged in"
         self.assertEqual(response.status_code, 200)
 
         response = self.client.get('/codebook/saved')
-        print "Testing /codebook/news/saved not logged in"
+        print "Testing /codebook/saved not logged in"
         self.assertEqual(response.status_code, 200)
 
         response = self.client.get('/codebook/profile/nshoemaker')
-        print "Testing /codebook/news/profile/nshoemaker not logged in"
+        print "Testing /codebook/profile/nshoemaker not logged in"
         self.assertEqual(response.status_code, 200)
