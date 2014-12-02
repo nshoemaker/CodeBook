@@ -2,6 +2,18 @@
  * Created by nora on 11/21/2014.
  */
 
+
+function prepair_results()
+{
+    prepair_file_save();
+    prepair_repo_scroll();
+    prepair_repo_star();
+    prepair_repo_toggle_buttons();
+    prepair_repo_watch();
+    prepair_comments();
+}
+
+
 $(document).ready(function () {
     recent_sort();
 });
