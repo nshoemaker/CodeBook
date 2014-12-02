@@ -23,7 +23,7 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -68,8 +68,13 @@ AUTHENTICATION_BACKENDS = (
    'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_GITHUB_KEY = '31fd927b2ac22678d050'
-SOCIAL_AUTH_GITHUB_SECRET = '431197c65d51dc0ae5e4919fc44a999b95e2fef3'
+# these are the settings for local development
+#SOCIAL_AUTH_GITHUB_KEY = '31fd927b2ac22678d050'
+#SOCIAL_AUTH_GITHUB_SECRET = '431197c65d51dc0ae5e4919fc44a999b95e2fef3'
+
+# new keys for deployment:
+SOCIAL_AUTH_GITHUB_KEY = 'aca57928bf5933e6f19e'
+SOCIAL_AUTH_GITHUB_SECRET = '477759c2ab4260dcb708c1c719a370d316891840'
 SOCIAL_AUTH_GITHUB_SCOPE = ['repo']
 SOCIAL_AUTH_USER_MODEL = 'codebook.ProfileUser'
 
@@ -83,12 +88,12 @@ WSGI_APPLICATION = 'finalproj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'codebook',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'webapps',
-        'PASSWORD': 'fun',
-        'HOST': '127.0.0.1',    # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',    # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',             # Set to empty string for default.
     }
 }
@@ -121,6 +126,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = '/home/ubuntu/test_site.com/finalproj/codebook/static'
 
 # Configures Django to merely print emails rather than sending them.
 # Comment out this line to enable real email-sending.

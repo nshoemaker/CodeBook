@@ -123,7 +123,6 @@ class RepoFile (models.Model):
 
     def get_date_created(self, g):
         return "1/1/2014"
-
     def get_content(self, g):
         try:
             repo_id = self.repository.repo_id
