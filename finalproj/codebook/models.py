@@ -5,12 +5,9 @@ from django.db.models import Q
 from django.contrib.auth.models import User, UserManager, AbstractBaseUser
 from django.utils import timezone
 from github import Github 
-# g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
-g = Github('dmouli', 'Spongebob5%')
 
 import base64
 import multiprocessing 
-#from joblib import Parallel, delayed  
 
 class Stack(models.Model):
     name = models.CharField(max_length=40)
@@ -105,27 +102,35 @@ class RepoFile (models.Model):
     average_quality = models.IntegerField(blank=True)
     tags = models.ManyToManyField(Tag)
 
-    def get_creator(self):
-        repo_id = int(self.repository.repo_id)
-        repo = g.get_repo(repo_id)
-        return repo.owner.name
+    def get_creator(self, g):
+        try:
+            repo_id = self.repository.repo_id
+            repo = g.get_repo(repo_id)
+            return repo.owner.name
+        except:
+            return ""
 
-    def get_name(self):
-        repo_id = int(self.repository.repo_id)
-        repo = g.get_repo(repo_id)
-        return repo.get_contents(self.path).name
+    def get_name(self, g):
+        try:
+            repo_id = self.repository.repo_id
+            repo = g.get_repo(repo_id)
+            return repo.get_contents(self.path).name
+        except:
+            return ""
 
-    def get_language(self):
+    def get_language(self, g):
         return "file_lang"
 
-    def get_date_created(self):
+    def get_date_created(self, g):
         return "1/1/2014"
-
-    def get_content(self):
-        repo_id = int(self.repository.repo_id)
-        repo = g.get_repo(repo_id)
-        content = repo.get_contents(self.path).content
-        return base64.b64decode(content)
+    def get_content(self, g):
+        try:
+            repo_id = self.repository.repo_id
+            repo = g.get_repo(repo_id)
+            content = repo.get_contents(self.path).content
+            return base64.b64decode(content)
+        except:
+            return "-- No Content --"
 
 
 class Difficulty(models.Model):
