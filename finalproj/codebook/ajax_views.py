@@ -268,6 +268,7 @@ def unwatch_repo(request, id):
         pass
 
 @login_required
+@transaction.atomic
 def save_file(request, id):
     if request.is_ajax():
         profile_user = request.user
@@ -307,6 +308,7 @@ def unsave_file(request, id):
 
 
 @login_required
+@transaction.atomic
 def like_comment(request, id):
     if request.is_ajax():
         context = {}
@@ -327,6 +329,7 @@ def like_comment(request, id):
 
 
 @login_required
+@transaction.atomic
 def unlike_comment(request, id):
     if request.is_ajax():
         context = {}
@@ -346,6 +349,7 @@ def unlike_comment(request, id):
         pass
 
 @login_required
+@transaction.atomic
 def rate_credibility(request):
     if request.is_ajax():
         social = request.user.social_auth.get(provider='github')
@@ -379,6 +383,7 @@ def rate_credibility(request):
         pass
 
 @login_required
+@transaction.atomic
 def add_proficiency(request):
     if request.is_ajax():
         context = {}
@@ -600,6 +605,7 @@ def watch_list(request):
     return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
 
 @login_required
+@transaction.atomic
 def save_file_from_repo(request):
     if request.is_ajax:
         profile_user = request.user
