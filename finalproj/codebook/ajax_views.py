@@ -446,7 +446,7 @@ def sort_lang_stream_recent(request):
         query = "language:JavaScript stars:>=500"
         repos = g.search_repositories(query,sort='updated',order='desc').get_page(0)
         these_repo_results = []
-        for repo in repos[:5]:
+        for repo in repos[:1]:
             try:
                 repo = Repository.objects.get(repo_id = repo.id)
                 x = Repo(None,repo.repo_id,g.get_user(), g)
