@@ -435,24 +435,22 @@ def add_proficiency(request):
         # uhhhhhhhh awk. this should never happen
         pass
 
-@login_required()
+@login_required
 def sort_lang_stream_recent(request):
     if request.is_ajax():
         context = {}
-        context['repos'] = {}
         g = get_auth_user_git(request)
         profile_user = request.user
 
         query = "language:JavaScript stars:>=500"
         repos = g.search_repositories(query,sort='updated',order='desc').get_page(0)
         these_repo_results = []
-        for repo in repos[:1]:
+        for repo in repos[:5]:
             try:
                 repo = Repository.objects.get(repo_id = repo.id)
                 x = Repo(None,repo.repo_id,g.get_user(), g)
             except ObjectDoesNotExist:
                 x = Repo(repo, repo.id, g.get_user(), g)
-            print x.name
             these_repo_results.append(x)
         context["repos"] = these_repo_results
         context['profile_user'] = profile_user
@@ -466,8 +464,22 @@ def sort_lang_stream_recent(request):
 def sort_lang_stream_popular(request):
     if request.is_ajax():
         context = {}
-        context['repos'] = {}
+        g = get_auth_user_git(request)
+        profile_user = request.user
+
+        query = "language:JavaScript stars:>700"
+        repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
+        these_repo_results = []
+        for repo in repos[:5]:
+            try:
+                repo = Repository.objects.get(repo_id = repo.id)
+                x = Repo(None,repo.repo_id,g.get_user(), g)
+            except ObjectDoesNotExist:
+                x = Repo(repo, repo.id, g.get_user(), g)
+            these_repo_results.append(x)
+        context["repos"] = these_repo_results
         context['profile_user'] = request.user
+        context['comment_form'] = CommentForm()
         return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
