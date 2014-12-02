@@ -14,6 +14,15 @@ $('#lang-popular').click(function () {
     popular_sort();
 });
 
+
+$(document).ajaxComplete(function()
+{
+    console.log("ajax complete");
+                        $('pre code').each(function (i, block) {
+                            hljs.highlightBlock(block);
+                        });
+});
+
 function recent_sort() {
     var target = document.getElementById('base-stream');
     var spinner = new Spinner().spin(target);
@@ -26,6 +35,8 @@ function recent_sort() {
         success: function (html) {
             spinner.stop();
             $("#repo-list").replaceWith(html);
+            prepair_results();
+            load_trees();
         },
         error: function (xhr, textStatus, errorThrown) {
             spinner.stop();
@@ -50,6 +61,8 @@ function popular_sort() {
         success: function (html) {
             spinner.stop();
             $("#repo-list").replaceWith(html);
+            prepair_results();
+            load_trees();
         },
         error: function (xhr, textStatus, errorThrown) {
             spinner.stop();
