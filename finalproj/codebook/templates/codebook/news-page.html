@@ -23,7 +23,7 @@
                 </div>-->
                 {% for lang in lang_list %}
                     <div class="col-md-1">
-                        <h3><a href="{% url 'quick_search' lang %}">{% include 'codebook/get-lang-icon-from-name.html' with lang=lang %}</a></h3>
+                        <h3>{% include 'codebook/get-lang-icon-from-name.html' with lang=lang %}</h3>
                     </div>
                 {% endfor %}
             </div>

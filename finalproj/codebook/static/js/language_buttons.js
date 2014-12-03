@@ -226,4 +226,21 @@ $(document).ready(function()
         $("#language-choice").text("a Language");
         $("#language-choice").css("font-weight","normal");
     });
+
+
+    $(".icon-orkut").mouseover(function()
+    {
+        $(this).css("background-color", "#77DDAA");
+        //$(".icon-orkut").css("background-color", "#77DDAA");
+        $("#language-choice").text("Bash");
+        $("#language-choice").css("font-weight","bolder");
+    });
+
+    $(".icon-orkut").mouseout(function()
+    {
+        $(this).css("background-color", "#55BB88");
+        //$(".icon-orkut").css("background-color", "#55BB88");
+        $("#language-choice").text("a Language");
+        $("#language-choice").css("font-weight","normal");
+    });
 });

@@ -15,17 +15,43 @@ function prepair_results()
 
 
 $(document).ready(function () {
-    recent_sort();
+    var $active = $('.lang-icon').first();
+    $active.addClass("active-lang");
+    var language = $active.attr("data-item-id");
+    console.log("ACTIVE LANGUAGE: ");
+    console.log(language);
+    recent_sort(language);
 });
 
 $('#lang-recent').click(function () {
-    recent_sort();
+    var $active = $('.active-lang').first();
+    var language = $active.attr("data-item-id");
+    recent_sort(language);
 });
 
 $('#lang-popular').click(function () {
-    popular_sort();
+    var $active = $('.active-lang').first();
+    var language = $active.attr("data-item-id");
+    popular_sort(language);
 });
 
+$('.lang-icon').click(function () {
+    var $this = $(this);
+    if (!$this.hasClass("active-lang")) {
+        $('.lang-icon').each(function() {
+            $(this).removeClass("active-lang");
+        });
+        $this.addClass("active-lang");
+        var language = $this.attr("data-item-id");
+
+        if ($('#lang-recent').hasClass("active-lang-filter")) {
+            recent_sort(language);
+        }
+        else if ($('#lang-popular').hasClass("active-lang-filter")) {
+            popular_sort(language);
+        }
+    }
+});
 
 $(document).ajaxComplete(function()
 {
@@ -35,15 +61,30 @@ $(document).ajaxComplete(function()
                         });
 });
 
-function recent_sort() {
+function recent_sort(language) {
     var target = document.getElementById('base-stream');
     var spinner = new Spinner().spin(target);
-    $("#lang-recent").css('background-color', '#77DDAA');
-    $("#lang-popular").css('background-color', '#FFFFFF');
+
+    var $recent = $("#lang-recent");
+    $recent.css('background-color', '#77DDAA');
+    var $popular = $("#lang-popular");
+    $popular.css('background-color', '#FFFFFF');
+
+    if ($popular.hasClass("active-lang-filter"))
+    {
+        $popular.removeClass("active-lang-filter");
+    }
+    if (!$recent.hasClass("active-lang-filter"))
+    {
+        $recent.addClass("active-lang-filter");
+    }
+
     $.ajax({
         type: "GET",
         url: "/codebook/sort_lang_stream_recent",
-        data: {},
+        data: {
+            language: language
+        },
         success: function (html) {
             spinner.stop();
             $("#repo-list").replaceWith(html);
@@ -61,15 +102,30 @@ function recent_sort() {
 
 }
 
-function popular_sort() {
+function popular_sort(language) {
     var target = document.getElementById('base-stream');
     var spinner = new Spinner().spin(target);
-    $("#lang-popular").css('background-color', '#77DDAA');
-    $("#lang-recent").css('background-color', '#FFFFFF');
+
+    var $popular = $("#lang-popular");
+    $popular.css('background-color', '#77DDAA');
+    var $recent = $("#lang-recent");
+    $recent.css('background-color', '#FFFFFF');
+
+    if ($recent.hasClass("active-lang-filter"))
+    {
+        $recent.removeClass("active-lang-filter");
+    }
+    if (!$popular.hasClass("active-lang-filter"))
+    {
+        $popular.addClass("active-lang-filter");
+    }
+
     $.ajax({
         type: "GET",
         url: "/codebook/sort_lang_stream_popular",
-        data: {},
+        data: {
+            language: language
+        },
         success: function (html) {
             spinner.stop();
             $("#repo-list").replaceWith(html);

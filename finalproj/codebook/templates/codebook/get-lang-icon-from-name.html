@@ -1,39 +1,29 @@
 {% if lang == 'java' %}
-    <i class="icon-prog-java"></i>
-{% endif %}
-{% if lang == 'python' %}
-    <i class="icon-prog-python"></i>
-{% endif %}
-{% if lang == 'c' %}
-	<i class="icon-prog-c"></i>
-{% endif %}
-{% if lang == 'javascript' %}
-	<i class="icon-prog-js02"></i>
-{% endif %}
-{% if lang == 'ruby' %}
-	<i class="icon-prog-ruby"></i>
-{% endif %}
-{% if lang == 'rails' %}
-	<i class="icon-prog-rails"></i>
-{% endif %}
-{% if lang == 'node' %}
-	<i class="icon-prog-nodejs02"></i>
-{% endif %}
-{% if lang == 'django' %}
-	<i class="icon-prog-django"></i>
-{% endif %}
-{% if lang == 'php' %}
-	<i class="icon-prog-php02"></i>
-{% endif %}
-{% if lang == 'cplusplus' or lang == 'c++' %}
-	<i class="icon-prog-cplusplus"></i>
-{% endif %}
-{% if lang == 'csharp' or lang == 'c#' %}
-	<i class="icon-prog-csharp"></i>
-{% endif %}
-{% if lang == 'objc' %}
-	<i class="icon-prog-objc"></i>
-{% endif %}
-{% if lang == 'css' %}
-	<i class="icon-css3-01"></i>
+    <i class="icon-prog-java lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
+{% elif lang == 'python' %}
+    <i class="icon-prog-python lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
+{% elif lang == 'c' %}
+	<i class="icon-prog-c lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
+{% elif lang == 'javascript' %}
+	<i class="icon-prog-js02 lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
+{% elif lang == 'ruby' %}
+	<i class="icon-prog-ruby lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
+{% elif lang == 'rails' %}
+	<i class="icon-prog-rails lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
+{% elif lang == 'node' %}
+	<i class="icon-prog-nodejs02 lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
+{% elif lang == 'django' %}
+	<i class="icon-prog-django lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
+{% elif lang == 'php' %}
+	<i class="icon-prog-php02 lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
+{% elif lang == 'cplusplus' or lang == 'c++' %}
+	<i class="icon-prog-cplusplus lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
+{% elif lang == 'csharp' or lang == 'c#' %}
+	<i class="icon-prog-csharp lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
+{% elif lang == 'objc' %}
+	<i class="icon-prog-objc lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
+{% elif lang == 'css' %}
+	<i class="icon-css3-01 lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
+{% else %}
+	<i class="icon-orkut lang-icon" id="lang-icon-{{ lang }}" data-item-id="{{ lang }}"></i>
 {% endif %}
