@@ -61,7 +61,7 @@ class Repo:
                 self.doc_rating = 0
             if self.difficulty_rating == None:
                 self.difficulty_rating = 0
-            self.comments = Comment.objects.filter(repository__repo_id = repo.id)
+            self.comments = Comment.objects.filter(repository__repo_id = repo.id).order_by('date_time')
 
         else:
             self.comments = Comment.objects.none()
