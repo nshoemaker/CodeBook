@@ -75,6 +75,8 @@ class Repo:
         self.default_file_contents = ""
         self.default_file_path = ""
         self.file_tree = None
+        self.readme = None
+        self.readme_contents = ""
         try:
             branches = repo.get_branches()
             SHA = branches[0].commit.sha
@@ -92,22 +94,57 @@ class Repo:
         except:
             pass
         try:
-            self.id = repo.id
-            self.name = repo.name
-            self.description = repo.description
-            self.url = repo.html_url
-            self.langs = repo.language
-            self.org = repo.organization
-            self.owner_name = repo.owner.login
-            self.owner_prof_pic = repo.owner.avatar_url
-            self.is_current_user_starring = user.has_in_starred(repo) 
-            self.star_count = repo.stargazers_count
-            self.is_current_user_watching = user.has_in_subscriptions(repo) 
-            self.watch_count = repo.watchers_count
-            self.tag_list = None
+          self.id = repo.id
         except:
-            print "crashed in basic info section"
-            pass
+          self.id = -1
+        try:
+          self.name = repo.name
+        except:
+          self.name = ""
+        try:
+          self.description = repo.description
+        except:
+          self.description = ""
+        try:
+          self.url = repo.html_url
+        except:
+          self.url = ""
+        try:
+          self.langs = repo.language
+        except:
+          self.langs = ""
+        try:
+          self.org = repo.organization
+        except:
+          self.org = ""
+        try:
+          self.owner_name = repo.owner.login
+        except:
+          self.owner_name = ""
+        try:
+          self.owner_prof_pic = repo.owner.avatar_url
+        except:
+          self.owner_prof_pic = ""
+        try:
+          self.is_current_user_starring = user.has_in_starred(repo) 
+        except:
+          self.is_current_user_starring = False
+        try:
+          self.star_count = repo.stargazers_count
+        except:
+          self.star_count = 0
+        try:
+          self.is_current_user_watching = user.has_in_subscriptions(repo) 
+        except:
+          self.is_current_user_watching = False 
+        try:
+          self.watch_count = repo.watchers_count
+        except:
+          self.watch_count = 0
+        try:
+          self.tag_list = None
+        except:
+          self.tag_list = None
 """      except Exception,e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -120,3 +157,6 @@ def get_auth_user_git(request):
     token = social.extra_data['access_token']
     g = Github(token)
     return g
+
+languages = ['c', 'java','objective-c', 'c++', 'c#', 'php', 'python', 'javascript', 'perl', 'visual basic .net', 'visual basic', 'r', 'transact
+

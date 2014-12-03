@@ -268,6 +268,8 @@ def unwatch_repo(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
+
+@transaction.atomic
 @login_required
 def save_file(request, id):
     if request.is_ajax():
@@ -306,7 +308,7 @@ def unsave_file(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
-
+@transaction.atomic
 @login_required
 def like_comment(request, id):
     if request.is_ajax():
@@ -326,7 +328,7 @@ def like_comment(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
-
+@transaction.atomic
 @login_required
 def unlike_comment(request, id):
     if request.is_ajax():
@@ -346,6 +348,7 @@ def unlike_comment(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
+@transaction.atomic
 @login_required
 def rate_credibility(request):
     if request.is_ajax():
@@ -356,7 +359,6 @@ def rate_credibility(request):
         #user statistics
         #numFollowers = g.get_user().followers
         #numRepos = g.get_user().public_repos
-        user_ratings = UserRating.objects.filter(profile_user=request.user)
         for repo in g.get_user().get_repos():
             langs = repo.get_languages()
             for lang in langs.keys():
@@ -380,6 +382,7 @@ def rate_credibility(request):
         # uhhhhhhhh awk. this should never happen
         pass
 
+@transaction.atomic
 @login_required
 def add_proficiency(request):
     if request.is_ajax():
