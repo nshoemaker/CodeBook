@@ -6,11 +6,15 @@
 <!-- TODO: everything above this comment and below the static usage comment should be deleted eventually -->
 
 <ol class="repository-list" id="repo-list">
+    {% if no_results == 'true' %}
+        <h4>No results found.</h4>
+    {% else %}
     {% for repo in repos %}
         <li id="repo{{ repo.id }}">
             {% include 'codebook/repository-combined.html' %}
         </li>
     {% endfor %}
+    {% endif %}
 </ol>
 
 <!-- end repository list -->

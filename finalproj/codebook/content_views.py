@@ -74,14 +74,21 @@ def front(request):
 @login_required
 def news(request):
     context = {}
+    profile_user = request.user
+    user_ratings = UserRating.objects.filter(profile_user=profile_user)
+    lang_list = []
+
+    for rating in user_ratings:
+        lang = rating.language
+        print "ORIGINAL LANG = " + lang.name + "___"
+        lang_name = ((lang.name).lower()).strip()
+        print "CONVERTED LANG = " + lang_name + "___"
+        lang_list.append(lang_name)
+
     # TODO: this is just temporary. Replace with actual list of languages the user likes.
-    lang_list = ['java', 'python', 'csharp', 'cpp', 'c']
-    context['lang_list'] = lang_list
+    #lang_list = ['java', 'python', 'csharp', 'cpp', 'c']
+    context['lang_list'] = lang_list[:12]
     context['searchform'] = SearchForm()
-    #profile_user = ProfileUser.objects.get(user=request.user)
-    #user_langs = profile_user.languages.all
-    #context['profile_user'] = profile_user
-    #context['lang_list'] = user_langs
     return render(request, 'codebook/news-page.html', context)
 
 @login_required
