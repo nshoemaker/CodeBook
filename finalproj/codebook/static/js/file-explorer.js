@@ -38,7 +38,6 @@ function load_tree(elem, id) {
             console.log("ACTIVATE: " + node + " (" + node.getKeyPath() + ")");
 
             if (!node.data.isFolder) {
-                console.log("I AM A FILE");
                 var key = node.data.key;
                 var parts = key.split('---');
                 var repo_id = parts[0];
@@ -54,7 +53,6 @@ function load_tree(elem, id) {
                         path: path
                     },
                     success: function (html) {
-                        console.log(html.toString());
                         $('#file-content-' + repo_id).replaceWith(html);
                         prepair_repo_scroll();
                     }
@@ -67,12 +65,14 @@ function load_tree(elem, id) {
             var parts = key.split('---');
             var repo_id = parts[0];
             var sha = parts[1];
+            var path = parts[2];
             $.ajax({
                 type: "GET",
                 url: '/codebook/expand_folder',
                 data: {
                     repo_id: repo_id,
-                    sha: sha
+                    sha: sha,
+                    path: path
                 },
                 success: function (json) {
                     /*
