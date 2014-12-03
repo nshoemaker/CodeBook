@@ -586,6 +586,9 @@ def repo_search_list(request):
                     x = Repo(repo, repo.id, g.get_user(), g)
                     nondbrepos.append(x)
                     print x.name
+            
+            for comment in x.comments:
+                comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g)
         these_repo_results = dbrepos+nondbrepos
         context["repos"] = these_repo_results
         context['comment_form'] = CommentForm()
@@ -660,7 +663,6 @@ def watch_list(request):
             x = Repo(None, repo.repo_id, user, g)
         except ObjectDoesNotExist:
             x = Repo(repo, repo.id, user, g)
-
 
         for comment in x.comments:
             comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g)
