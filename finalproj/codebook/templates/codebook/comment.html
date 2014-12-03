@@ -1,7 +1,7 @@
 {% load staticfiles %}
 <div class="row comment">
     <div class="col-md-1">
-        <h5>{% include 'codebook/get-profpic.html' with id=comment.profile_user.user.id %}</h5>
+        <h5>{% include 'codebook/get-profpic.html' with profile_user=comment.profile_user %}</h5>
     </div>
     <div class="col-md-2">
         <h5>{{ comment.profile_user.get_username }}</h5>

@@ -596,6 +596,10 @@ def watch_list(request):
             x = Repo(None, repo.repo_id, user, g)
         except ObjectDoesNotExist:
             x = Repo(repo, repo.id, user, g)
+
+
+        for comment in x.comments:
+            comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g)
         recent_watched.append(x)
 
     context = {}
