@@ -484,12 +484,14 @@ def repo_search_list(request):
         if(choice == 'User'):
             repos = []
             files = []
+            results = []
             for word in text:
                 if word not in levels:
                     users = g.search_users(word,sort='followers',order='desc')
                     for user in users:
                         for repo in user.get_repos().get_page(0):
-                           repos.append(repo)
+                            results.append(repo)
+            repos.append(results)
 
         elif(choice == 'Repo'):
             files = []
@@ -522,7 +524,6 @@ def repo_search_list(request):
             pass
             #TODO: raise exception shouldn't get here
 
-
         these_repo_results = []
         level = 0
         if any(word in text for word in easy):
@@ -548,12 +549,16 @@ def repo_search_list(request):
                     repofile(repository = Repo(f.repository,id=f.repository.id,g.get_user()),   
         """
         repos=list(itertools.chain(*repos))
-        if len(repos) <=1:
+        if len(repos) < 1:
+            #TODO: no valid results
             return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
         dbrepos = []
         nondbrepos = []
         for repo in repos[:10]:
-            contribs = len(list(repo.get_contributors()))
+            try:
+                contribs = len(list(repo.get_contributors()))
+            except:
+                continue
             avgdif = 0
             try:
                 currrepo = Repository.objects.get(repo_id = repo.id)
@@ -567,7 +572,6 @@ def repo_search_list(request):
                     avgdif = avgdif/count
                     print "got difficulty from stars: ",avgdif
                 else:
-                    #TODO: fix this
                     avgdif = (contribs/10 + repo.size/10000)/2 
                 avgdif = min(avgdif,5)
                 if level==0 or (level==1 and avgdif<=2) or (level==2 and avgdif>2 and avgdif<=4) or (level==3 and avgdif>4):
