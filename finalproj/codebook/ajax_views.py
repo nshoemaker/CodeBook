@@ -447,9 +447,12 @@ def sort_lang_stream_recent(request):
         g = get_auth_user_git(request)
         profile_user = request.user
 
-        language = request.GET['language']
-        query = "language:" + language + " stars:>=500"
-        repos = g.search_repositories(query,sort='updated',order='desc').get_page(0)
+        try:
+            language = request.GET['language']
+            query = "language:" + language + " stars:>=500"
+            repos = g.search_repositories(query,sort='updated',order='desc').get_page(0)
+        except:
+            repos = []
         these_repo_results = []
         for repo in repos[:5]:
             try:
@@ -473,9 +476,12 @@ def sort_lang_stream_popular(request):
         g = get_auth_user_git(request)
         profile_user = request.user
 
-        language = request.GET['language']
-        query = "language:" + language + " stars:>=700"
-        repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
+        try:
+            language = request.GET['language']
+            query = "language:" + language + " stars:>=700"
+            repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
+        except:
+            repos = []
         these_repo_results = []
         for repo in repos[:5]:
             try:
