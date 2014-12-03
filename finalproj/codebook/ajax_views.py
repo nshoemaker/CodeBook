@@ -453,6 +453,8 @@ def sort_lang_stream_recent(request):
             repos = g.search_repositories(query,sort='updated',order='desc').get_page(0)
         except:
             repos = []
+            no_results = 'true'
+            context['no_results'] = no_results
         these_repo_results = []
         for repo in repos[:5]:
             try:
@@ -482,6 +484,8 @@ def sort_lang_stream_popular(request):
             repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
         except:
             repos = []
+            no_results = 'true'
+            context['no_results'] = no_results
         these_repo_results = []
         for repo in repos[:5]:
             try:
