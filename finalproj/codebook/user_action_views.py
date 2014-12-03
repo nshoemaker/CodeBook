@@ -22,9 +22,7 @@ def signin(request):
 # (ajax_views.py action repo_search_list)
 @login_required
 def new_search(request):
-    social = request.user.social_auth.get(provider='github')
-    token = social.extra_data['access_token']
-    g = Github(token)
+    g = get_auth_user_git(request)
     profile_user = request.user
     context = {}
 
