@@ -7,6 +7,7 @@
 ##############################################################
 ##############################################################
 from views_base import *
+import itertools
 
 def get_formatted_nodes(self, tree, repo):
     print tree
@@ -267,8 +268,9 @@ def unwatch_repo(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
-@login_required
+
 @transaction.atomic
+@login_required
 def save_file(request, id):
     if request.is_ajax():
         profile_user = request.user
@@ -306,9 +308,8 @@ def unsave_file(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
-
-@login_required
 @transaction.atomic
+@login_required
 def like_comment(request, id):
     if request.is_ajax():
         context = {}
@@ -327,9 +328,8 @@ def like_comment(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
-
-@login_required
 @transaction.atomic
+@login_required
 def unlike_comment(request, id):
     if request.is_ajax():
         context = {}
@@ -348,8 +348,8 @@ def unlike_comment(request, id):
         # uhhhhhhhh awk. this should never happen
         pass
 
-@login_required
 @transaction.atomic
+@login_required
 def rate_credibility(request):
     if request.is_ajax():
         social = request.user.social_auth.get(provider='github')
@@ -382,8 +382,8 @@ def rate_credibility(request):
         # uhhhhhhhh awk. this should never happen
         pass
 
-@login_required
 @transaction.atomic
+@login_required
 def add_proficiency(request):
     if request.is_ajax():
         context = {}
@@ -461,7 +461,6 @@ def sort_lang_stream_popular(request):
         # uhhhhhhhh awk. this should never happen
         pass
 
-
 # Given a search type and some text, returns a list of repositories
 @login_required
 def repo_search_list(request):
@@ -469,62 +468,126 @@ def repo_search_list(request):
         social = request.user.social_auth.get(provider='github')
         token = social.extra_data['access_token']
         g = Github(token)
+        print "Start is:", g.get_rate_limit().rate.remaining
         profile_user = request.user
         context = {}
         context['repos'] = {}
         choice = request.GET.get("types")
-        query = request.GET.get("text")
-        text = query.replace(" ","")
+        text = request.GET.get("text").split('+')
+        text = [item.lower() for item in text if item.isalnum()]
+
+        easy = ['easy','beginner','simple']
+        medium = ['medium', 'intermediate']
+        hard = ['hard','difficult','advanced']
+        levels = easy+medium+hard
 
         if(choice == 'User'):
             repos = []
             files = []
-            users = g.search_users(text,sort='followers',order='desc')
-            for user in users:
-                for repo in user.get_repos().get_page(0):
-                   repos.append(repo)
-
+            results = []
+            for word in text:
+                if word not in levels:
+                    users = g.search_users(word,sort='followers',order='desc')
+                    for user in users:
+                        for repo in user.get_repos().get_page(0):
+                            results.append(repo)
+            repos.append(results)
 
         elif(choice == 'Repo'):
             files = []
-            repos = g.search_repositories(text,sort='stars',order='desc').get_page(0)
+            repos = []
+            for word in text:
+                if word not in levels:
+                    results = g.search_repositories(word,sort='stars',order='desc').get_page(0)
+                    repos.append(results)
 
         elif(choice == 'Code'):
+            print "CAME IN HERE"
             repos = []
             query = text+" user:github size:>10000"
             files = g.search_code(query).get_page(0)
                 
-        else:
-            #check that language?
+        elif(choice == 'Lang'):
             files = []
-            query = "language:"+text+" stars:>=500"
-            repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
-        """
-        these_file_results = []
-        for f in files[:10]:
-            file_name = f.name
-            print file_name + "\n"
-            file_contents = base64.b64decode(f.content)
-            print file_contents + "\n"
-            file_path = f.path
-            print file_path + "\n"
-            try:
-                repo = Repository.objects.get(repo_id = repo.f.repository.id)
-                x = Repo(None,repo.repo_id,g.get_user())
-            except ObjectDoesNotExist:
-                x = Repo(repo, repo.id, g.get_user())
-            repofile(repository = Repo(f.repository,id=f.repository.id,g.get_user()),   
-        """
+            repos = []
+            searched = False
+            for word in text:
+                if word not in levels and word in languages:
+                    query = "language:"+word+" stars:>=500"
+                    results = g.search_repositories(query,sort='stars',order='desc').get_page(0)
+                    repos.append(results)
+                    searched = True
+            if not searched:
+                pass
+                #TODO: return language not available
+        else:
+            pass
+            #TODO: raise exception shouldn't get here
+
         these_repo_results = []
+        level = 0
+        if any(word in text for word in easy):
+            level = 1
+        if any(word in text for word in medium):
+            level = 2
+        if any(word in text for word in hard):
+            level = 3
+        """    
+                these_file_results = []
+                for f in files[:10]:
+                    file_name = f.name
+                    print file_name + "\n"
+                    file_contents = base64.b64decode(f.content)
+                    print file_contents + "\n"
+                    file_path = f.path
+                    print file_path + "\n"
+                    try:
+                        repo = Repository.objects.get(repo_id = repo.f.repository.id)
+                        x = Repo(None,repo.repo_id,g.get_user())
+                    except ObjectDoesNotExist:
+                        x = Repo(repo, repo.id, g.get_user())
+                    repofile(repository = Repo(f.repository,id=f.repository.id,g.get_user()),   
+        """
+        repos=list(itertools.chain(*repos))
+        if len(repos) < 1:
+            #TODO: no valid results
+            return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
+        dbrepos = []
+        nondbrepos = []
         for repo in repos[:10]:
             try:
-                repo = Repository.objects.get(repo_id = repo.id)
-                x = Repo(None,repo.repo_id,g.get_user(), g)
+                contribs = len(list(repo.get_contributors()))
+            except:
+                continue
+            avgdif = 0
+            try:
+                currrepo = Repository.objects.get(repo_id = repo.id)
+                print "Got repo from db"
+                difobjs = currrepo.difficulty_set.all()
+                count = 0
+                for obj in difobjs:
+                    avgdif += obj.rating
+                    count += 1
+                if count > 0:
+                    avgdif = avgdif/count
+                    print "got difficulty from stars: ",avgdif
+                else:
+                    avgdif = (contribs/10 + repo.size/10000)/2 
+                avgdif = min(avgdif,5)
+                if level==0 or (level==1 and avgdif<=2) or (level==2 and avgdif>2 and avgdif<=4) or (level==3 and avgdif>4):
+                    x = Repo(None,currrepo.repo_id,g.get_user(), g)
+                    dbrepos.append(x)
+                    print "added from db section"
+                    print x.name
             except ObjectDoesNotExist:
-                x = Repo(repo, repo.id, g.get_user(), g)
-            these_repo_results.append(x)
+                avgdif = (contribs/10 + repo.size/10000)/2 
+                avgdif = min(avgdif,5)
+                if level==0 or (level==1 and avgdif<=2) or (level==2 and avgdif>2 and avgdif<=4) or (level==3 and avgdif>4):
+                    x = Repo(repo, repo.id, g.get_user(), g)
+                    nondbrepos.append(x)
+                    print x.name
+        these_repo_results = dbrepos+nondbrepos
         context["repos"] = these_repo_results
-        context['profile_user'] = profile_user
         context['comment_form'] = CommentForm()
         """
         for r in these_repo_results:
@@ -546,6 +609,7 @@ def repo_search_list(request):
                         print "     " + l.mode
                         print "     " + l.url
                         print "     " + l.type"""
+        print "End is:" ,g.get_rate_limit().rate.remaining
         return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
@@ -604,8 +668,8 @@ def watch_list(request):
     context['profile_user'] = request.user
     return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
 
-@login_required
 @transaction.atomic
+@login_required
 def save_file_from_repo(request):
     if request.is_ajax:
         profile_user = request.user
