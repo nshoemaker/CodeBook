@@ -20,16 +20,54 @@ from views_base import *
 @login_required
 def my_profile_view(request):
     context = {}
-
     g = get_auth_user_git(request)
+    user = g.get_user()
+    
     profile_user = request.user
     profile_user.get_git_profile_url = profile_user.get_git_profile_url(g)
     profile_user.get_email = profile_user.get_email(g)
     profile_user.get_avatar_url = profile_user.get_avatar_url(g)
 
-    context["profile_user"] = request.user
+    query = "user:" + user.login
+    recent_repos = g.search_repositories(query)
+    popular_repos = g.search_repositories(query, sort='stars', order='desc').get_page(0)
+
+    recent_repo_results = []
+    try:
+        for repo in recent_repos[:5]:
+            try:
+                repo = Repository.objects.get(repo_id = repo.id)
+                x = Repo(None,repo.repo_id, g.get_user() , g)
+            except ObjectDoesNotExist:
+                x = Repo(repo, repo.id, g.get_user() , g)
+            recent_repo_results.append(x)
+    except:
+        pass
+
+    popular_repo_results = []
+    try:
+        for repo in popular_repos[:5]:
+            try:
+                repo = Repository.objects.get(repo_id = repo.id)
+                x = Repo(None,repo.repo_id, g.get_user() , g)
+            except ObjectDoesNotExist:
+                x = Repo(repo, repo.id, g.get_user() , g)
+            popular_repo_results.append(x)
+    except:
+        pass
+
+    user_saves = Saved.objects.filter(profile_user=profile_user)
+    saved_files = [] 
+    for save in user_saves:
+        save.repo_file.get_name = save.repo_file.get_name(g)
+        saved_files.append(save.repo_file)
+
+    context['recent_repos'] = recent_repo_results
+    context['popular_repos'] = popular_repo_results
+    context['saved_files'] = saved_files
+    context['profile_user'] = request.user
     context['searchform'] = SearchForm()
-    context["view_my_profile"] = 'true'
+    context['view_my_profile'] = 'true'
     context['ratings'] = UserRating.objects.filter(profile_user = request.user)
     return render(request, 'codebook/view_my_profile.html', context)
 

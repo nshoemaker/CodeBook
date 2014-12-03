@@ -636,6 +636,7 @@ def save_file_from_repo(request):
 
 
 @login_required
+@transaction.atomic
 def rate_documentation(request):
     if request.is_ajax:
         profile_user = request.user
@@ -654,6 +655,7 @@ def rate_documentation(request):
         pass
 
 @login_required
+@transaction.atomic
 def rate_difficulty(request):
     if request.is_ajax:
         profile_user = request.user

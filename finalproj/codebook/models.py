@@ -49,7 +49,7 @@ class ProfileUser(AbstractBaseUser):
         try:
             return g.get_user().avatar_url
         except:
-            return "% static 'img/default_profile.jpg' %"
+            return "static 'img/default_profile.jpg'"
 
     def get_git_profile_url(self, g):
         try:
