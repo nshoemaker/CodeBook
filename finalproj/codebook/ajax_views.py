@@ -7,6 +7,7 @@
 ##############################################################
 ##############################################################
 from views_base import *
+import itertools
 
 def get_formatted_nodes(self, tree, repo):
     print tree
@@ -355,6 +356,7 @@ def rate_credibility(request):
         #user statistics
         #numFollowers = g.get_user().followers
         #numRepos = g.get_user().public_repos
+        user_ratings = UserRating.objects.filter(profile_user=request.user)
         for repo in g.get_user().get_repos():
             langs = repo.get_languages()
             for lang in langs.keys():
@@ -456,6 +458,7 @@ def sort_lang_stream_popular(request):
         # uhhhhhhhh awk. this should never happen
         pass
 
+languages = ['c', 'java','objective-c', 'c++', 'c#', 'php', 'python', 'javascript', 'perl', 'visual basic .net', 'visual basic', 'r', 'transact-sql', 'ruby', 'delphi/object', 'pascal', 'f#', 'pl/sql', 'swift', 'pascal', 'dart', 'actionscript', 'sas', 'lisp', 'matlab', 'postscript', 'logo', 'ml', 'cobol', 'assembly', 'abap', 'scala', 'fortran', 'd', 'ct', 'ada', 'openedge abl', 'scheme', 'haskell', 'lua', 'scratch', 'go', 'erlang', 'prolog', 'io', 'pl/i', 'max/msp', 'tcl', 'q', 'groovy', '(visual) foxpro'] 
 
 # Given a search type and some text, returns a list of repositories
 @login_required
@@ -464,12 +467,13 @@ def repo_search_list(request):
         social = request.user.social_auth.get(provider='github')
         token = social.extra_data['access_token']
         g = Github(token)
+        print "Start is:", g.get_rate_limit().rate.remaining
         profile_user = request.user
         context = {}
         context['repos'] = {}
         choice = request.GET.get("types")
         text = request.GET.get("text").split('+')
-        text = [item for item in text if item.isalnum()]
+        text = [item.lower() for item in text if item.isalnum()]
 
         easy = ['easy','beginner','simple']
         medium = ['medium', 'intermediate']
@@ -486,7 +490,6 @@ def repo_search_list(request):
                         for repo in user.get_repos().get_page(0):
                            repos.append(repo)
 
-
         elif(choice == 'Repo'):
             files = []
             repos = []
@@ -501,16 +504,24 @@ def repo_search_list(request):
             query = text+" user:github size:>10000"
             files = g.search_code(query).get_page(0)
                 
-        else:
-            #check that language?
+        elif(choice == 'Lang'):
             files = []
             repos = []
+            searched = False
             for word in text:
-                if word not in levels:
+                if word not in levels and word in languages:
                     query = "language:"+word+" stars:>=500"
                     results = g.search_repositories(query,sort='stars',order='desc').get_page(0)
                     repos.append(results)
-        
+                    searched = True
+            if not searched:
+                pass
+                #TODO: return language not available
+        else:
+            pass
+            #TODO: raise exception shouldn't get here
+
+
         these_repo_results = []
         level = 0
         if any(word in text for word in easy):
@@ -538,28 +549,34 @@ def repo_search_list(request):
         repos=list(itertools.chain(*repos))
         if len(repos) <=1:
             return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
-       
+        dbrepos = []
+        nondbrepos = []
         for repo in repos[:10]:
+            contribs = len(list(repo.get_contributors()))
+            avgdif = 0
             try:
                 currrepo = Repository.objects.get(repo_id = repo.id)
                 difobjs = currrepo.difficulty_set.all()
-                avg = 0
                 count = 0
                 for obj in difobjs:
-                    avg+=obj.rating
-                    count+=1
+                    avgdif += obj.rating
+                    count += 1
                 if count > 0:
-                    avg = avg/count
+                    avgdif = avgdif/count
                 else:
-                    avg = 0
-                if level==0 or (level==1 and avg<=3) or (level==2 and avg>3 and avg<=6) or (level==3 and avg>6):
+                    #TODO: fix this
+                    avgdif = (contribs/10 + repo.size/10000)/2 
+                if level==0 or (level==1 and avgdif<=3) or (level==2 and avgdif>3 and avgdif<=6) or (level==3 and avgdif>6):
                     x = Repo(None,currrepo.repo_id,g.get_user(), g)
-                    these_repo_results.insert(0,x)
+                    dbrepos.append(x)
                     print x.name
             except ObjectDoesNotExist:
-                x = Repo(repo, repo.id, g.get_user(), g)
-                these_repo_results.append(x)
-                print x.name
+                avgdif = (contribs/10 + repo.size/10000)/2 
+                if level==0 or (level==1 and avgdif<=3) or (level==2 and avgdif>3 and avgdif<=6) or (level==3 and avgdif>6):
+                    x = Repo(repo, repo.id, g.get_user(), g)
+                    nondbrepos.append(x)
+                    print x.name
+        these_repo_results = dbrepos+nondbrepos
         context["repos"] = these_repo_results
         context['comment_form'] = CommentForm()
         """
@@ -582,6 +599,7 @@ def repo_search_list(request):
                         print "     " + l.mode
                         print "     " + l.url
                         print "     " + l.type"""
+        print "End is:" ,g.get_rate_limit().rate.remaining
         return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
