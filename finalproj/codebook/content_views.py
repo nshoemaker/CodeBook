@@ -108,6 +108,12 @@ def front(request):
     context['searchform'] = SearchForm()
     if request.user and not request.user.is_anonymous:
         context['user'] = request.user
+        social = request.user.social_auth.get(provider='github')
+        token = social.extra_data['access_token']
+        g = Github(token)
+        if g.get_rate_limit().rate.remaining < 250:
+            pass
+            #return unavailable page
     return render(request, 'codebook/front-page.html', context)
 
 @login_required
