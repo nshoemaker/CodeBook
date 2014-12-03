@@ -461,8 +461,6 @@ def sort_lang_stream_popular(request):
         # uhhhhhhhh awk. this should never happen
         pass
 
-languages = ['c', 'java','objective-c', 'c++', 'c#', 'php', 'python', 'javascript', 'perl', 'visual basic .net', 'visual basic', 'r', 'transact-sql', 'ruby', 'delphi/object', 'pascal', 'f#', 'pl/sql', 'swift', 'pascal', 'dart', 'actionscript', 'sas', 'lisp', 'matlab', 'postscript', 'logo', 'ml', 'cobol', 'assembly', 'abap', 'scala', 'fortran', 'd', 'ct', 'ada', 'openedge abl', 'scheme', 'haskell', 'lua', 'scratch', 'go', 'erlang', 'prolog', 'io', 'pl/i', 'max/msp', 'tcl', 'q', 'groovy', '(visual) foxpro'] 
-
 # Given a search type and some text, returns a list of repositories
 @login_required
 def repo_search_list(request):
@@ -666,6 +664,7 @@ def watch_list(request):
     context['profile_user'] = request.user
     return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
 
+@transaction.atomic
 @login_required
 def save_file_from_repo(request):
     if request.is_ajax:
