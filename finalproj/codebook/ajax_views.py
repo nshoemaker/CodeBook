@@ -269,7 +269,6 @@ def unwatch_repo(request, id):
         pass
 
 @login_required
-@transaction.atomic
 def save_file(request, id):
     if request.is_ajax():
         profile_user = request.user
@@ -309,7 +308,6 @@ def unsave_file(request, id):
 
 
 @login_required
-@transaction.atomic
 def like_comment(request, id):
     if request.is_ajax():
         context = {}
@@ -330,7 +328,6 @@ def like_comment(request, id):
 
 
 @login_required
-@transaction.atomic
 def unlike_comment(request, id):
     if request.is_ajax():
         context = {}
@@ -350,7 +347,6 @@ def unlike_comment(request, id):
         pass
 
 @login_required
-@transaction.atomic
 def rate_credibility(request):
     if request.is_ajax():
         social = request.user.social_auth.get(provider='github')
@@ -385,7 +381,6 @@ def rate_credibility(request):
         pass
 
 @login_required
-@transaction.atomic
 def add_proficiency(request):
     if request.is_ajax():
         context = {}
@@ -561,6 +556,7 @@ def repo_search_list(request):
             avgdif = 0
             try:
                 currrepo = Repository.objects.get(repo_id = repo.id)
+                print "Got repo from db"
                 difobjs = currrepo.difficulty_set.all()
                 count = 0
                 for obj in difobjs:
@@ -568,16 +564,20 @@ def repo_search_list(request):
                     count += 1
                 if count > 0:
                     avgdif = avgdif/count
+                    print "got difficulty from stars: ",avgdif
                 else:
                     #TODO: fix this
                     avgdif = (contribs/10 + repo.size/10000)/2 
-                if level==0 or (level==1 and avgdif<=3) or (level==2 and avgdif>3 and avgdif<=6) or (level==3 and avgdif>6):
+                avgdif = min(avgdif,5)
+                if level==0 or (level==1 and avgdif<=2) or (level==2 and avgdif>2 and avgdif<=4) or (level==3 and avgdif>4):
                     x = Repo(None,currrepo.repo_id,g.get_user(), g)
                     dbrepos.append(x)
+                    print "added from db section"
                     print x.name
             except ObjectDoesNotExist:
                 avgdif = (contribs/10 + repo.size/10000)/2 
-                if level==0 or (level==1 and avgdif<=3) or (level==2 and avgdif>3 and avgdif<=6) or (level==3 and avgdif>6):
+                avgdif = min(avgdif,5)
+                if level==0 or (level==1 and avgdif<=2) or (level==2 and avgdif>2 and avgdif<=4) or (level==3 and avgdif>4):
                     x = Repo(repo, repo.id, g.get_user(), g)
                     nondbrepos.append(x)
                     print x.name
@@ -664,7 +664,6 @@ def watch_list(request):
     return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
 
 @login_required
-@transaction.atomic
 def save_file_from_repo(request):
     if request.is_ajax:
         profile_user = request.user
