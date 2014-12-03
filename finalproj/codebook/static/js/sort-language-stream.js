@@ -87,7 +87,7 @@ function recent_sort(language) {
         },
         success: function (html) {
             spinner.stop();
-            $("#repo-list").replaceWith(html);
+            $("#repository-list-container").replaceWith(html);
             prepair_results();
             load_trees();
         },
@@ -128,7 +128,7 @@ function popular_sort(language) {
         },
         success: function (html) {
             spinner.stop();
-            $("#repo-list").replaceWith(html);
+            $("#repository-list-container").replaceWith(html);
             prepair_results();
             load_trees();
         },
