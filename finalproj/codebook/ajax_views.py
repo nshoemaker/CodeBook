@@ -91,7 +91,7 @@ def get_top_level(request):
             rep = hub.get_repo(int(rep_id))
         except:
             print 'bad'
-            rep = g.get_repo(int(rep_id))
+            rep = hub.get_repo(int(rep_id))
         # TODO: what if there is no mater branch????
         try:
             master = rep.get_branch('master')
@@ -690,6 +690,8 @@ def repo_search_list(request):
         these_repo_results.sort(key=lambda x: x.doc_rating, reverse= True)
         context["repos"] = these_repo_results
         context['comment_form'] = CommentForm()
+        # DO NOT DELETE THE FOLLOWING LINE IT ALLOWS COMMENT LIKES AND DISLIKES TO POPULATE CORRECTLY
+        context['profile_user'] = profile_user 
         """
         for r in these_repo_results:
             print "----------------------"
