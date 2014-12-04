@@ -126,6 +126,16 @@ class Repo:
         except:
           self.owner_prof_pic = ""
         try:
+          profile_user = ProfileUser.objects.get(username=repo.owner.login)
+          print "FOUND PROFILE USER : " + profile_user.username
+          self.owner_url = "/codebook/profile/" + profile_user.username
+        except:
+          try:
+            print "DIDN'T FIND PROFILE USER "
+            self.owner_url = repo.owner.html_url
+          except:
+            self.owner_url = ""
+        try:
           self.is_current_user_starring = user.has_in_starred(repo) 
         except:
           self.is_current_user_starring = False
