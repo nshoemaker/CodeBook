@@ -570,6 +570,7 @@ def repo_search_list(request):
         count = 0
         dbrepos = []
         nondbrepos = []
+        langrepos = []
         
         if(choice == 'User'):
             repos = []
@@ -596,7 +597,6 @@ def repo_search_list(request):
         elif(choice == 'Lang'):
             files = []
             repos = []
-            langrepos = []
             if text in languages:
                 for currrepo in Repository.objects.filter(languages__name__iexact = text).distinct():
                     print "updating languages of repo"
@@ -628,11 +628,9 @@ def repo_search_list(request):
                     results = g.search_repositories(query,sort='stars',order='desc').get_page(0)
                     repos.append(results)
             else:
-                pass
-                #TODO: return language not available
+                return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
         else:
-            pass
-            #TODO: raise exception shouldn't get here
+            print "problem"
 
         these_repo_results = []
         """    
@@ -653,7 +651,7 @@ def repo_search_list(request):
         """
         repos=list(itertools.chain(*repos))
         if len(repos) < 1:
-            #TODO: no valid results
+            #no valid results
             return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
         for repo in repos:
             if count>7:
