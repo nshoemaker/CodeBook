@@ -26,7 +26,7 @@ def get_formatted_nodes(self, tree, repo):
         else:
             isFolder = 'false'
             isLazy = 'false'
-        key = str(repo.id) + '---' + el.sha + '---' + el.path
+        key = str(repo.id) + '---' + el.sha
         node = {"title": title,
                 "key": key,
                 "isFolder": isFolder,
@@ -45,26 +45,25 @@ def expand_folder(request):
         if request.GET:
             rep_id = request.GET.get("repo_id")
             sha = request.GET.get("sha")
-            parent_path = request.GET.get("path")
         elif request.POST:
             rep_id = request.POST.get("repo_id")
             sha = request.POST.get("sha")
-            parent_path = request.POST.get("path")
         rep = hub.get_repo(int(rep_id))
         next_level = rep.get_git_tree(sha).tree
-
+        #j = get_formatted_nodes(next_level, rep)
         res = []
+        print "NEXT LEVEL SIZE: "+ str(len(next_level))
         for el in next_level:
             title = el.path
-            full_path = str(parent_path) + "/" + str(el.path)
             hideCheckbox = True
             if el.type == 'tree':
+                print "FOLDER: " + el.path
                 isFolder = True
                 isLazy = True
             else:
                 isFolder = False
                 isLazy = False
-            key = str(rep.id) + '---' + el.sha + '---' + full_path
+            key = str(rep.id) + '---' + el.sha + '---' + el.path
             node = {"title": title,
                     "key": key,
                     "isFolder": isFolder,
@@ -72,6 +71,7 @@ def expand_folder(request):
                     "hideCheckox": hideCheckbox}
             res.append(node)
         j = json.dumps(res, encoding="Latin-1")
+        print rep_id
         return HttpResponse(j, content_type="application/json")
     else:
         pass
@@ -86,11 +86,12 @@ def get_top_level(request):
             rep_id = request.GET.get("repo_id")
         elif request.POST:
             rep_id = request.POST.get("repo_id")
+        print rep_id
         try:
             rep = hub.get_repo(int(rep_id))
         except:
             print 'bad'
-            rep = hub.get_repo(int(rep_id))
+            rep = g.get_repo(int(rep_id))
         # TODO: what if there is no mater branch????
         try:
             master = rep.get_branch('master')
@@ -98,11 +99,14 @@ def get_top_level(request):
             master = rep.get_branches()[0]
         SHA = master.commit.sha
         next_level = rep.get_git_tree(SHA).tree
+        #j = get_formatted_nodes(next_level, rep)
         res = []
+        print "NEXT LEVEL SIZE: "+ str(len(next_level))
         for el in next_level:
             title = el.path
             hideCheckbox = True
             if el.type == 'tree':
+                print "FOLDER: " + el.path
                 isFolder = True
                 isLazy = True
             else:
@@ -116,6 +120,7 @@ def get_top_level(request):
                     "hideCheckox": hideCheckbox}
             res.append(node)
         j = json.dumps(res, encoding="Latin-1")
+        print rep_id
         return HttpResponse(j, content_type="application/json")
     else:
         pass
@@ -570,6 +575,7 @@ def repo_search_list(request):
         count = 0
         dbrepos = []
         nondbrepos = []
+        langrepos = []
         
         if(choice == 'User'):
             repos = []
@@ -596,7 +602,6 @@ def repo_search_list(request):
         elif(choice == 'Lang'):
             files = []
             repos = []
-            langrepos = []
             if text in languages:
                 for currrepo in Repository.objects.filter(languages__name__iexact = text).distinct():
                     print "updating languages of repo"
@@ -685,8 +690,6 @@ def repo_search_list(request):
         these_repo_results.sort(key=lambda x: x.doc_rating, reverse= True)
         context["repos"] = these_repo_results
         context['comment_form'] = CommentForm()
-        # DO NOT DELETE THE FOLLOWING LINE IT ALLOWS COMMENT LIKES AND DISLIKES TO POPULATE CORRECTLY
-        context['profile_user'] = profile_user
         """
         for r in these_repo_results:
             print "----------------------"
