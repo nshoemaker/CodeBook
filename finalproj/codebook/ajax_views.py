@@ -602,6 +602,7 @@ def repo_search_list(request):
         elif(choice == 'Lang'):
             files = []
             repos = []
+            print text
             if text in languages:
                 for currrepo in Repository.objects.filter(languages__name__iexact = text).distinct():
                     print "updating languages of repo"

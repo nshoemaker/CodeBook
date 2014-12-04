@@ -61,7 +61,7 @@ class Repo:
                 self.doc_rating = 0
             if self.difficulty_rating == None:
                 self.difficulty_rating = 0
-            self.comments = Comment.objects.filter(repository__repo_id = repo.id).order_by('date_time')
+            self.comments = Comment.objects.filter(repository__repo_id = repo.id)
 
         else:
             self.comments = Comment.objects.none()
@@ -159,5 +159,5 @@ def get_auth_user_git(request):
     return g
 
 
-languages = ['c', 'java','objective-c', 'c++', 'c#', 'php', 'python', 'javascript', 'perl', 'visual basic .net', 'visual basic', 'r', 'transact-sql', 'ruby', 'delphi/object', 'pascal', 'f#', 'pl/sql', 'swift', 'pascal', 'dart', 'actionscript', 'sas', 'lisp', 'matlab', 'postscript', 'logo', 'ml', 'cobol', 'assembly', 'abap', 'scala', 'fortran', 'd', 'ct', 'ada', 'openedge abl', 'scheme', 'haskell', 'lua', 'scratch', 'go', 'erlang', 'prolog', 'io', 'pl/i', 'max/msp', 'tcl', 'q', 'groovy', '(visual) foxpro'] 
+languages = ['c', 'rails', 'aspnet', 'bash', 'node', 'java','objc', 'cplusplus', 'csharp', 'php', 'python', 'javascript', 'perl', 'visual basic .net', 'visual basic', 'r', 'transact-sql', 'ruby', 'delphi/object', 'f#', 'pl/sql', 'swift', 'pascal', 'dart', 'actionscript', 'sas', 'lisp', 'matlab', 'postscript', 'logo', 'ml', 'cobol', 'assembly', 'abap', 'scala', 'fortran', 'd', 'ct', 'ada', 'openedge abl', 'scheme', 'haskell', 'lua', 'scratch', 'go', 'erlang', 'prolog', 'io', 'pl/i', 'max/msp', 'tcl', 'q', 'groovy', '(visual) foxpro'] 
 
