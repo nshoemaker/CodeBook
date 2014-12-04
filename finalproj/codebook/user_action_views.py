@@ -22,9 +22,7 @@ def signin(request):
 # (ajax_views.py action repo_search_list)
 @login_required
 def new_search(request):
-    social = request.user.social_auth.get(provider='github')
-    token = social.extra_data['access_token']
-    g = Github(token)
+    g = get_auth_user_git(request)
     profile_user = request.user
     context = {}
 
@@ -39,6 +37,7 @@ def new_search(request):
     context['repos'] = {}
     context['files'] = {}
     context["source"] = 'search'
+    context['searchform'] = SearchForm()
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user
     context['gh_user'] = g.get_user()
@@ -59,6 +58,7 @@ def new_quick_search(request, language):
     context["repos"] = {}
     context['files'] = {}
     context["source"] = 'search'
+    context['searchform'] = SearchForm()
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user
     context['filter'] = 'Languages'
