@@ -57,15 +57,6 @@ function save_file(file_id)
 
 function unsave_file(file_id)
 {
-    $.ajax({
-        type: "POST",
-        url: "/codebook/unsave_file/" + file_id,
-        datatype: 'html',
-        data: {
-            repo_id: file_id,
-            csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
-        },
-        success: function() {
             var eye = $("#save-status-" + file_id);
             if (!eye.hasClass("glyphicon-floppy-disk"))
             {
@@ -82,11 +73,15 @@ function unsave_file(file_id)
                 }
             }
 
-            
-
-            //if ($("#saved").length) {
-            //    $("#file-list").remove($("#file"+file_id));
-            //}
+    $.ajax({
+        type: "POST",
+        url: "/codebook/unsave_file/" + file_id,
+        datatype: 'html',
+        data: {
+            repo_id: file_id,
+            csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
+        },
+        success: function() {
         },
         error: function (xhr, textStatus, errorThrown) {
             if (!(xhr.status == 0 || xhr.status == '0' || errorThrown == 0 || errorThrown == '0' || xhr.response == 0 || xhr.response == '0')) {
