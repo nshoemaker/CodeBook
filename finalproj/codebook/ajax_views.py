@@ -26,7 +26,7 @@ def get_formatted_nodes(self, tree, repo):
         else:
             isFolder = 'false'
             isLazy = 'false'
-        key = str(repo.id) + '---' + el.sha
+        key = str(repo.id) + '---' + el.sha + '---' + el.path
         node = {"title": title,
                 "key": key,
                 "isFolder": isFolder,
@@ -45,25 +45,26 @@ def expand_folder(request):
         if request.GET:
             rep_id = request.GET.get("repo_id")
             sha = request.GET.get("sha")
+            parent_path = request.GET.get("path")
         elif request.POST:
             rep_id = request.POST.get("repo_id")
             sha = request.POST.get("sha")
+            parent_path = request.POST.get("path")
         rep = hub.get_repo(int(rep_id))
         next_level = rep.get_git_tree(sha).tree
-        #j = get_formatted_nodes(next_level, rep)
+
         res = []
-        print "NEXT LEVEL SIZE: "+ str(len(next_level))
         for el in next_level:
             title = el.path
+            full_path = str(parent_path) + "/" + str(el.path)
             hideCheckbox = True
             if el.type == 'tree':
-                print "FOLDER: " + el.path
                 isFolder = True
                 isLazy = True
             else:
                 isFolder = False
                 isLazy = False
-            key = str(rep.id) + '---' + el.sha + '---' + el.path
+            key = str(rep.id) + '---' + el.sha + '---' + full_path
             node = {"title": title,
                     "key": key,
                     "isFolder": isFolder,
@@ -71,7 +72,6 @@ def expand_folder(request):
                     "hideCheckox": hideCheckbox}
             res.append(node)
         j = json.dumps(res, encoding="Latin-1")
-        print rep_id
         return HttpResponse(j, content_type="application/json")
     else:
         pass
@@ -86,12 +86,11 @@ def get_top_level(request):
             rep_id = request.GET.get("repo_id")
         elif request.POST:
             rep_id = request.POST.get("repo_id")
-        print rep_id
         try:
             rep = hub.get_repo(int(rep_id))
         except:
             print 'bad'
-            rep = g.get_repo(int(rep_id))
+            rep = hub.get_repo(int(rep_id))
         # TODO: what if there is no mater branch????
         try:
             master = rep.get_branch('master')
@@ -99,14 +98,11 @@ def get_top_level(request):
             master = rep.get_branches()[0]
         SHA = master.commit.sha
         next_level = rep.get_git_tree(SHA).tree
-        #j = get_formatted_nodes(next_level, rep)
         res = []
-        print "NEXT LEVEL SIZE: "+ str(len(next_level))
         for el in next_level:
             title = el.path
             hideCheckbox = True
             if el.type == 'tree':
-                print "FOLDER: " + el.path
                 isFolder = True
                 isLazy = True
             else:
@@ -120,7 +116,6 @@ def get_top_level(request):
                     "hideCheckox": hideCheckbox}
             res.append(node)
         j = json.dumps(res, encoding="Latin-1")
-        print rep_id
         return HttpResponse(j, content_type="application/json")
     else:
         pass
@@ -440,11 +435,32 @@ def add_proficiency(request):
         # uhhhhhhhh awk. this should never happen
         pass
 
-@login_required()
+@login_required
 def sort_lang_stream_recent(request):
     if request.is_ajax():
         context = {}
-        context['repos'] = {}
+        g = get_auth_user_git(request)
+        profile_user = request.user
+
+        try:
+            language = request.GET['language']
+            query = "language:" + language + " stars:>=500"
+            repos = g.search_repositories(query,sort='updated',order='desc').get_page(0)
+        except:
+            repos = []
+            no_results = 'true'
+            context['no_results'] = no_results
+        these_repo_results = []
+        for repo in repos[:5]:
+            try:
+                repo = Repository.objects.get(repo_id = repo.id)
+                x = Repo(None,repo.repo_id,g.get_user(), g)
+            except ObjectDoesNotExist:
+                x = Repo(repo, repo.id, g.get_user(), g)
+            these_repo_results.append(x)
+        context["repos"] = these_repo_results
+        context['profile_user'] = profile_user
+        context['comment_form'] = CommentForm()
         return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
@@ -454,8 +470,28 @@ def sort_lang_stream_recent(request):
 def sort_lang_stream_popular(request):
     if request.is_ajax():
         context = {}
-        context['repos'] = {}
+        g = get_auth_user_git(request)
+        profile_user = request.user
+
+        try:
+            language = request.GET['language']
+            query = "language:" + language + " stars:>=700"
+            repos = g.search_repositories(query,sort='stars',order='desc').get_page(0)
+        except:
+            repos = []
+            no_results = 'true'
+            context['no_results'] = no_results
+        these_repo_results = []
+        for repo in repos[:5]:
+            try:
+                repo = Repository.objects.get(repo_id = repo.id)
+                x = Repo(None,repo.repo_id,g.get_user(), g)
+            except ObjectDoesNotExist:
+                x = Repo(repo, repo.id, g.get_user(), g)
+            these_repo_results.append(x)
+        context["repos"] = these_repo_results
         context['profile_user'] = request.user
+        context['comment_form'] = CommentForm()
         return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen

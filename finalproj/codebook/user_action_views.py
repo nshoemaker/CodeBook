@@ -37,6 +37,7 @@ def new_search(request):
     context['repos'] = {}
     context['files'] = {}
     context["source"] = 'search'
+    context['searchform'] = SearchForm()
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user
     context['gh_user'] = g.get_user()
@@ -57,6 +58,7 @@ def new_quick_search(request, language):
     context["repos"] = {}
     context['files'] = {}
     context["source"] = 'search'
+    context['searchform'] = SearchForm()
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user
     context['filter'] = 'Languages'

@@ -110,7 +110,7 @@ class Comment(models.Model):
     profile_user = models.ForeignKey(ProfileUser)
     text = models.CharField(max_length=400)  # text of comment
     date_time = models.DateTimeField(auto_now_add=True)
-    path = models.CharField(max_length=400)  # relative path file comment on
+    path = models.CharField(max_length=2048)  # relative path file comment on
     likers = models.ManyToManyField(ProfileUser, related_name="liked_by")
 
 class Tag(models.Model):
@@ -127,7 +127,7 @@ class Repository(models.Model):
 
 class RepoFile (models.Model):
     repository = models.ForeignKey(Repository)
-    path = models.CharField(max_length=400)
+    path = models.CharField(max_length=2048)
     comments = models.ManyToManyField(Comment)
     savers = models.ManyToManyField(ProfileUser, related_name="saved_by")
     average_difficulty = models.IntegerField(blank=True)

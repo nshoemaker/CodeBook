@@ -333,6 +333,10 @@ padding-right: 5px;
     -moz-border-radius: 50%;
 }
 
+.active-lang {
+     color: #77DDAA;
+}
+
 .control-btn {
   background-color: #77DDAA;
 }
