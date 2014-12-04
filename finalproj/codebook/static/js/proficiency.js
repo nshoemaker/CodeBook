@@ -19,9 +19,10 @@ $('#add-proficiency-btn').click(function () {
                 csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
             },
             success: function (html) {
+                $('#skill-edit-' + language).remove();
                 $('#proficiency-list').prepend(html);
                 $('#language-choice').val('');
-                $('#slider').value(5);
+                $('#slider').val(5);
             },
             error: function (xhr, textStatus, errorThrown) {
                 console.log("made it to repo comment function FAIL");
