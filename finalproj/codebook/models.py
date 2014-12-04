@@ -39,39 +39,58 @@ class ProfileUser(AbstractBaseUser):
     def get_username(self):
         return self.username
 
-    def get_id(self, g):
+    def get_id(self, g, username=None):
         try:
-            return g.get_user().id
+            if (username != None):
+                return g.get_user(username).id
+            else:
+                return g.get_user().id
         except:
             return 0
 
-    def get_avatar_url(self, g):
+    def get_avatar_url(self, g, username=None):
         try:
-            return g.get_user().avatar_url
+            if (username != None):
+                return g.get_user(username).avatar_url
+            else:
+                return g.get_user().avatar_url
         except:
             return "static 'img/default_profile.jpg'"
 
-    def get_git_profile_url(self, g):
+    def get_git_profile_url(self, g, username=None):
         try:
-            return g.get_user().html_url
+            if (username != None):
+                return g.get_user(username).html_url
+            else:
+                return g.get_user().html_url
         except:
             return "None"
     
-    def get_repos(self, g):
+    def get_repos(self, g, username=None):
         try:
-            return g.get_user().get_repos()
+            if (username != None):
+                return g.get_user(username).get_repos()
+            else:
+                return g.get_user().get_repos()
         except:
             pass 
 
-    def get_following(self, g):
+    def get_following(self, g, username=None):
         try:
-            return g.get_user().get_followers()
+            if (username != None):
+                return g.get_user(username).get_followers()
+            else:
+                return g.get_user().get_followers()
         except:
             pass
 
-    def get_email(self, g):
+    def get_email(self, g, username=None):
         try:
-            email = g.get_user().email
+            if (username != None):
+                email = g.get_user(username).email
+            else:
+                email = g.get_user().email
+
             if (email == "" or email == " "):
                 return "None"
             else:
@@ -80,21 +99,30 @@ class ProfileUser(AbstractBaseUser):
             return "None"
 
 
-    def get_website(self, g):
+    def get_website(self, g, username=None):
         try:
-            return g.get_user().blog
+            if (username != None):
+                return g.get_user(username).blog
+            else:
+                return g.get_user().blog
         except:
             return "None"
 
-    def get_company(self, g):
+    def get_company(self, g, username=None):
         try:
-            return g.get_user().company
+            if (username != None):
+                return g.get_user(username).company
+            else:
+                return g.get_user().company
         except:
             return "None"
 
-    def get_bio(self, g):
+    def get_bio(self, g, username=None):
         try:
-            return g.get_user().bio 
+            if (username != None):
+                return g.get_user(username).bio 
+            else:
+                return g.get_user().bio 
         except:
             return "None"
 
