@@ -1,0 +1,7 @@
+{% if recent_repos %}
+    {% for repo in recent_repos %}
+        <p> {{ repo.name }} </p>
+    {% endfor %}
+{% else %}
+    {{ profile_user.get_username }} has no recent activity!
+{% endif %}

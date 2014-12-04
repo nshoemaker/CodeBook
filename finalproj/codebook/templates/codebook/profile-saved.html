@@ -1,0 +1,7 @@
+{% if saved_files %}
+    {% for file in saved_files %}
+        <p>{{ file.get_name }} : {{ file.path }}</p>
+    {% endfor %}
+{% else %}
+    {{ profile_user.get_username }} has not saved any files!
+{% endif %}
