@@ -633,11 +633,9 @@ def repo_search_list(request):
                     results = g.search_repositories(query,sort='stars',order='desc').get_page(0)
                     repos.append(results)
             else:
-                pass
-                #TODO: return language not available
+                return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
         else:
-            pass
-            #TODO: raise exception shouldn't get here
+            print "Problem"
 
         these_repo_results = []
         """    
@@ -658,7 +656,7 @@ def repo_search_list(request):
         """
         repos=list(itertools.chain(*repos))
         if len(repos) < 1:
-            #TODO: no valid results
+            #no valid results
             return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
         for repo in repos:
             if count>7:
