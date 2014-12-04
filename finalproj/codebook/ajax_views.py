@@ -129,7 +129,16 @@ def post_repo_comment(request, id):
         except:
             print 'ERROR 1'
             return HttpResponse('Error')
-        repo = Repository.objects.get_or_create(repo_id=id)#get_object_or_404(Repository, repo_id=id)
+        repo, repo_created = Repository.objects.get_or_create(repo_id=id)
+        if repo_created:
+            g = get_auth_user_git(request)
+            langs = g.get_repo(int(id)).get_languages().keys()
+            for l in langs:
+                lang, created = Language.objects.get_or_create(name=l)
+                print created
+                repo.languages.add(lang)
+                repo.save()
+        
         profile_user = request.user
 
         if not comment_form.is_valid():
@@ -200,7 +209,14 @@ def star_repo(request, id):
         else:
             user.add_to_starred(repo)
         
-        Repository.objects.get_or_create(repo_id=id)
+        repo, repo_created = Repository.objects.get_or_create(repo_id=id)
+        if repo_created:
+            g = get_auth_user_git(request)
+            langs = g.get_repo(int(id)).get_languages().keys()
+            for l in langs:
+                lang,created = Language.objects.get_or_create(name=l)
+                repo.languages.add(lang)
+                repo.save()
         return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
@@ -236,7 +252,15 @@ def watch_repo(request, id):
             pass
         else:
             user.add_to_subscriptions(repo)
-        Repository.objects.get_or_create(repo_id=id)
+
+        repo, repo_created = Repository.objects.get_or_create(repo_id=id)
+        if repo_created:
+            g = get_auth_user_git(request)
+            langs = g.get_repo(int(id)).get_languages().keys()
+            for l in langs:
+                lang,created = Language.objects.get_or_create(name=l)
+                repo.languages.add(lang)
+                repo.save()
         return HttpResponse('True', content_type="text")
     else:
         # uhhhhhhhh awk. this should never happen
@@ -497,6 +521,22 @@ def sort_lang_stream_popular(request):
         # uhhhhhhhh awk. this should never happen
         pass
 
+
+def dbrepodiffy(dbrepo, gitrepo, contribs, level):
+    avgdif=0
+    difobjs = dbrepo.difficulty_set.all()
+    smcount = 0
+    for obj in difobjs:
+        avgdif += obj.rating
+        smcount += 1
+    if smcount > 0:
+        avgdif = avgdif/smcount
+        print "got difficulty from stars: ", avgdif
+    else:
+        avgdif = (contribs/10 + gitrepo.size/10000)/2 
+    avgdif = min(avgdif,5)
+    return level==0 or (level==1 and avgdif<=2) or (level==2 and avgdif>2 and avgdif<=4) or (level==3 and avgdif>4)
+
 # Given a search type and some text, returns a list of repositories
 @login_required
 def repo_search_list(request):
@@ -509,33 +549,44 @@ def repo_search_list(request):
         context = {}
         context['repos'] = {}
         choice = request.GET.get("types")
-        text = request.GET.get("text").split('+')
-        text = [item.lower() for item in text if item.isalnum()]
+        text = request.GET.get("text")
+        text = text.replace('+',' ').strip().lower()
 
         easy = ['easy','beginner','simple']
         medium = ['medium', 'intermediate']
         hard = ['hard','difficult','advanced']
         levels = easy+medium+hard
 
+        level = 0
+        if any(word in text for word in easy):
+            level = 1
+        if any(word in text for word in medium):
+            level = 2
+        if any(word in text for word in hard):
+            level = 3
+
+        word_list = text.split()
+        text = ' '.join([i for i in word_list if i not in levels])
+        count = 0
+        dbrepos = []
+        nondbrepos = []
+        langrepos = []
+        
         if(choice == 'User'):
             repos = []
             files = []
             results = []
-            for word in text:
-                if word not in levels:
-                    users = g.search_users(word,sort='followers',order='desc')
-                    for user in users:
-                        for repo in user.get_repos().get_page(0):
-                            results.append(repo)
+            users = g.search_users(text,sort='followers',order='desc')
+            for user in users:
+                for repo in user.get_repos().get_page(0):
+                    results.append(repo)
             repos.append(results)
 
         elif(choice == 'Repo'):
             files = []
             repos = []
-            for word in text:
-                if word not in levels:
-                    results = g.search_repositories(word,sort='stars',order='desc').get_page(0)
-                    repos.append(results)
+            results = g.search_repositories(text,sort='stars',order='desc').get_page(0)
+            repos.append(results)
 
         elif(choice == 'Code'):
             print "CAME IN HERE"
@@ -546,28 +597,42 @@ def repo_search_list(request):
         elif(choice == 'Lang'):
             files = []
             repos = []
-            searched = False
-            for word in text:
-                if word not in levels and word in languages:
-                    query = "language:"+word+" stars:>=500"
+            if text in languages:
+                for currrepo in Repository.objects.filter(languages__name__iexact = text).distinct():
+                    print "updating languages of repo"
+                    #language update code
+                    dblangs = currrepo.languages.all()
+                    repo = g.get_repo(currrepo.repo_id)
+                    gitlangs = repo.get_languages().keys()
+                    if (dblangs.count()>len(gitlangs)):
+                        for l in dblangs:
+                            currrepo.languages.remove(l)
+                    for l in gitlangs:
+                        if not dblangs.filter(name=l).exists():
+                            lang,created = Language.objects.get_or_create(name=l)
+                            currrepo.languages.add(lang)
+                            currrepo.save()
+                    #difficulty calc
+                    try:
+                        contribs = len(list(repo.get_contributors()))
+                        if dbrepodiffy(currrepo, repo, contribs, level): 
+                            x = Repo(None,currrepo.repo_id,g.get_user(), g)
+                            langrepos.append(x)
+                            print x.name
+                            count+=1
+                    except:
+                        continue
+                print "count is: ", count 
+                if count<=7: 
+                    query = "language:"+text+" stars:>=500"
                     results = g.search_repositories(query,sort='stars',order='desc').get_page(0)
                     repos.append(results)
-                    searched = True
-            if not searched:
-                pass
-                #TODO: return language not available
+            else:
+                return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
         else:
-            pass
-            #TODO: raise exception shouldn't get here
+            print "problem"
 
         these_repo_results = []
-        level = 0
-        if any(word in text for word in easy):
-            level = 1
-        if any(word in text for word in medium):
-            level = 2
-        if any(word in text for word in hard):
-            level = 3
         """    
                 these_file_results = []
                 for f in files[:10]:
@@ -586,11 +651,11 @@ def repo_search_list(request):
         """
         repos=list(itertools.chain(*repos))
         if len(repos) < 1:
-            #TODO: no valid results
+            #no valid results
             return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
-        dbrepos = []
-        nondbrepos = []
-        for repo in repos[:10]:
+        for repo in repos:
+            if count>7:
+                break
             try:
                 contribs = len(list(repo.get_contributors()))
             except:
@@ -598,31 +663,24 @@ def repo_search_list(request):
             avgdif = 0
             try:
                 currrepo = Repository.objects.get(repo_id = repo.id)
-                print "Got repo from db"
-                difobjs = currrepo.difficulty_set.all()
-                count = 0
-                for obj in difobjs:
-                    avgdif += obj.rating
-                    count += 1
-                if count > 0:
-                    avgdif = avgdif/count
-                    print "got difficulty from stars: ",avgdif
-                else:
-                    avgdif = (contribs/10 + repo.size/10000)/2 
-                avgdif = min(avgdif,5)
-                if level==0 or (level==1 and avgdif<=2) or (level==2 and avgdif>2 and avgdif<=4) or (level==3 and avgdif>4):
+                if choice == 'Lang':
+                    continue
+                print "Got repo from db: ", currrepo.repo_id
+                if dbrepodiffy(currrepo,repo,contribs,level): 
                     x = Repo(None,currrepo.repo_id,g.get_user(), g)
                     dbrepos.append(x)
-                    print "added from db section"
                     print x.name
+                    count += 1
             except ObjectDoesNotExist:
                 avgdif = (contribs/10 + repo.size/10000)/2 
                 avgdif = min(avgdif,5)
                 if level==0 or (level==1 and avgdif<=2) or (level==2 and avgdif>2 and avgdif<=4) or (level==3 and avgdif>4):
                     x = Repo(repo, repo.id, g.get_user(), g)
                     nondbrepos.append(x)
+                    count += 1
                     print x.name
-        these_repo_results = dbrepos+nondbrepos
+        these_repo_results = langrepos+dbrepos+nondbrepos
+        these_repo_results.sort(key=lambda x: x.doc_rating, reverse= True)
         context["repos"] = these_repo_results
         context['comment_form'] = CommentForm()
         # DO NOT DELETE THE FOLLOWING LINE IT ALLOWS COMMENT LIKES AND DISLIKES TO POPULATE CORRECTLY
@@ -723,7 +781,15 @@ def save_file_from_repo(request):
 
         if path == None or repo_id == None:
             return HttpResponse('False', content_type="text")
+
         repo, repo_created = Repository.objects.get_or_create(repo_id=repo_id)
+        if repo_created:
+            g = get_auth_user_git(request)
+            langs = g.get_repo(int(repo_id)).get_languages().keys()
+            for l in langs:
+                lang,created = Language.objects.get_or_create(name=l)
+                repo.languages.add(lang)
+                repo.save()
         file, file_created = RepoFile.objects.get_or_create( path=path, average_difficulty=0, average_quality=0, repository=repo)
         saved, saved_created = Saved.objects.get_or_create(profile_user=profile_user, repo_file=file)
         file.savers.add(profile_user)
@@ -743,7 +809,14 @@ def rate_documentation(request):
         print repo_id
         print rating
 
-        repo, repo_created= Repository.objects.get_or_create(repo_id=repo_id)
+        repo, repo_created = Repository.objects.get_or_create(repo_id=repo_id)
+        if repo_created:
+            g = get_auth_user_git(request)
+            langs = g.get_repo(int(repo_id)).get_languages().keys()
+            for l in langs:
+                lang,created = Language.objects.get_or_create(name=l)
+                repo.languages.add(lang)
+                repo.save()
         print repo_created
         documentation, documentation_created = Documentation.objects.update_or_create(profile_user=profile_user, rating=rating, repository=repo)
         print documentation_created
@@ -758,7 +831,14 @@ def rate_difficulty(request):
         repo_id = int(request.POST.get("repo_id"))
         rating = int(request.POST.get("rating"))
 
-        repo, repo_created= Repository.objects.get_or_create(repo_id=repo_id)
+        repo, repo_created = Repository.objects.get_or_create(repo_id=repo_id)
+        if repo_created:
+            g = get_auth_user_git(request)
+            langs = g.get_repo(repo_id).get_languages().keys()
+            for l in langs:
+                lang,created = Language.objects.get_or_create(name=l)
+                repo.languages.add(lang)
+                repo.save()
         print repo
         print repo_created
         difficulty, difficulty_updated = Difficulty.objects.update_or_create(profile_user=profile_user, rating=rating, repository=repo)
