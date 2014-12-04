@@ -1,0 +1,32 @@
+<div class="repository">
+<div class="row repository-header">
+    <div class="col-md-6 text-left">
+        <a href="{{ repo.url }}"><h5 class="text-left">{{ repo.name }}</h5></a>
+    </div>
+    <div class="col-md-1">
+        {% if repo.is_current_user_starring %}
+            <h5 id="star-status-{{ repo.id }}" data-item-id="{{ repo.id }}" title="Un-star this Repository."
+                class="glyphicon glyphicon-star star-status cursor-pointer"></h5>
+        {% else %}
+            <h5 id="star-status-{{ repo.id }}" data-item-id="{{ repo.id }}" title="Star this Repository."
+                class="glyphicon glyphicon-star-empty star-status cursor-pointer"></h5>
+        {% endif %}
+    </div>
+    <div class="col-md-1">
+        {% if repo.is_current_user_watching %}
+            <h5 id="watch-status-{{ repo.id }}" data-item-id="{{ repo.id }}" title="Un-watch this Repository."
+                class="glyphicon glyphicon-eye-close watch-status cursor-pointer"></h5>
+        {% else %}
+            <h5 id="watch-status-{{ repo.id }}" data-item-id="{{ repo.id }}" title="Watch this Repository."
+                class="glyphicon glyphicon-eye-open watch-status cursor-pointer"></h5>
+        {% endif %}
+    </div>
+    <div class="col-md-2">
+        <a href="{{ repo.owner_url }}"><h5 class="text-right cursor-pointer">{{ repo.owner_name }}</h5></a>
+    </div>
+    <div class="col-md-1">
+        <!-- TODO: setup profile images -->
+        <h5><img src="{{ repo.owner_prof_pic }}"></h5>
+    </div>
+</div>
+</div>

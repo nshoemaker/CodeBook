@@ -1,7 +1,11 @@
 {% if recent_repos %}
+<ol class="repository-list" id="repo-list">
     {% for repo in recent_repos %}
-        <p> {{ repo.name }} </p>
+        <li id="repo{{ repo.id }}">
+        {% include 'codebook/repository-header.html' %}
+        </li>
     {% endfor %}
+</ol>
 {% else %}
     {{ profile_user.get_username }} has no recent activity!
 {% endif %}
