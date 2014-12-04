@@ -66,6 +66,7 @@ def my_profile_view(request):
     context['popular_repos'] = popular_repo_results
     context['saved_files'] = saved_files
     context['profile_user'] = request.user
+    context['logged_in_user'] = request.user
     context['searchform'] = SearchForm()
     context['view_my_profile'] = 'true'
     context['ratings'] = UserRating.objects.filter(profile_user = request.user)
@@ -123,6 +124,7 @@ def profile_view(request, username):
     context['popular_repos'] = popular_repo_results
     context['saved_files'] = saved_files
     context['profile_user'] = profile_user
+    context['logged_in_user'] = request.user
     if (profile_user == request.user):
         context["view_my_profile"] = 'true'
     context['searchform'] = SearchForm()
