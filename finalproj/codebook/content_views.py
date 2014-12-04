@@ -63,6 +63,7 @@ def login_page(request):
     return render(request, 'codebook/login-page.html', context)
 
 
+@login_required
 def front(request):
     context = {}
     context['searchform'] = SearchForm()
