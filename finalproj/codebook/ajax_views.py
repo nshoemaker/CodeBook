@@ -625,6 +625,8 @@ def repo_search_list(request):
         these_repo_results = dbrepos+nondbrepos
         context["repos"] = these_repo_results
         context['comment_form'] = CommentForm()
+        # DO NOT DELETE THE FOLLOWING LINE IT ALLOWS COMMENT LIKES AND DISLIKES TO POPULATE CORRECTLY
+        context['profile_user'] = profile_user
         """
         for r in these_repo_results:
             print "----------------------"
