@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Codebook: Front Page{% endblock %}
+
+{% block stylesheets %}
+    {% load staticfiles %}
+{% endblock stylesheets %}
+
+{% block nav-left %}
+{% endblock %}
+
+{% block nav-right %}
+{% endblock nav-right %}
+
+{% block search-dropdown %}
+{% endblock search-dropdown %}
+{% block header %}
+    <div class="row jumbotron lang-main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8 centered-text">
+                    <h1>Welcome to Codebook</h1>
+                </div>
+            </div>
+            <div class="row">
+                <a class="btn btn-block btn-social btn-lg btn-github"
+                   href="{% url 'social:begin' 'github' %}?next={{ request.path }}">
+                    <i class="fa fa-github-square"></i>
+                    Sign in with GitHub
+                </a>
+            </div>
+            <div class="row" id="errors">
+
+            </div>
+        </div>
+    </div>
+{% endblock header %}
+
+{% block stream %}
+{% endblock stream %}
+
+
+{% block collapse-all %}
+{% endblock collapse-all %}

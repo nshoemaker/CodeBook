@@ -58,6 +58,11 @@ def saved(request):
     context['profile_user'] = profile_user
     return render(request, 'codebook/saved-files.html', context)
 
+def login_page(request):
+    context = {}
+    return render(request, 'codebook/login-page.html', context)
+
+
 def front(request):
     context = {}
     context['searchform'] = SearchForm()
@@ -105,6 +110,7 @@ def watching(request):
     return render(request, 'codebook/watching-page.html', context)
 
 
+@login_required
 def sandbox(request):
     social = request.user.social_auth.get(provider='github')
     token = social.extra_data['access_token']

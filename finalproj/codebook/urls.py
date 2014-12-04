@@ -3,6 +3,7 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
 	# Loading Content
     url(r'^$', 'codebook.content_views.front', name='front'),
+    url(r'^login$', 'codebook.content_views.login_page', name='login'),
     url(r'^news$', 'codebook.content_views.news', name='news'),
     url(r'^watching$', 'codebook.content_views.watching', name='watching'),
     url(r'^saved$', 'codebook.content_views.saved', name='saved'),
