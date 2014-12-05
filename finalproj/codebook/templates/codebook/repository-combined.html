@@ -5,10 +5,10 @@
                 <div class="col-md-1">
                     <!-- should have a link to the repository -->
                     <h4 class="glyphicon glyphicon-expand repo-toggle-button cursor-pointer" id="repo-toggle-button-{{ repo.id }}"
-                        data-item-id="{{ repo.id }}"></h4>
+                        data-item-id="{{ repo.id }}" title="expand/collapse Repository view"></h4>
                 </div>
                 <div class="col-md-2 text-left">
-                    <a href="{{ repo.url }}" target="_blank"><h5 class="text-left">{{ repo.name }}</h5></a>
+                    <a href="{{ repo.url }}" target="_blank"><h5 class="text-left" title="Repository name">{{ repo.name }}</h5></a>
                 </div>
                 <div class="col-md-1">
                         {% if repo.is_current_user_starring %}
@@ -28,11 +28,11 @@
 
                 </div>
                 <div class="col-md-2">
-                    <h5 class="text-right cursor-pointer">{{ repo.owner_name }}</h5>
+                    <a href="{{ repo.owner_url }}"><h5 class="text-right cursor-pointer" title="Repository owner">{{ repo.owner_name }}</h5></a>
                 </div>
                 <div class="col-md-1">
                     <!-- TODO: setup profile images -->
-                    <h4><img src="{{ repo.owner_prof_pic }}"></h4>
+                    <h4><img src="{{ repo.owner_prof_pic }}" title="Repository owner"></h4>
                 </div>
             </div>
             <!-- end repository header top thingy -->
@@ -46,9 +46,10 @@
                 </div>
                 <div class="col-md-9 repository-file">
                     <div class="btn-group btn-group-xs file-controls">
-                        <button id="current-file-save-{{ repo.id }}" class="btn btn-xs control-btn glyphicon glyphicon-floppy-save current-file-save" title="Save File" data-item-id="{{ repo.id }}"></button>
+                        <button id="current-file-save-{{ repo.id }}" class="btn btn-xs control-btn glyphicon glyphicon-floppy-save current-file-save" title="Save File" data-item-id="{{ repo.id }}" data-text="File Saved!"></button>
                     </div>
                     {% include 'codebook/file-contents-combined.html' with file_content=repo.default_file_contents %}
+                    <div class="saved-notification" id="saved-notification-{{ repo.id }}" style="display: none"></div>
                 </div>
             </div>
             <!-- end file view -->

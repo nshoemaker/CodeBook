@@ -39,6 +39,7 @@ function like_comment(comment_id)
             {
                 eye.addClass("glyphicon-remove");
             }
+            eye.attr("title", "Unlike comment" );
         },
         error: function (xhr, textStatus, errorThrown) {
             if (!(xhr.status == 0 || xhr.status == '0' || errorThrown == 0 || errorThrown == '0' || xhr.response == 0 || xhr.response == '0')) {
@@ -70,6 +71,7 @@ function unlike_comment(comment_id)
             {
                 eye.removeClass("glyphicon-remove");
             }
+            eye.attr("title", "Like comment" );
         },
         error: function (xhr, textStatus, errorThrown) {
             if (!(xhr.status == 0 || xhr.status == '0' || errorThrown == 0 || errorThrown == '0' || xhr.response == 0 || xhr.response == '0')) {

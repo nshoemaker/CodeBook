@@ -38,32 +38,92 @@ class ProfileUser(AbstractBaseUser):
     def get_username(self):
         return self.username
 
-    def get_id(self):
-        return 1
+    def get_id(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).id
+            else:
+                return g.get_user().id
+        except:
+            return 0
 
-    def get_avatar_url(self):
-        return "https://github.com/images/error/octocat_happy.gif"
+    def get_avatar_url(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).avatar_url
+            else:
+                return g.get_user().avatar_url
+        except:
+            return "static 'img/default_profile.jpg'"
 
-    def get_git_profile_url(self):
-        return "https://api.github.com/users/octocat"
+    def get_git_profile_url(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).html_url
+            else:
+                return g.get_user().html_url
+        except:
+            return "None"
     
-    def get_repos(self):
-        pass
+    def get_repos(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).get_repos()
+            else:
+                return g.get_user().get_repos()
+        except:
+            pass 
 
-    def get_following(self):
-        pass
+    def get_following(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).get_followers()
+            else:
+                return g.get_user().get_followers()
+        except:
+            pass
 
-    def get_email(self):
-        return "user@email.com"
+    def get_email(self, g, username=None):
+        try:
+            if (username != None):
+                email = g.get_user(username).email
+            else:
+                email = g.get_user().email
 
-    def get_website(self):
-        return "userwebsite.com"
+            if (email == "" or email == " "):
+                return "None"
+            else:
+                return email
+        except:
+            return "None"
 
-    def get_company(self):
-        return "User Company"
 
-    def get_bio(self):
-        return "This is my user bio."
+    def get_website(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).blog
+            else:
+                return g.get_user().blog
+        except:
+            return "None"
+
+    def get_company(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).company
+            else:
+                return g.get_user().company
+        except:
+            return "None"
+
+    def get_bio(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).bio 
+            else:
+                return g.get_user().bio 
+        except:
+            return "None"
 
 
 class UserRating(models.Model):

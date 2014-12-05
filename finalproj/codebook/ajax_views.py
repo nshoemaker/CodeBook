@@ -130,8 +130,8 @@ def post_repo_comment(request, id):
             print 'ERROR 1'
             return HttpResponse('Error')
         repo, repo_created = Repository.objects.get_or_create(repo_id=id)
+        g = get_auth_user_git(request)
         if repo_created:
-            g = get_auth_user_git(request)
             langs = g.get_repo(int(id)).get_languages().keys()
             for l in langs:
                 lang, created = Language.objects.get_or_create(name=l)
@@ -149,6 +149,8 @@ def post_repo_comment(request, id):
         com_new = comment_form.save(commit=False)
         com_new.profile_user = profile_user
         comment_form.save()
+
+        com_new.profile_user.get_avatar_url = com_new.profile_user.get_avatar_url(g)
 
         repo = Repository.objects.get(repo_id=id)
         repo.comments.add(com_new)
@@ -656,6 +658,10 @@ def repo_search_list(request):
                     nondbrepos.append(x)
                     count += 1
                     print x.name
+
+            for comment in x.comments:
+                comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g)
+
         these_repo_results = langrepos+dbrepos+nondbrepos
         these_repo_results.sort(key=lambda x: x.doc_rating, reverse= True)
         context["repos"] = these_repo_results
@@ -734,6 +740,9 @@ def watch_list(request):
             x = Repo(None, repo.repo_id, user, g)
         except ObjectDoesNotExist:
             x = Repo(repo, repo.id, user, g)
+
+        for comment in x.comments:
+            comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g)
         recent_watched.append(x)
 
     context = {}
@@ -778,6 +787,7 @@ def save_file_from_repo(request):
 
 
 @login_required
+@transaction.atomic
 def rate_documentation(request):
     if request.is_ajax:
         profile_user = request.user
@@ -803,6 +813,7 @@ def rate_documentation(request):
         pass
 
 @login_required
+@transaction.atomic
 def rate_difficulty(request):
     if request.is_ajax:
         profile_user = request.user
