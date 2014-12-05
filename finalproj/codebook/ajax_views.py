@@ -135,7 +135,6 @@ def post_repo_comment(request, id):
             langs = g.get_repo(int(id)).get_languages().keys()
             for l in langs:
                 lang, created = Language.objects.get_or_create(name=l)
-                print created
                 repo.languages.add(lang)
                 repo.save()
         
@@ -371,9 +370,9 @@ def unlike_comment(request, id):
 @login_required
 def rate_credibility(request):
     if request.is_ajax():
-        social = request.user.social_auth.get(provider='github')
-        token = social.extra_data['access_token']
-        g = Github(token)
+        g = get_auth_user_git(request)
+        if g.get_rate_limit().rate.remaining < 250:
+            return render(request, 'codebook/rate-limit-page.html')
  
         #user statistics
         #numFollowers = g.get_user().followers
@@ -464,6 +463,8 @@ def sort_lang_stream_recent(request):
     if request.is_ajax():
         context = {}
         g = get_auth_user_git(request)
+        if g.get_rate_limit().rate.remaining < 250:
+            return render(request, 'codebook/rate-limit-page.html')
         profile_user = request.user
 
         try:
@@ -495,6 +496,8 @@ def sort_lang_stream_popular(request):
     if request.is_ajax():
         context = {}
         g = get_auth_user_git(request)
+        if g.get_rate_limit().rate.remaining < 250:
+            return render(request, 'codebook/rate-limit-page.html')
         profile_user = request.user
 
         try:
@@ -531,7 +534,6 @@ def dbrepodiffy(dbrepo, gitrepo, contribs, level):
         smcount += 1
     if smcount > 0:
         avgdif = avgdif/smcount
-        print "got difficulty from stars: ", avgdif
     else:
         avgdif = (contribs/10 + gitrepo.size/10000)/2 
     avgdif = min(avgdif,5)
@@ -541,9 +543,9 @@ def dbrepodiffy(dbrepo, gitrepo, contribs, level):
 @login_required
 def repo_search_list(request):
     if request.is_ajax():
-        social = request.user.social_auth.get(provider='github')
-        token = social.extra_data['access_token']
-        g = Github(token)
+        g = get_auth_user_git(request)
+        if g.get_rate_limit().rate.remaining < 250:
+            return render(request, 'codebook/rate-limit-page.html')
         print "Start is:", g.get_rate_limit().rate.remaining
         profile_user = request.user
         context = {}
@@ -574,7 +576,6 @@ def repo_search_list(request):
         
         if(choice == 'User'):
             repos = []
-            files = []
             results = []
             users = g.search_users(text,sort='followers',order='desc')
             for user in users:
@@ -583,23 +584,14 @@ def repo_search_list(request):
             repos.append(results)
 
         elif(choice == 'Repo'):
-            files = []
             repos = []
             results = g.search_repositories(text,sort='stars',order='desc').get_page(0)
             repos.append(results)
-
-        elif(choice == 'Code'):
-            print "CAME IN HERE"
-            repos = []
-            query = text+" user:github size:>10000"
-            files = g.search_code(query).get_page(0)
                 
         elif(choice == 'Lang'):
-            files = []
             repos = []
             if text in languages:
                 for currrepo in Repository.objects.filter(languages__name__iexact = text).distinct():
-                    print "updating languages of repo"
                     #language update code
                     dblangs = currrepo.languages.all()
                     repo = g.get_repo(currrepo.repo_id)
@@ -622,7 +614,6 @@ def repo_search_list(request):
                             count+=1
                     except:
                         continue
-                print "count is: ", count 
                 if count<=7: 
                     query = "language:"+text+" stars:>=500"
                     results = g.search_repositories(query,sort='stars',order='desc').get_page(0)
@@ -633,22 +624,7 @@ def repo_search_list(request):
             print "problem"
 
         these_repo_results = []
-        """    
-                these_file_results = []
-                for f in files[:10]:
-                    file_name = f.name
-                    print file_name + "\n"
-                    file_contents = base64.b64decode(f.content)
-                    print file_contents + "\n"
-                    file_path = f.path
-                    print file_path + "\n"
-                    try:
-                        repo = Repository.objects.get(repo_id = repo.f.repository.id)
-                        x = Repo(None,repo.repo_id,g.get_user())
-                    except ObjectDoesNotExist:
-                        x = Repo(repo, repo.id, g.get_user())
-                    repofile(repository = Repo(f.repository,id=f.repository.id,g.get_user()),   
-        """
+        
         repos=list(itertools.chain(*repos))
         if len(repos) < 1:
             #no valid results
@@ -665,7 +641,6 @@ def repo_search_list(request):
                 currrepo = Repository.objects.get(repo_id = repo.id)
                 if choice == 'Lang':
                     continue
-                print "Got repo from db: ", currrepo.repo_id
                 if dbrepodiffy(currrepo,repo,contribs,level): 
                     x = Repo(None,currrepo.repo_id,g.get_user(), g)
                     dbrepos.append(x)
@@ -705,7 +680,6 @@ def repo_search_list(request):
                         print "     " + l.mode
                         print "     " + l.url
                         print "     " + l.type"""
-        print "End is:" ,g.get_rate_limit().rate.remaining
         return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     else:
         # uhhhhhhhh awk. this should never happen
@@ -714,9 +688,9 @@ def repo_search_list(request):
 @login_required
 def get_file_contents(request):
     if request.is_ajax():
-        social = request.user.social_auth.get(provider='github')
-        token = social.extra_data['access_token']
-        hub = Github(token)
+        hub = get_auth_user_git(request)
+        if hub.get_rate_limit().rate.remaining < 250:
+            return render(request, 'codebook/rate-limit-page.html')
         if request.GET:
             rep_id = request.GET.get("repo_id")
             sha = request.GET.get("sha")
@@ -746,6 +720,8 @@ def get_file_contents(request):
 @login_required
 def watch_list(request):
     g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        return render(request, 'codebook/rate-limit-page.html')
     user = g.get_user()
     watched = user.get_subscriptions()
 
