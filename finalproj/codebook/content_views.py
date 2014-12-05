@@ -20,6 +20,11 @@ from views_base import *
 @login_required
 def my_profile_view(request):
     context = {}
+    g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
     context["profile_user"] = request.user
     context['searchform'] = SearchForm()
     context["view_my_profile"] = 'true'
@@ -29,6 +34,11 @@ def my_profile_view(request):
 @login_required
 def profile_view(request, username):
     context = {}
+    g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
     # TODO change this to the username of the user
     profile_user = get_object_or_404(ProfileUser, username=username)
     context["profile_user"] = profile_user
@@ -41,6 +51,11 @@ def profile_view(request, username):
 @login_required
 def saved(request):
     context = {}
+    g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
     files = [] 
     profile_user = request.user
     user_saves = Saved.objects.filter(profile_user=profile_user)
@@ -66,20 +81,22 @@ def login_page(request):
 @login_required
 def front(request):
     context = {}
+    g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
     context['searchform'] = SearchForm()
-    if request.user and not request.user.is_anonymous:
-        context['user'] = request.user
-        social = request.user.social_auth.get(provider='github')
-        token = social.extra_data['access_token']
-        g = Github(token)
-        if g.get_rate_limit().rate.remaining < 250:
-            pass
-            #return unavailable page
     return render(request, 'codebook/front-page.html', context)
 
 @login_required
 def news(request):
     context = {}
+    g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
     profile_user = request.user
     user_ratings = UserRating.objects.filter(profile_user=profile_user)
     lang_list = []
@@ -101,6 +118,10 @@ def news(request):
 def watching(request):
     context = {}
     g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
     user = g.get_user()
 
     context['searchform'] = SearchForm()
@@ -116,7 +137,11 @@ def sandbox(request):
     social = request.user.social_auth.get(provider='github')
     token = social.extra_data['access_token']
     context = {}
-
+    g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
     #g = Github(token)
     #repo_obj = Repository(repo_id = 23319657)
     #repo_obj.save()
