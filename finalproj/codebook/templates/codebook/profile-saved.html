@@ -1,0 +1,11 @@
+{% if saved_files %}
+    <ol class="file-list" id="file-list">
+    {% for file in saved_files %}
+        <li id="file{{ file.id }}">
+        {% include 'codebook/file-header.html' %}
+        </li>
+    {% endfor %}
+    </ol>
+{% else %}
+    {{ profile_user.get_username }} has not saved any files!
+{% endif %}

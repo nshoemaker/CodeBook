@@ -83,12 +83,6 @@ function unwatch_repository(repo_id) {
             csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
         },
         success: function () {
-            console.log("successful unwatch");
-            //if ($("#watching")) {
-            //    if ($("#repo" + repo_id)) {
-            //        $("#repo" + repo_id).remove();
-            //    }
-            // }
         },
         error: function (xhr, textStatus, errorThrown) {
             if (!(xhr.status == 0 || xhr.status == '0' || errorThrown == 0 || errorThrown == '0' || xhr.response == 0 || xhr.response == '0')) {
