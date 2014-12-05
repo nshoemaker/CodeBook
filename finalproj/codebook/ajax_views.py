@@ -610,7 +610,6 @@ def repo_search_list(request):
                         if dbrepodiffy(currrepo, repo, contribs, level): 
                             x = Repo(None,currrepo.repo_id,g.get_user(), g)
                             langrepos.append(x)
-                            print x.name
                             count+=1
                     except:
                         continue
@@ -626,7 +625,7 @@ def repo_search_list(request):
         these_repo_results = []
         
         repos=list(itertools.chain(*repos))
-        if len(repos) < 1:
+        if len(repos) < 1 and len(langrepos)<1:
             #no valid results
             return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
         for repo in repos:
