@@ -593,8 +593,9 @@ def repo_search_list(request):
             if text in languages:
                 for currrepo in Repository.objects.filter(languages__name__iexact = text).distinct():
                     #language update code
+                    repo_id = int(currrepo.repo_id)
                     dblangs = currrepo.languages.all()
-                    repo = g.get_repo(currrepo.repo_id)
+                    repo = g.get_repo(repo_id)
                     gitlangs = repo.get_languages().keys()
                     if (dblangs.count()>len(gitlangs)):
                         for l in dblangs:
@@ -608,7 +609,7 @@ def repo_search_list(request):
                     try:
                         contribs = len(list(repo.get_contributors()))
                         if dbrepodiffy(currrepo, repo, contribs, level): 
-                            x = Repo(None,currrepo.repo_id,g.get_user(), g)
+                            x = Repo(None,repo_id,g.get_user(), g)
                             langrepos.append(x)
                             count+=1
                     except:
@@ -643,7 +644,7 @@ def repo_search_list(request):
                 if choice == 'Lang':
                     continue
                 if dbrepodiffy(currrepo,repo,contribs,level): 
-                    x = Repo(None,currrepo.repo_id,g.get_user(), g)
+                    x = Repo(None,int(currrepo.repo_id),g.get_user(), g)
                     dbrepos.append(x)
                     print x.name
                     count += 1
