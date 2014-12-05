@@ -22,7 +22,7 @@ def my_profile_view(request):
     context = {}
     g = get_auth_user_git(request)
     if g.get_rate_limit().rate.remaining < 250:
-        context['is_full_page'] = True
+        context['message'] = "Rate Limit has been exceeded"
         return render(request, 'codebook/rate-limit-page.html', context)
         #return unavailable page
     context["profile_user"] = request.user
@@ -36,7 +36,7 @@ def profile_view(request, username):
     context = {}
     g = get_auth_user_git(request)
     if g.get_rate_limit().rate.remaining < 250:
-        context['is_full_page'] = True
+        context['message'] = "Rate Limit has been exceeded"
         return render(request, 'codebook/rate-limit-page.html', context)
         #return unavailable page
     # TODO change this to the username of the user
@@ -53,7 +53,7 @@ def saved(request):
     context = {}
     g = get_auth_user_git(request)
     if g.get_rate_limit().rate.remaining < 250:
-        context['is_full_page'] = True
+        context['message'] = "Rate Limit has been exceeded"
         return render(request, 'codebook/rate-limit-page.html', context)
         #return unavailable page
     files = [] 
@@ -83,7 +83,7 @@ def front(request):
     context = {}
     g = get_auth_user_git(request)
     if g.get_rate_limit().rate.remaining < 250:
-        context['is_full_page'] = True
+        context['message'] = "Rate Limit has been exceeded"
         return render(request, 'codebook/rate-limit-page.html', context)
         #return unavailable page
     context['searchform'] = SearchForm()
@@ -94,7 +94,7 @@ def news(request):
     context = {}
     g = get_auth_user_git(request)
     if g.get_rate_limit().rate.remaining < 250:
-        context['is_full_page'] = True
+        context['message'] = "Rate Limit has been exceeded"
         return render(request, 'codebook/rate-limit-page.html', context)
         #return unavailable page
     profile_user = request.user
@@ -119,7 +119,7 @@ def watching(request):
     context = {}
     g = get_auth_user_git(request)
     if g.get_rate_limit().rate.remaining < 250:
-        context['is_full_page'] = True
+        context['message'] = "Rate Limit has been exceeded"
         return render(request, 'codebook/rate-limit-page.html', context)
         #return unavailable page
     user = g.get_user()
@@ -139,7 +139,7 @@ def sandbox(request):
     context = {}
     g = get_auth_user_git(request)
     if g.get_rate_limit().rate.remaining < 250:
-        context['is_full_page'] = True
+        context['message'] = "Rate Limit has been exceeded"
         return render(request, 'codebook/rate-limit-page.html', context)
         #return unavailable page
     #g = Github(token)
