@@ -15,7 +15,6 @@ class Stack(models.Model):
 
 class Language(models.Model):
     name = models.CharField(max_length=20)
-    #extensions = models.CharField(max_length=20)
 
 class ProfileUser(AbstractBaseUser):
     is_anonymous = models.BooleanField(default = False)
@@ -151,7 +150,7 @@ class Tag(models.Model):
 class Repository(models.Model):
     repo_id = models.IntegerField(primary_key=True)
     comments = models.ManyToManyField(Comment)
-
+    languages = models.ManyToManyField(Language)
 
 class RepoFile (models.Model):
     repository = models.ForeignKey(Repository)

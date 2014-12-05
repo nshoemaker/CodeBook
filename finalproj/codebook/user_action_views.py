@@ -28,8 +28,8 @@ def new_search(request):
 
     searchform = SearchForm(request.GET)
     if not searchform.is_valid():
-        print searchform.errors
-        return None
+        context['message'] = "Invalid Search Query."
+        return render(request, 'codebook/rate-limit-page.html', context)
 
     text = searchform.cleaned_data['text']
     choice = searchform.cleaned_data['types']

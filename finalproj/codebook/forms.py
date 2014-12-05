@@ -12,4 +12,4 @@ class CommentForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
     text = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Search'}))
-    types = forms.ChoiceField(choices=(('Lang', 'Languages'),('Repo','Repository'),('User','User'),('Code','Code')))
+    types = forms.ChoiceField(choices=(('Lang', 'Languages'),('Repo','Repository'),('User','User')))

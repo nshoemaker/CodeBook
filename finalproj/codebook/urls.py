@@ -3,6 +3,7 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
 	# Loading Content
     url(r'^$', 'codebook.content_views.front', name='front'),
+    url(r'^login$', 'codebook.content_views.login_page', name='login'),
     url(r'^news$', 'codebook.content_views.news', name='news'),
     url(r'^watching$', 'codebook.content_views.watching', name='watching'),
     url(r'^saved$', 'codebook.content_views.saved', name='saved'),
@@ -14,7 +15,7 @@ urlpatterns = patterns('',
     url(r'^expand_folder$', 'codebook.ajax_views.expand_folder', name='expand_folder'),
     url(r'^get_top_level$', 'codebook.ajax_views.get_top_level', name='get_top_level'),
     url(r'^get_file_contents$', 'codebook.ajax_views.get_file_contents', name='get_file_contents'),
-
+    
     # User Actions
     url(r'^comment_repo/(?P<id>\d+)$', 'codebook.ajax_views.post_repo_comment', name='comment_repo'),
     url(r'^search_results$', 'codebook.user_action_views.new_search', name='search'),
