@@ -49,7 +49,7 @@ User is github user, get by g.get_user() of authenticated g user.
 class Repo:
     def __init__(self, repo, id, user, hub):
         if(repo is None):
-            repo = hub.get_repo(id)
+            repo = hub.get_repo(int(id))
             try:
                 repository = Repository.objects.get(repo_id__exact=id)
                 self.doc_rating = repository.documentation_set.aggregate(Avg('rating')).values()[0]
