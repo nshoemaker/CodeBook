@@ -10,22 +10,6 @@
 <li><a href="{% url 'watching' %}">Watching</a></li>
 {% endif %}
 
-<!--
-	ADD % BACK TO TAGS IF NEEDED
-{ if active == 'starred' }
-<li class="active"><a href="{ url 'starred' }">Starred</a></li>
-{ else }
-<li><a href="{ url 'starred' }">Starred</a></li>
-{ endif }
--->
-<!--
-{% if active == 'following' %}
-<li class="active"><a href="{% url 'following' %}">Following</a></li>
-{% else %}
-<li><a href="{ url 'following' %}">Following</a></li>
-{% endif %}
--->
-
 {% if active == 'saved' %}
 <li class="active" id="saved"><a href="{% url 'saved' %}">Saved Files</a></li>
 {% else %}
@@ -36,10 +20,4 @@
 <li class="active" id="profile"><a href="{% url 'view_my_profile' %}">Profile</a></li>
 {% else %}
 <li><a href="{% url 'view_my_profile' %}">Profile</a></li>
-{% endif %}
-
-{% if active == 'settings' %}
-<li class="active" id="settings"><a href="#"><span class="glyphicon glyphicon-cog"></span></a></li>
-{% else %}
-<li><a href="#"><span class="glyphicon glyphicon-cog"></span></a></li>
 {% endif %}

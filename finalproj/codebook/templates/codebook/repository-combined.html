@@ -8,7 +8,7 @@
                         data-item-id="{{ repo.id }}"></h4>
                 </div>
                 <div class="col-md-2 text-left">
-                    <a href="{{ repo.url }}"><h5 class="text-left">{{ repo.name }}</h5></a>
+                    <a href="{{ repo.url }}" target="_blank"><h5 class="text-left">{{ repo.name }}</h5></a>
                 </div>
                 <div class="col-md-1">
                         {% if repo.is_current_user_starring %}
@@ -115,17 +115,16 @@
                     <div class="col-md-9 col-lg-offset-1">
                         <div id="the_post{{ repo.id }}">
                             <tr>
-                                <th><label for="id_text">{{ comment_form.text.label }}</label></th>
                                 <td>
                                     {{ comment_form.errorlist }}
-                                    <input id="repo-post-text-{{ repo.id }}" maxlength="400" name="text" pla
+                                    <input class="comment-post-text form-control" id="repo-post-text-{{ repo.id }}" name="text" pla
                                            ceholder="Say something..." required="True" type="text"/></td>
                             </tr>
                             {% csrf_token %}
                         </div>
                     </div>
                     <div class="col-md-1">
-                        <input type="submit" class="btn control-btn" value="Comment">
+                        <input type="submit" class="btn control-btn" value="Add Comment">
                     </div>
                     {% csrf_token %}
                 </form>
