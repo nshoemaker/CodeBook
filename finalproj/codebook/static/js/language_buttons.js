@@ -108,16 +108,16 @@ $(document).ready(function()
     });
 
 
-    $(".icon-prog-django").mouseover(function()
+    $(".icon-prog-perl").mouseover(function()
     {
-        $(".icon-prog-django").css("background-color", "#77DDAA");
-        $("#language-choice").text("Django");
+        $(".icon-prog-perl").css("background-color", "#77DDAA");
+        $("#language-choice").text("Perl");
         $("#language-choice").css("font-weight","bolder");
     });
 
-    $(".icon-prog-django").mouseout(function()
+    $(".icon-prog-perl").mouseout(function()
     {
-        $(".icon-prog-django").css("background-color", "#55BB88");
+        $(".icon-prog-perl").css("background-color", "#55BB88");
         $("#language-choice").text("a Language");
         $("#language-choice").css("font-weight","normal");
     });
