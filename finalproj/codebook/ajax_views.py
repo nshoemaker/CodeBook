@@ -479,6 +479,7 @@ def sort_lang_stream_recent(request):
             repos = []
             no_results = 'true'
             context['no_results'] = no_results
+            context['my_languages_stream_no_results'] = 'true'
         these_repo_results = []
         for repo in repos[:5]:
             try:
@@ -515,6 +516,7 @@ def sort_lang_stream_popular(request):
             repos = []
             no_results = 'true'
             context['no_results'] = no_results
+            context['my_languages_stream_no_results'] = 'true'
         these_repo_results = []
         for repo in repos[:5]:
             try:
