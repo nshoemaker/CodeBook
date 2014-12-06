@@ -374,7 +374,7 @@ def rate_credibility(request):
     if request.is_ajax():
         g = get_auth_user_git(request)
         if g.get_rate_limit().rate.remaining < 250:
-            return render(request, 'codebook/rate-limit-page.html')
+            return HttpResponse('False', content_type="text")
  
         #user statistics
         #numFollowers = g.get_user().followers
@@ -466,7 +466,9 @@ def sort_lang_stream_recent(request):
         context = {}
         g = get_auth_user_git(request)
         if g.get_rate_limit().rate.remaining < 250:
-            return render(request, 'codebook/rate-limit-page.html')
+            context['repos'] = []
+            context['message'] = "Error rate limit exceeded"
+            return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
         profile_user = request.user
 
         try:
@@ -499,7 +501,10 @@ def sort_lang_stream_popular(request):
         context = {}
         g = get_auth_user_git(request)
         if g.get_rate_limit().rate.remaining < 250:
-            return render(request, 'codebook/rate-limit-page.html')
+            context["repos"] = []
+            context['profile_user'] = request.user
+            context['message'] = "Error rate limit exceeded"
+            return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
         profile_user = request.user
 
         try:
@@ -545,12 +550,15 @@ def dbrepodiffy(dbrepo, gitrepo, contribs, level):
 @login_required
 def repo_search_list(request):
     if request.is_ajax():
-        g = get_auth_user_git(request)
-        if g.get_rate_limit().rate.remaining < 250:
-            return render(request, 'codebook/rate-limit-page.html')
-        print "Start is:", g.get_rate_limit().rate.remaining
-        profile_user = request.user
         context = {}
+        g = get_auth_user_git(request)
+        profile_user = request.user
+        if g.get_rate_limit().rate.remaining < 250:
+            context["repos"] = []
+            context['profile_user'] = profile_user
+            context['message'] = "Error rate limit exceeded"
+            return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
+        print "Start is:", g.get_rate_limit().rate.remaining
         context['repos'] = {}
         choice = request.GET.get("types")
         text = request.GET.get("text")
@@ -621,8 +629,10 @@ def repo_search_list(request):
                     results = g.search_repositories(query,sort='stars',order='desc').get_page(0)
                     repos.append(results)
             else:
+                context["repos"] = []
+                context['profile_user'] = profile_user
                 context['message'] = "No results matched your search."
-                return render(request, 'codebook/rate-limit-page.html', context)
+                return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
         else:
             print "problem"
 
@@ -631,8 +641,10 @@ def repo_search_list(request):
         repos=list(itertools.chain(*repos))
         if len(repos) < 1 and len(langrepos)<1:
             #no valid results
+            context["repos"] = []
+            context['profile_user'] = profile_user
             context['message'] = "No results matched your search."
-            return render(request, 'codebook/rate-limit-page.html', context)
+            return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
         for repo in repos:
             if count>7:
                 break
@@ -654,7 +666,7 @@ def repo_search_list(request):
                 avgdif = (contribs/10 + repo.size/10000)/2 
                 avgdif = min(avgdif,5)
                 if level==0 or (level==1 and avgdif<=2) or (level==2 and avgdif>2 and avgdif<=4) or (level==3 and avgdif>4):
-                    x = Repo(repo, repo.id, g.get_user(), g)
+                    x = Repo(repo, int(repo.id), g.get_user(), g)
                     nondbrepos.append(x)
                     count += 1
                     print x.name
@@ -696,9 +708,12 @@ def repo_search_list(request):
 @login_required
 def get_file_contents(request):
     if request.is_ajax():
+        context = {}
         hub = get_auth_user_git(request)
         if hub.get_rate_limit().rate.remaining < 250:
-            return render(request, 'codebook/rate-limit-page.html')
+            context["repo"] = []
+            context['message'] = "Error rate limit exceeded"
+            return render_to_response('codebook/file-contents-combined-extra-info.html', context, content_type="html")
         if request.GET:
             rep_id = request.GET.get("repo_id")
             sha = request.GET.get("sha")
@@ -716,7 +731,6 @@ def get_file_contents(request):
             filecontent = base64.b64decode(content)
         else:
             pass
-        context = {}
         context['file_content'] = filecontent
         context['repo'] = rep
         context['file_path'] = path
@@ -728,8 +742,12 @@ def get_file_contents(request):
 @login_required
 def watch_list(request):
     g = get_auth_user_git(request)
+    context = {}
     if g.get_rate_limit().rate.remaining < 250:
-        return render(request, 'codebook/rate-limit-page.html')
+        context["repos"] = []
+        context['profile_user'] = request.user
+        context['message'] = "Error rate limit exceeded"
+        return render_to_response('codebook/repository-list-combined.html', context, content_type="html")
     user = g.get_user()
     watched = user.get_subscriptions()
 
@@ -745,7 +763,6 @@ def watch_list(request):
             comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g)
         recent_watched.append(x)
 
-    context = {}
     context['repos'] = recent_watched
     context['comment_form'] = CommentForm()
     context['profile_user'] = request.user
