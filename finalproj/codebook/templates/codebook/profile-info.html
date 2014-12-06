@@ -65,19 +65,19 @@
             {% include 'codebook/profile-lang-list.html' %}
         </div>
         <div class="tab-pane fade" id="saved">
-            <h2>{{profile_user.get_username}}'s Saved Files</h2>
+            <h3>{{profile_user.get_username}}'s Saved Files</h3>
             {% include 'codebook/profile-saved.html' %}
         </div>
         <div class="tab-pane fade" id="popular">
-            <h2>{{profile_user.get_username}}'s Popular Repositories</h2>
+            <h3>{{profile_user.get_username}}'s Popular Repositories</h3>
             {% include 'codebook/profile-popular.html' %}
         </div>
         <div class="tab-pane fade" id="recent">
-            <h2>{{profile_user.get_username}}'s Recent Repositories</h2>
+            <h3>{{profile_user.get_username}}'s Recent Repositories</h3>
             {% include 'codebook/profile-recent.html' %}
         </div>
         <div class="tab-pane fade" id="edit">
-            <h2>Edit My Profile</h2>
+            <h3>Edit My Profile</h3>
             <h4>Rate your language skill level from 1 to 10.</h4>
             {% include 'codebook/profile-edit-profile.html' %}
         </div>
