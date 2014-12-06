@@ -1,9 +1,14 @@
 /**
  * Created by nora on 11/20/2014.
  */
-
 $('#add-proficiency-btn').click(function () {
     var language = $('#language-prof').val();
+    console.log(language);
+    language = language.replace(/'/g, "&quot");
+    language = language.replace(/</g, "&lt");
+    language = language.replace(/>/g, "&gt");
+    language = language.substring(0,19);
+    console.log(language);
     var proficiency = $('#amount').val();
     console.log("lang: " + language + " proficiency: " + proficiency);
     if (language == "") {
@@ -19,9 +24,15 @@ $('#add-proficiency-btn').click(function () {
                 csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
             },
             success: function (html) {
+                $.expr[":"].contains = $.expr.createPseudo(function(arg) {
+                    return function( elem ) {
+                        return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+                    };
+                });
+                $(".skill:contains(" + language + ")").remove()
                 $('#proficiency-list').prepend(html);
                 $('#language-choice').val('');
-                $('#slider').value(5);
+                $('#slider').val(5);
             },
             error: function (xhr, textStatus, errorThrown) {
                 console.log("made it to repo comment function FAIL");

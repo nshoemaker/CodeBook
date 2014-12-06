@@ -1,16 +1,16 @@
 {% load staticfiles %}
 <div class="row comment">
     <div class="col-md-1">
-        <h5>{% include 'codebook/get-profpic.html' with id=comment.profile_user.user.id %}</h5>
+        <h5>{% include 'codebook/get-profpic.html' with profile_user=comment.profile_user %}</h5>
     </div>
     <div class="col-md-2">
         <h5>{{ comment.profile_user.get_username }}</h5>
     </div>
     <div class="col-md-1 col-md-offset-7">
         {% if profile_user in comment.likers.all %}
-            <h5 id="like-status-{{ comment.id }}" data-item-id="{{ comment.id }}" class="glyphicon glyphicon-remove like-status"></h5>
+            <h5 id="like-status-{{ comment.id }}" data-item-id="{{ comment.id }}" class="glyphicon glyphicon-remove like-status cursor-pointer" title="Unlike comment"></h5>
         {% else %}
-            <h5 id="like-status-{{ comment.id }}" data-item-id="{{ comment.id }}" class="glyphicon glyphicon-ok like-status"></h5>
+            <h5 id="like-status-{{ comment.id }}" data-item-id="{{ comment.id }}" class="glyphicon glyphicon-ok like-status cursor-pointer" title="Like comment"></h5>
         {% endif %}
     </div>
     <div class="col-md-10 comment-text">

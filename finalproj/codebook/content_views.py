@@ -1,93 +1,165 @@
-############################################################
-############################################################
-##  content_views.py:                                     ##
-##                                                        ##
-##  Contains actions which populate pages of the web app  ##
-##  Actions:                                              ##
-##      front     - populates front-page.html             ##
-##      news      - populates news-page.html              ##
-##      watching  - populates watching-page.html          ##
-##      starred   - populates starred-page.html           ##
-##      following - populates following-page.html         ##
-############################################################
-############################################################
+##############################################################
+##############################################################
+##  content_views.py:                                       ##
+##                                                          ##
+##  Contains actions which populate pages of the web app    ##
+##  Actions:                                                ##
+##      front           - populates front page              ##
+##      news            - populates my languages stream     ##
+##      watching        - populates watch stream            ##
+##      saved           - populates saved stream            ##
+##      following       - populates following-page.html     ##
+##      my_profile_view - populates view of own profile     ##
+##      profile_view    - populates view of a profile page  ##
+##                                                          ##
+##############################################################
+##############################################################
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.core.urlresolvers import reverse
-from django.db import transaction
+from views_base import *
 
-from django.core.exceptions import ObjectDoesNotExist
-
-from github import Github 
-# g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
-g = Github('dmouli', 'Spongebob5%')
-"""
-g = Github(token)
-"""
-
-# Needed to manually create HttpResponses or raise an Http404 exception
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-
-# Decorator to use built-in authentication system
-from django.contrib.auth.decorators import login_required
-
-# Used to create and manually log in a user
-from django.contrib.auth.models import User
-from django.contrib.auth import login, authenticate
-
-# Used to generate a one-time-use token to verify a user's email address
-from django.contrib.auth.tokens import default_token_generator
-
-# Used to send mail from within Django
-from django.core.mail import send_mail
-
-from django.template.context import RequestContext
-
-# Helper function to guess a MIME type from a file name
-from mimetypes import guess_type
-
-from django.db.models import Q
-
-from codebook.models import *
-from codebook.forms import *
-
-from datetime import datetime
-from django.utils import timezone
-
-import json
-
+@login_required
 def my_profile_view(request):
     context = {}
-    context["profile_user"] = request.user
+    g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
+    user = g.get_user()
+    
+    profile_user = request.user
+    profile_user.get_git_profile_url = profile_user.get_git_profile_url(g)
+    profile_user.get_email = profile_user.get_email(g)
+    profile_user.get_avatar_url = profile_user.get_avatar_url(g)
+
+    query = "user:" + user.login
+    recent_repos = g.search_repositories(query)
+    popular_repos = g.search_repositories(query, sort='stars', order='desc').get_page(0)
+
+    recent_repo_results = []
+    try:
+        for repo in recent_repos[:5]:
+            try:
+                repo = Repository.objects.get(repo_id = repo.id)
+                x = Repo(None,repo.repo_id, g.get_user() , g)
+            except ObjectDoesNotExist:
+                x = Repo(repo, repo.id, g.get_user() , g)
+            recent_repo_results.append(x)
+    except:
+        pass
+
+    popular_repo_results = []
+    try:
+        for repo in popular_repos[:5]:
+            try:
+                repo = Repository.objects.get(repo_id = repo.id)
+                x = Repo(None,repo.repo_id, g.get_user() , g)
+            except ObjectDoesNotExist:
+                x = Repo(repo, repo.id, g.get_user() , g)
+            popular_repo_results.append(x)
+    except:
+        pass
+
+    user_saves = Saved.objects.filter(profile_user=profile_user)
+    saved_files = [] 
+    for save in user_saves:
+        save.repo_file.get_name = save.repo_file.get_name(g)
+        saved_files.append(save.repo_file)
+
+    context['recent_repos'] = recent_repo_results
+    context['popular_repos'] = popular_repo_results
+    context['saved_files'] = saved_files
+    context['profile_user'] = request.user
+    context['logged_in_user'] = request.user
     context['searchform'] = SearchForm()
-    context["view_my_profile"] = 'true'
+    context['view_my_profile'] = 'true'
     context['ratings'] = UserRating.objects.filter(profile_user = request.user)
     return render(request, 'codebook/view_my_profile.html', context)
 
+@login_required
 def profile_view(request, username):
     context = {}
+    g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
     # TODO change this to the username of the user
     profile_user = get_object_or_404(ProfileUser, username=username)
-    context["profile_user"] = profile_user
-    context['searchform'] = SearchForm()
+    user = g.get_user(username)
+    
+    try:
+        profile_user.get_git_profile_url = profile_user.get_git_profile_url(g, username)
+        profile_user.get_email = profile_user.get_email(g, username)
+        profile_user.get_avatar_url = profile_user.get_avatar_url(g, username)
+    except:
+        pass
+
+    query = "user:" + user.login
+    recent_repos = g.search_repositories(query)
+    popular_repos = g.search_repositories(query, sort='stars', order='desc').get_page(0)
+
+    recent_repo_results = []
+    try:
+        for repo in recent_repos[:5]:
+            try:
+                repo = Repository.objects.get(repo_id = repo.id)
+                x = Repo(None,repo.repo_id, g.get_user() , g)
+            except ObjectDoesNotExist:
+                x = Repo(repo, repo.id, g.get_user() , g)
+            recent_repo_results.append(x)
+    except:
+        pass
+
+    popular_repo_results = []
+    try:
+        for repo in popular_repos[:5]:
+            try:
+                repo = Repository.objects.get(repo_id = repo.id)
+                x = Repo(None,repo.repo_id, g.get_user() , g)
+            except ObjectDoesNotExist:
+                x = Repo(repo, repo.id, g.get_user() , g)
+            popular_repo_results.append(x)
+    except:
+        pass
+
+    user_saves = Saved.objects.filter(profile_user=profile_user)
+    saved_files = [] 
+    for save in user_saves:
+        save.repo_file.get_name = save.repo_file.get_name(g)
+        saved_files.append(save.repo_file)
+
+    context['recent_repos'] = recent_repo_results
+    context['popular_repos'] = popular_repo_results
+    context['saved_files'] = saved_files
+    context['profile_user'] = profile_user
+    context['logged_in_user'] = request.user
     if (profile_user == request.user):
         context["view_my_profile"] = 'true'
+    context['searchform'] = SearchForm()
     context['ratings'] = UserRating.objects.filter(profile_user = profile_user)
     return render(request, 'codebook/profile.html', context)
 
-def get_auth_user_git(request):
-    social = request.user.social_auth.get(provider='github')
-    token = social.extra_data['access_token']
-    g = Github(token)
-    return g
-
+@login_required
 def saved(request):
     context = {}
+    g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
     files = [] 
     profile_user = request.user
     user_saves = Saved.objects.filter(profile_user=profile_user)
+    g = get_auth_user_git(request)
 
     for save in user_saves:
+        save.repo_file.get_name = save.repo_file.get_name(g)
+        save.repo_file.get_creator = save.repo_file.get_creator(g)
+        save.repo_file.get_content = save.repo_file.get_content(g)
+        repo =  g.get_repo(int(save.repo_file.repository.repo_id))
+        save.repo_file.repository.name = repo.name
+        save.repo_file.repository.url = repo.html_url
         files.append(save.repo_file)
     context['searchform'] = SearchForm()
     context['files'] = files
@@ -96,78 +168,85 @@ def saved(request):
     context['profile_user'] = profile_user
     return render(request, 'codebook/saved-files.html', context)
 
+def login_page(request):
+    context = {}
+    return render(request, 'codebook/login-page.html', context)
+
+
+@login_required
 def front(request):
     context = {}
+    g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
     context['searchform'] = SearchForm()
-    if request.user and not request.user.is_anonymous:
-        context['user'] = request.user
     return render(request, 'codebook/front-page.html', context)
 
-#@login_required
+@login_required
 def news(request):
     context = {}
+    g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
+    profile_user = request.user
+    user_ratings = UserRating.objects.filter(profile_user=profile_user)
+    lang_list = []
+
+    for rating in user_ratings:
+        lang = rating.language
+        print "ORIGINAL LANG = " + lang.name + "___"
+        lang_name = ((lang.name).lower()).strip()
+        print "CONVERTED LANG = " + lang_name + "___"
+        lang_list.append(lang_name)
+
     # TODO: this is just temporary. Replace with actual list of languages the user likes.
-    lang_list = ['java', 'python', 'csharp', 'cpp', 'c']
-    context['lang_list'] = lang_list
+    #lang_list = ['java', 'python', 'csharp', 'cpp', 'c']
+    context['lang_list'] = lang_list[:12]
     context['searchform'] = SearchForm()
-    #profile_user = ProfileUser.objects.get(user=request.user)
-    #user_langs = profile_user.languages.all
-    #context['profile_user'] = profile_user
-    #context['lang_list'] = user_langs
     return render(request, 'codebook/news-page.html', context)
 
-#@login_required
+@login_required
 def watching(request):
     context = {}
     g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
     user = g.get_user()
-    watched = user.get_subscriptions()
-    recent_watched = []  
 
-    i = 0
-    for repo in watched:
-        if (i < 10):
-            new_repo = Repository(repo_id = repo.id)
-            new_repo.save()
-            recent_watched.append(new_repo)
-            i = i+1
-        else:
-            break
     context['searchform'] = SearchForm()
     context["source"] = 'watching'
-    context['repos'] = recent_watched
     context['comment_form'] = CommentForm()
     context['profile_user'] = request.user
     context['gh_user'] = user
     return render(request, 'codebook/watching-page.html', context)
 
 
-#@login_required
-def following(request):
-    context = {}
-    # TODO: this is just temporary. Replace with actual list of user ids of people the user is following (max 10)
-    following_list_short = ['1','2','3','4','5','6','7','8','9','10','11','12']
-    context['following_list_short'] = following_list_short
-    context['searchform'] = SearchForm()
-    #context['profile_user'] = ProfileUser.objects.get(user=request.user)
-    return render(request, 'codebook/following-page.html', context)
-
-
+@login_required
 def sandbox(request):
     social = request.user.social_auth.get(provider='github')
     token = social.extra_data['access_token']
     context = {}
-    """
-    g = Github(token)
-    repo_obj = Repository(repo_id = 7986587)
-    repo_obj.save()
-    print repo_obj.get_url()
-    repo_gilbert = g.get_repo(7986587)
-    file_index = repo_gilbert.get_contents("index.html")
-    path = file_index.path
-    new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
-    new_file.save()
-    """
+    g = get_auth_user_git(request)
+    if g.get_rate_limit().rate.remaining < 250:
+        context['message'] = "Rate Limit has been exceeded"
+        return render(request, 'codebook/rate-limit-page.html', context)
+        #return unavailable page
+    #g = Github(token)
+    #repo_obj = Repository(repo_id = 23319657)
+    #repo_obj.save()
+    #print repo_obj.get_url()
+    #repo_gilbert = g.get_repo(7986587)
+    #file_index = repo_gilbert.get_contents("index.html")
+    #path = file_index.path
+    #new_file = RepoFile(repository=repo_obj, path=path, average_difficulty=0, average_quality=0)
+    #new_file.save()
+
     profile_user = request.user
 
     for repo in Repository.objects.all():
@@ -188,3 +267,4 @@ def sandbox(request):
     context['comment_form'] = CommentForm()
     context['profile_user'] = profile_user #ProfileUser.objects.get(id=1)
     return render(request, "codebook/sandbox.html", context)
+

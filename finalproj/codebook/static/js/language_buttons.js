@@ -108,16 +108,16 @@ $(document).ready(function()
     });
 
 
-    $(".icon-prog-django").mouseover(function()
+    $(".icon-prog-perl").mouseover(function()
     {
-        $(".icon-prog-django").css("background-color", "#77DDAA");
-        $("#language-choice").text("Django");
+        $(".icon-prog-perl").css("background-color", "#77DDAA");
+        $("#language-choice").text("Perl");
         $("#language-choice").css("font-weight","bolder");
     });
 
-    $(".icon-prog-django").mouseout(function()
+    $(".icon-prog-perl").mouseout(function()
     {
-        $(".icon-prog-django").css("background-color", "#55BB88");
+        $(".icon-prog-perl").css("background-color", "#55BB88");
         $("#language-choice").text("a Language");
         $("#language-choice").css("font-weight","normal");
     });
@@ -223,6 +223,36 @@ $(document).ready(function()
     $(".icon-prog-bash02").mouseout(function()
     {
         $(".icon-prog-bash02").css("background-color", "#55BB88");
+        $("#language-choice").text("a Language");
+        $("#language-choice").css("font-weight","normal");
+    });
+
+
+    $(".icon-orkut").mouseover(function()
+    {
+        $(this).css("background-color", "#77DDAA");
+        $("#language-choice").text("a Language");
+        $("#language-choice").css("font-weight","bolder");
+    });
+
+    $(".icon-orkut").mouseout(function()
+    {
+        $(this).css("background-color", "#55BB88");
+        $("#language-choice").text("a Language");
+        $("#language-choice").css("font-weight","normal");
+    });
+
+
+    $(".icon-css3-01").mouseover(function()
+    {
+        $(this).css("background-color", "#77DDAA");
+        $("#language-choice").text("CSS");
+        $("#language-choice").css("font-weight","bolder");
+    });
+
+    $(".icon-css3-01").mouseout(function()
+    {
+        $(this).css("background-color", "#55BB88");
         $("#language-choice").text("a Language");
         $("#language-choice").css("font-weight","normal");
     });

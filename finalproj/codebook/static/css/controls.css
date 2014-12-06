@@ -1,3 +1,25 @@
+.saved-notification {
+    width:100px;
+    height:10px;
+    height:auto;
+    position:absolute;
+    left:50%;
+    margin-left:-100px;
+    bottom:10px;
+    background-color: #66CC99;
+    color: #333333;
+    font-size: 14px;
+    padding:10px;
+    text-align:center;
+    border-radius: 2px;
+    -webkit-box-shadow: 0px 0px 24px -1px #55BB88;
+    -moz-box-shadow: 0px 0px 24px -1px #55BB88;
+    box-shadow: 0px 0px 24px -1px #55BB88;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
 #proficiency-form {
     background-color: #dcdcdc;
     border-radius: 5px;
@@ -10,7 +32,7 @@
 #slider {
     margin-top: 7px;
     background-color: #dcdcdc;
-    width: 120px;
+    width: 75px;
     padding: 0px;
 }
 
@@ -83,7 +105,7 @@
 {
     padding: 0px;
     margin: 0px;
-    height: 200px;
+    min-height: 300px;
     position:relative;
 }
 
@@ -197,6 +219,7 @@ list-style-type: none;
 .repository-file-explorer {
   background-color: #c0c0c0;
   min-height: 200px;
+  padding:0px;
 }
 
 .repository-header {
@@ -332,6 +355,10 @@ padding-right: 5px;
     -moz-border-radius: 50%;
 }
 
+.active-lang {
+     color: #77DDAA;
+}
+
 .control-btn {
   background-color: #77DDAA;
 }
@@ -350,7 +377,7 @@ list-style-type: none;
 .profpic img{
     padding: 0 px;
     border-radius: 50%;
-    width: 100 px;
+    width: 220px;
 }
 
 .vert-padded{

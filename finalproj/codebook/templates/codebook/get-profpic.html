@@ -1,2 +1,1 @@
-{% load staticfiles %}
-<img src="{% static 'img/default_profile.jpg' %}">
+<img src="{{ profile_user.get_avatar_url }}">

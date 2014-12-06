@@ -5,12 +5,9 @@ from django.db.models import Q
 from django.contrib.auth.models import User, UserManager, AbstractBaseUser
 from django.utils import timezone
 from github import Github 
-# g = Github(user, password) - USE THIS ONE TO TEST B/C IT WON'T HIT RATE LIMIT
-g = Github('dmouli', 'Spongebob5%')
 
 import base64
 import multiprocessing 
-#from joblib import Parallel, delayed  
 
 class Stack(models.Model):
     name = models.CharField(max_length=40)
@@ -18,7 +15,6 @@ class Stack(models.Model):
 
 class Language(models.Model):
     name = models.CharField(max_length=20)
-    #extensions = models.CharField(max_length=20)
 
 class ProfileUser(AbstractBaseUser):
     is_anonymous = models.BooleanField(default = False)
@@ -42,32 +38,92 @@ class ProfileUser(AbstractBaseUser):
     def get_username(self):
         return self.username
 
-    def get_id(self):
-        return 1
+    def get_id(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).id
+            else:
+                return g.get_user().id
+        except:
+            return 0
 
-    def get_avatar_url(self):
-        return "https://github.com/images/error/octocat_happy.gif"
+    def get_avatar_url(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).avatar_url
+            else:
+                return g.get_user().avatar_url
+        except:
+            return "static 'img/default_profile.jpg'"
 
-    def get_git_profile_url(self):
-        return "https://api.github.com/users/octocat"
+    def get_git_profile_url(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).html_url
+            else:
+                return g.get_user().html_url
+        except:
+            return "None"
     
-    def get_repos(self):
-        pass
+    def get_repos(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).get_repos()
+            else:
+                return g.get_user().get_repos()
+        except:
+            pass 
 
-    def get_following(self):
-        pass
+    def get_following(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).get_followers()
+            else:
+                return g.get_user().get_followers()
+        except:
+            pass
 
-    def get_email(self):
-        return "user@email.com"
+    def get_email(self, g, username=None):
+        try:
+            if (username != None):
+                email = g.get_user(username).email
+            else:
+                email = g.get_user().email
 
-    def get_website(self):
-        return "userwebsite.com"
+            if (email == "" or email == " "):
+                return "None"
+            else:
+                return email
+        except:
+            return "None"
 
-    def get_company(self):
-        return "User Company"
 
-    def get_bio(self):
-        return "This is my user bio."
+    def get_website(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).blog
+            else:
+                return g.get_user().blog
+        except:
+            return "None"
+
+    def get_company(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).company
+            else:
+                return g.get_user().company
+        except:
+            return "None"
+
+    def get_bio(self, g, username=None):
+        try:
+            if (username != None):
+                return g.get_user(username).bio 
+            else:
+                return g.get_user().bio 
+        except:
+            return "None"
 
 
 class UserRating(models.Model):
@@ -81,7 +137,7 @@ class Comment(models.Model):
     profile_user = models.ForeignKey(ProfileUser)
     text = models.CharField(max_length=400)  # text of comment
     date_time = models.DateTimeField(auto_now_add=True)
-    path = models.CharField(max_length=400)  # relative path file comment on
+    path = models.CharField(max_length=2048)  # relative path file comment on
     likers = models.ManyToManyField(ProfileUser, related_name="liked_by")
 
 class Tag(models.Model):
@@ -94,46 +150,60 @@ class Tag(models.Model):
 class Repository(models.Model):
     repo_id = models.IntegerField(primary_key=True)
     comments = models.ManyToManyField(Comment)
-
+    languages = models.ManyToManyField(Language)
 
 class RepoFile (models.Model):
     repository = models.ForeignKey(Repository)
-    path = models.CharField(max_length=400)
+    path = models.CharField(max_length=2048)
     comments = models.ManyToManyField(Comment)
     savers = models.ManyToManyField(ProfileUser, related_name="saved_by")
     average_difficulty = models.IntegerField(blank=True)
     average_quality = models.IntegerField(blank=True)
     tags = models.ManyToManyField(Tag)
 
-    def get_creator(self):
-        repo_id = self.repository.repo_id
-        repo = g.get_repo(repo_id)
-        return repo.owner.name
+    def get_creator(self, g):
+        try:
+            repo_id = self.repository.repo_id
+            repo = g.get_repo(int(repo_id))
+            return repo.owner.name
+        except:
+            return ""
 
-    def get_name(self):
-        repo_id = self.repository.repo_id
-        repo = g.get_repo(repo_id)
-        return repo.get_contents(self.path).name
+    def get_name(self, g):
+        try:
+            repo_id = self.repository.repo_id
+            repo = g.get_repo(int(repo_id))
+            return repo.get_contents(self.path).name
+        except:
+            return ""
 
-    def get_language(self):
+    def get_language(self, g):
         return "file_lang"
 
-    def get_date_created(self):
+    def get_date_created(self, g):
         return "1/1/2014"
 
-    def get_content(self):
-        repo_id = self.repository.repo_id
-        repo = g.get_repo(repo_id)
-        content = repo.get_contents(self.path).content
-        return base64.b64decode(content)
+    def get_content(self, g):
+        try:
+            repo_id = self.repository.repo_id
+            repo = g.get_repo(int(repo_id))
+            content = repo.get_contents(self.path).content
+            return base64.b64decode(content)
+        except:
+            return "-- No Content --"
 
 
 class Difficulty(models.Model):
     rating = models.IntegerField()
-    repo_file = models.ForeignKey(RepoFile)
+    repository = models.ForeignKey(Repository)
     profile_user = models.ForeignKey(ProfileUser)
     date_time = models.DateTimeField(auto_now_add=True)
 
+class Documentation(models.Model):
+    rating = models.IntegerField()
+    repository = models.ForeignKey(Repository)
+    profile_user = models.ForeignKey(ProfileUser)
+    date_time = models.DateTimeField(auto_now_add=True)
 
 class Saved(models.Model):
     profile_user = models.ForeignKey(ProfileUser)

@@ -109,7 +109,7 @@ USE_TZ = True
 
 ROOT_URLCONF = 'finalproj.urls'
 
-LOGIN_URL = '/codebook/front'
+LOGIN_URL = '/codebook/login'
 
 LOGIN_REDIRECT_URL = '/codebook/'
 
