@@ -410,20 +410,19 @@ def add_proficiency(request):
         language_name = request.POST.get('language')
         proficiency = request.POST.get('proficiency')
         profile_user = request.user
-        print language_name
-        print proficiency
-        for l in Language.objects.filter(name=language_name):
-            print l.name
+        lang_name = language_name
 
-        print "----"
+        for l in (Language.objects.filter(name__iexact=language_name)):
+            print "FOUND A LANGUAGE IN OBJECTS: " + l.name 
+            lang_name = l.name
 
-        lang, lang_created = Language.objects.get_or_create(name=language_name)
-        print lang.name + " " + str(lang_created)
+        lang, lang_created = Language.objects.get_or_create(name=lang_name)
+        print "Lang name:" + str(lang.name) + "Lang created:" + str(lang_created)
 
         user_ratings = UserRating.objects.filter(profile_user=profile_user)
         updated = False
         for r in user_ratings:
-            if r.language.name == language_name:
+            if r.language.name == lang_name:
                 print "updated"
                 r.proficiency = proficiency
                 r.save()

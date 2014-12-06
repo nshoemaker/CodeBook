@@ -19,7 +19,12 @@ $('#add-proficiency-btn').click(function () {
                 csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
             },
             success: function (html) {
-                $('#skill-edit-' + language).remove();
+                $.expr[":"].contains = $.expr.createPseudo(function(arg) {
+                    return function( elem ) {
+                        return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+                    };
+                });
+                $(".skill:contains(" + language + ")").remove()
                 $('#proficiency-list').prepend(html);
                 $('#language-choice').val('');
                 $('#slider').val(5);
