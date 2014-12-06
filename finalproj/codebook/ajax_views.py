@@ -488,6 +488,8 @@ def sort_lang_stream_recent(request):
                 x = Repo(None,repo.repo_id,g.get_user(), g)
             except ObjectDoesNotExist:
                 x = Repo(repo, repo.id, g.get_user(), g)
+            for comment in x.comments:
+                comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g, comment.profile_user.username)
             these_repo_results.append(x)
         context["repos"] = these_repo_results
         context['profile_user'] = profile_user
@@ -525,6 +527,8 @@ def sort_lang_stream_popular(request):
                 x = Repo(None,repo.repo_id,g.get_user(), g)
             except ObjectDoesNotExist:
                 x = Repo(repo, repo.id, g.get_user(), g)
+            for comment in x.comments:
+                comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g, comment.profile_user.username)
             these_repo_results.append(x)
         context["repos"] = these_repo_results
         context['profile_user'] = request.user
@@ -675,7 +679,7 @@ def repo_search_list(request):
                     print x.name
 
             for comment in x.comments:
-                comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g)
+                comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g, comment.profile_user.username)
 
         these_repo_results = langrepos+dbrepos+nondbrepos
         these_repo_results.sort(key=lambda x: x.doc_rating, reverse= True)
@@ -763,7 +767,7 @@ def watch_list(request):
             x = Repo(repo, repo.id, user, g)
 
         for comment in x.comments:
-            comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g)
+            comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g, comment.profile_user.username)
         recent_watched.append(x)
 
     context['repos'] = recent_watched
