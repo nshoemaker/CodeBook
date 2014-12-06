@@ -1,3 +1,25 @@
+.saved-notification {
+    width:100px;
+    height:10px;
+    height:auto;
+    position:absolute;
+    left:50%;
+    margin-left:-100px;
+    bottom:10px;
+    background-color: #66CC99;
+    color: #333333;
+    font-size: 14px;
+    padding:10px;
+    text-align:center;
+    border-radius: 2px;
+    -webkit-box-shadow: 0px 0px 24px -1px #55BB88;
+    -moz-box-shadow: 0px 0px 24px -1px #55BB88;
+    box-shadow: 0px 0px 24px -1px #55BB88;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
 #proficiency-form {
     background-color: #dcdcdc;
     border-radius: 5px;

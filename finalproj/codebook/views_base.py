@@ -49,7 +49,7 @@ User is github user, get by g.get_user() of authenticated g user.
 class Repo:
     def __init__(self, repo, id, user, hub):
         if(repo is None):
-            repo = hub.get_repo(id)
+            repo = hub.get_repo(int(id))
             try:
                 repository = Repository.objects.get(repo_id__exact=id)
                 self.doc_rating = repository.documentation_set.aggregate(Avg('rating')).values()[0]
@@ -169,5 +169,5 @@ def get_auth_user_git(request):
     return g
 
 
-languages = ['c', 'java','objective-c', 'c++', 'c#', 'php', 'python', 'javascript', 'perl', 'visual basic .net', 'visual basic', 'r', 'transact-sql', 'ruby', 'delphi/object', 'pascal', 'f#', 'pl/sql', 'swift', 'pascal', 'dart', 'actionscript', 'sas', 'lisp', 'matlab', 'postscript', 'logo', 'ml', 'cobol', 'assembly', 'abap', 'scala', 'fortran', 'd', 'ct', 'ada', 'openedge abl', 'scheme', 'haskell', 'lua', 'scratch', 'go', 'erlang', 'prolog', 'io', 'pl/i', 'max/msp', 'tcl', 'q', 'groovy', '(visual) foxpro'] 
+languages = ['c', 'rails', 'aspnet', 'bash', 'node', 'java','objc', 'cplusplus', 'csharp', 'php', 'python', 'javascript', 'perl', 'visual basic .net', 'visual basic', 'r', 'transact-sql', 'ruby', 'delphi/object', 'f#', 'pl/sql', 'swift', 'pascal', 'dart', 'actionscript', 'sas', 'lisp', 'matlab', 'postscript', 'logo', 'ml', 'cobol', 'assembly', 'abap', 'scala', 'fortran', 'd', 'ct', 'ada', 'openedge abl', 'scheme', 'haskell', 'lua', 'scratch', 'go', 'erlang', 'prolog', 'io', 'pl/i', 'max/msp', 'tcl', 'q', 'groovy', '(visual) foxpro'] 
 

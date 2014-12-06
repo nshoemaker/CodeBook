@@ -15,7 +15,6 @@ class Stack(models.Model):
 
 class Language(models.Model):
     name = models.CharField(max_length=20)
-    #extensions = models.CharField(max_length=20)
 
 class ProfileUser(AbstractBaseUser):
     is_anonymous = models.BooleanField(default = False)
@@ -151,7 +150,7 @@ class Tag(models.Model):
 class Repository(models.Model):
     repo_id = models.IntegerField(primary_key=True)
     comments = models.ManyToManyField(Comment)
-
+    languages = models.ManyToManyField(Language)
 
 class RepoFile (models.Model):
     repository = models.ForeignKey(Repository)
@@ -165,7 +164,7 @@ class RepoFile (models.Model):
     def get_creator(self, g):
         try:
             repo_id = self.repository.repo_id
-            repo = g.get_repo(repo_id)
+            repo = g.get_repo(int(repo_id))
             return repo.owner.name
         except:
             return ""
@@ -173,7 +172,7 @@ class RepoFile (models.Model):
     def get_name(self, g):
         try:
             repo_id = self.repository.repo_id
-            repo = g.get_repo(repo_id)
+            repo = g.get_repo(int(repo_id))
             return repo.get_contents(self.path).name
         except:
             return ""
@@ -187,7 +186,7 @@ class RepoFile (models.Model):
     def get_content(self, g):
         try:
             repo_id = self.repository.repo_id
-            repo = g.get_repo(repo_id)
+            repo = g.get_repo(int(repo_id))
             content = repo.get_contents(self.path).content
             return base64.b64decode(content)
         except:

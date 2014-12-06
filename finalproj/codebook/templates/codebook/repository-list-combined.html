@@ -7,7 +7,11 @@
 
 <ol class="repository-list" id="repo-list">
     {% if no_results == 'true' %}
-        <h4>No results found.</h4>
+        <h3>No results found.</h3>
+    {% endif %}
+    {% if my_languages_stream_no_results == 'true' %}
+        <h4>You haven't rated any languages yet!</h4>
+        <h5>Feel free to go to your profile to edit your profile and add language preferences.</h5>
     {% else %}
     {% for repo in repos %}
         <li id="repo{{ repo.id }}">

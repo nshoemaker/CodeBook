@@ -8,7 +8,7 @@
                         data-item-id="{{ repo.id }}" title="expand/collapse Repository view"></h4>
                 </div>
                 <div class="col-md-2 text-left">
-                    <a href="{{ repo.url }}"><h5 class="text-left" title="Repository name">{{ repo.name }}</h5></a>
+                    <a href="{{ repo.url }}" target="_blank"><h5 class="text-left" title="Repository name">{{ repo.name }}</h5></a>
                 </div>
                 <div class="col-md-1">
                         {% if repo.is_current_user_starring %}
@@ -46,9 +46,10 @@
                 </div>
                 <div class="col-md-9 repository-file">
                     <div class="btn-group btn-group-xs file-controls">
-                        <button id="current-file-save-{{ repo.id }}" class="btn btn-xs control-btn glyphicon glyphicon-floppy-save current-file-save" title="Save File" data-item-id="{{ repo.id }}"></button>
+                        <button id="current-file-save-{{ repo.id }}" class="btn btn-xs control-btn glyphicon glyphicon-floppy-save current-file-save" title="Save File" data-item-id="{{ repo.id }}" data-text="File Saved!"></button>
                     </div>
                     {% include 'codebook/file-contents-combined.html' with file_content=repo.default_file_contents %}
+                    <div class="saved-notification" id="saved-notification-{{ repo.id }}" style="display: none"></div>
                 </div>
             </div>
             <!-- end file view -->
@@ -115,17 +116,16 @@
                     <div class="col-md-9 col-lg-offset-1">
                         <div id="the_post{{ repo.id }}">
                             <tr>
-                                <th><label for="id_text">{{ comment_form.text.label }}</label></th>
                                 <td>
                                     {{ comment_form.errorlist }}
-                                    <input id="repo-post-text-{{ repo.id }}" maxlength="400" name="text" pla
+                                    <input class="comment-post-text form-control" id="repo-post-text-{{ repo.id }}" name="text" pla
                                            ceholder="Say something..." required="True" type="text"/></td>
                             </tr>
                             {% csrf_token %}
                         </div>
                     </div>
                     <div class="col-md-1">
-                        <input type="submit" class="btn control-btn" value="Comment">
+                        <input type="submit" class="btn control-btn" value="Add Comment">
                     </div>
                     {% csrf_token %}
                 </form>

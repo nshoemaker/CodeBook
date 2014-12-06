@@ -40,7 +40,8 @@
         </li>
         <li>
             <a href="#popular" role="tab" data-toggle="tab">
-                <icon class="fa fa-angle-double-up"></icon> Popular
+                <icon class="fa fa-angle-double-up"></icon>
+                Popular
             </a>
         </li>
         <li>
@@ -62,22 +63,63 @@
     <div class="tab-content profile-tabs">
         <div class="tab-pane fade active in language-breakdown" id="languages">
             <h3>Language Breakdown</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Languge Breakdown</h3>
+                </div>
+                <div class="col-md-4">
+                    <h3>
+                        <button type="button" class="btn btn-xs control-btn" data-toggle="modal"
+                                data-target=".bs-example-modal-sm">
+                            What's this?
+                        </button>
+                    </h3>
+                </div>
+            </div>
             {% include 'codebook/profile-lang-list.html' %}
+            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="mySmallModalLabel">Language Breakdown</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h6>The top bar shows your skill level in a language as determined by our credibility algorithm which uses your git history to determine how much experience you have with a certain language.</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <progress class="skill" max="100" value="50"></progress>
+                                    <progress class="proficiency" max="10" value="8"></progress>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h6>The bottom bar shows the skill level that you specify in the Edit My Profile tab.</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="tab-pane fade" id="saved">
-            <h2>{{profile_user.get_username}}'s Saved Files</h2>
+            <h3>{{ profile_user.get_username }}'s Saved Files</h3>
             {% include 'codebook/profile-saved.html' %}
         </div>
         <div class="tab-pane fade" id="popular">
-            <h2>{{profile_user.get_username}}'s Popular Repositories</h2>
+            <h3>{{ profile_user.get_username }}'s Popular Repositories</h3>
             {% include 'codebook/profile-popular.html' %}
         </div>
         <div class="tab-pane fade" id="recent">
-            <h2>{{profile_user.get_username}}'s Recent Repositories</h2>
+            <h3>{{ profile_user.get_username }}'s Recent Repositories</h3>
             {% include 'codebook/profile-recent.html' %}
         </div>
         <div class="tab-pane fade" id="edit">
-            <h2>Edit My Profile</h2>
+            <h3>Edit My Profile</h3>
             <h4>Rate your language skill level from 1 to 10.</h4>
             {% include 'codebook/profile-edit-profile.html' %}
         </div>

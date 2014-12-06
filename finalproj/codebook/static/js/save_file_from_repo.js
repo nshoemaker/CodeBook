@@ -9,6 +9,8 @@ $("#base-stream").on("click", ".current-file-save", function() {
     console.log($obj);
     console.log("file_path " + file_path);
 
+    $('#saved-notification-' + repo_id).text($(this).data('text')).fadeIn(400).delay(2000).fadeOut(400);
+
     $.ajax({
         type: "POST",
         url: "/codebook/save_file_from_repo",
