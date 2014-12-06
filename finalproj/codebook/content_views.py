@@ -157,6 +157,9 @@ def saved(request):
         save.repo_file.get_name = save.repo_file.get_name(g)
         save.repo_file.get_creator = save.repo_file.get_creator(g)
         save.repo_file.get_content = save.repo_file.get_content(g)
+        repo =  g.get_repo(int(save.repo_file.repository.repo_id))
+        save.repo_file.repository.name = repo.name
+        save.repo_file.repository.url = repo.html_url
         files.append(save.repo_file)
     context['searchform'] = SearchForm()
     context['files'] = files
