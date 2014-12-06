@@ -1,9 +1,14 @@
 /**
  * Created by nora on 11/20/2014.
  */
-
 $('#add-proficiency-btn').click(function () {
     var language = $('#language-prof').val();
+    console.log(language);
+    language = language.replace(/'/g, "&quot");
+    language = language.replace(/</g, "&lt");
+    language = language.replace(/>/g, "&gt");
+    language = language.substring(0,19);
+    console.log(language);
     var proficiency = $('#amount').val();
     console.log("lang: " + language + " proficiency: " + proficiency);
     if (language == "") {
