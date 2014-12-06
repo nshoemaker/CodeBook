@@ -11,5 +11,5 @@ class CommentForm(forms.ModelForm):
         }
 
 class SearchForm(forms.Form):
-    text = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Search'}))
+    text = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Search for a Language, User, or Repo at your Difficulty Level - ex) \'java easy\''}))
     types = forms.ChoiceField(choices=(('Lang', 'Languages'),('Repo','Repository'),('User','User')))
