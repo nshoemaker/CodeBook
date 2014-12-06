@@ -383,7 +383,9 @@ def rate_credibility(request):
             langs = repo.get_languages()
             for lang in langs.keys():
                 try:
-                    language = Language.objects.get(name=lang)
+                    for l in (Language.objects.filter(name__iexact=lang)):
+                        lang_name = l.name
+                    language = Language.objects.get(name=lang_name)
                 except:
                     language = Language(name=lang)
                     language.save()
