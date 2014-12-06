@@ -379,21 +379,25 @@ def rate_credibility(request):
         #user statistics
         #numFollowers = g.get_user().followers
         #numRepos = g.get_user().public_repos
+        repos = g.get_user().get_repos()
         for repo in g.get_user().get_repos():
-            langs = repo.get_languages()
+            try:
+                langs = repo.get_languages()
+            except:
+                continue
             for lang in langs.keys():
-                try:
-                    for l in (Language.objects.filter(name__iexact=lang)):
+                for l in (Language.objects.filter(name__iexact=lang)):
+                    try:
                         lang_name = l.name
-                    language = Language.objects.get(name=lang_name)
-                except:
-                    language = Language(name=lang)
-                    language.save()
-                try:
-                    rating = UserRating.objects.get(language=language,profile_user=request.user)
-                except:
-                    rating = UserRating(profile_user=request.user,credibility=0,proficiency=0,language=language)
-                    rating.save()
+                        language = Language.objects.get(name=lang_name)
+                    except:
+                        language = Language(name=lang)
+                        language.save()
+                    try:
+                        rating = UserRating.objects.get(language=language,profile_user=request.user)
+                    except:
+                        rating = UserRating(profile_user=request.user,credibility=0,proficiency=0,language=language)
+                        rating.save()
                 rating.credibility = min(langs[lang]/1000,100)
                 rating.save()
         #for r in UserRating.objects.filter(profile_user=request.user):
