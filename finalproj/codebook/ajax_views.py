@@ -810,6 +810,8 @@ def save_file_from_repo(request):
 def rate_documentation(request):
     if request.is_ajax:
         profile_user = request.user
+        if request.POST.get("rating") == None or request.POST.get("repo_id") == None:
+            return HttpResponse('True', content_type="text")
         repo_id = int(request.POST.get("repo_id"))
         rating = int(request.POST.get("rating"))
 
@@ -836,19 +838,22 @@ def rate_documentation(request):
 def rate_difficulty(request):
     if request.is_ajax:
         profile_user = request.user
-        repo_id = int(request.POST.get("repo_id"))
+        if request.POST.get("rating") == None or request.POST.get("repo_id") == None:
+            return HttpResponse('True', content_type="text")
         rating = int(request.POST.get("rating"))
 
+        repo_id = int(request.POST.get("repo_id"))
+
+
         repo, repo_created = Repository.objects.get_or_create(repo_id=repo_id)
+
         if repo_created:
             g = get_auth_user_git(request)
-            langs = g.get_repo(repo_id).get_languages().keys()
+            langs = g.get_repo(int(repo_id)).get_languages().keys()
             for l in langs:
                 lang,created = Language.objects.get_or_create(name=l)
                 repo.languages.add(lang)
                 repo.save()
-        print repo
-        print repo_created
         difficulty, difficulty_updated = Difficulty.objects.update_or_create(profile_user=profile_user, rating=rating, repository=repo)
         print difficulty_updated
         return HttpResponse('True', content_type="text")
