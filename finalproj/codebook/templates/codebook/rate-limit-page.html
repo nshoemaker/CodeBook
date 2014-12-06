@@ -1,1 +1,61 @@
-<p>hi</p>
+{% extends "base.html" %}
+{% block title %}Codebook: Rate Limit Page{% endblock %}
+
+{% block stylesheets %}
+    {% load staticfiles %}
+{% endblock stylesheets %}
+
+{% block nav-left %}
+{% endblock %}
+
+{% block nav-right %}
+    <div class="form-group">
+        <div class="col-xs-7">
+            <h4><a class="btn btn-sm btn-block btn-social btn-github" href="{% url 'auth:logout' %}?next=/"><i class="fa fa-github-square"></i>Logout</a></h4></div>
+    </div>
+{% endblock nav-right %}
+
+{% block search-dropdown %}
+{% endblock search-dropdown %}
+{% block header %}
+    <div class="row jumbotron lang-main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8 centered-text">
+                    <h1>Whoops!</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 centered-text">
+                    <h3 class="centered-text">Looks like we've hit a rate limit!</h3>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 centered-text">
+                    <h4 class="centered-text">Please try again later.</h4>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 centered-text">
+                    <h6 class="centered-text">(or sign in with a different account)</h6>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            <div class="row" id="errors">
+
+            </div>
+        </div>
+    </div>
+{% endblock header %}
+
+{% block stream %}
+{% endblock stream %}
+
+
+{% block collapse-all %}
+{% endblock collapse-all %}
