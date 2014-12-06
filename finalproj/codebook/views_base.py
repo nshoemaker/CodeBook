@@ -52,8 +52,11 @@ class Repo:
             repo = hub.get_repo(int(id))
             try:
                 repository = Repository.objects.get(repo_id__exact=id)
-                self.doc_rating = repository.documentation_set.aggregate(Avg('rating')).values()[0]
-                self.difficulty_rating = repository.difficulty_set.aggregate(Avg('rating')).values()[0]
+                print 0
+                self.doc_rating = int(repository.documentation_set.aggregate(Avg('rating')).values()[0])
+                print self.doc_rating
+                self.difficulty_rating = int(repository.difficulty_set.aggregate(Avg('rating')).values()[0])
+                print self.difficulty_rating
             except:
                 self.difficulty_rating = 0
                 self.doc_rating = 0
@@ -62,12 +65,16 @@ class Repo:
             if self.difficulty_rating == None:
                 self.difficulty_rating = 0
             self.comments = Comment.objects.filter(repository__repo_id = repo.id).order_by('date_time')
+            if self.comments == None:
+                self.comments = Comment.objects.none()
 
         else:
             self.comments = Comment.objects.none()
             self.doc_rating = 0
             self.difficulty_rating = 0
 
+        print self.difficulty_rating
+        print self.doc_rating
         branches = repo.get_branches()
         SHA = branches[0].commit.sha
         tree = repo.get_git_tree(SHA).tree
@@ -93,6 +100,10 @@ class Repo:
             self.readme_contents = base64.b64decode(self.readme.content) 
         except:
             pass
+
+        if self.file_tree == None:
+            self.file_tree = {}
+            self.default_file_contents = "Sorry there was an error retrieving this repository's contents."
         try:
           self.id = repo.id
         except:
