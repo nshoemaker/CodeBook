@@ -383,7 +383,9 @@ def rate_credibility(request):
             langs = repo.get_languages()
             for lang in langs.keys():
                 try:
-                    language = Language.objects.get(name=lang)
+                    for l in (Language.objects.filter(name__iexact=lang)):
+                        lang_name = l.name
+                    language = Language.objects.get(name=lang_name)
                 except:
                     language = Language(name=lang)
                     language.save()
@@ -410,20 +412,19 @@ def add_proficiency(request):
         language_name = request.POST.get('language')
         proficiency = request.POST.get('proficiency')
         profile_user = request.user
-        print language_name
-        print proficiency
-        for l in Language.objects.filter(name=language_name):
-            print l.name
+        lang_name = language_name
 
-        print "----"
+        for l in (Language.objects.filter(name__iexact=language_name)):
+            print "FOUND A LANGUAGE IN OBJECTS: " + l.name 
+            lang_name = l.name
 
-        lang, lang_created = Language.objects.get_or_create(name=language_name)
-        print lang.name + " " + str(lang_created)
+        lang, lang_created = Language.objects.get_or_create(name=lang_name)
+        print "Lang name:" + str(lang.name) + "Lang created:" + str(lang_created)
 
         user_ratings = UserRating.objects.filter(profile_user=profile_user)
         updated = False
         for r in user_ratings:
-            if r.language.name == language_name:
+            if r.language.name == lang_name:
                 print "updated"
                 r.proficiency = proficiency
                 r.save()
@@ -487,6 +488,8 @@ def sort_lang_stream_recent(request):
                 x = Repo(None,repo.repo_id,g.get_user(), g)
             except ObjectDoesNotExist:
                 x = Repo(repo, repo.id, g.get_user(), g)
+            for comment in x.comments:
+                comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g, comment.profile_user.username)
             these_repo_results.append(x)
         context["repos"] = these_repo_results
         context['profile_user'] = profile_user
@@ -524,6 +527,8 @@ def sort_lang_stream_popular(request):
                 x = Repo(None,repo.repo_id,g.get_user(), g)
             except ObjectDoesNotExist:
                 x = Repo(repo, repo.id, g.get_user(), g)
+            for comment in x.comments:
+                comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g, comment.profile_user.username)
             these_repo_results.append(x)
         context["repos"] = these_repo_results
         context['profile_user'] = request.user
@@ -674,7 +679,7 @@ def repo_search_list(request):
                     print x.name
 
             for comment in x.comments:
-                comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g)
+                comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g, comment.profile_user.username)
 
         these_repo_results = langrepos+dbrepos+nondbrepos
         these_repo_results.sort(key=lambda x: x.doc_rating, reverse= True)
@@ -762,7 +767,7 @@ def watch_list(request):
             x = Repo(repo, repo.id, user, g)
 
         for comment in x.comments:
-            comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g)
+            comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g, comment.profile_user.username)
         recent_watched.append(x)
 
     context['repos'] = recent_watched

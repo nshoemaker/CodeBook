@@ -160,6 +160,8 @@ def saved(request):
         repo =  g.get_repo(int(save.repo_file.repository.repo_id))
         save.repo_file.repository.name = repo.name
         save.repo_file.repository.url = repo.html_url
+        for comment in save.repo_file.comments:
+            comment.profile_user.get_avatar_url = comment.profile_user.get_avatar_url(g, comment.profile_user.username)
         files.append(save.repo_file)
     context['searchform'] = SearchForm()
     context['files'] = files
